@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<License>
+  <Data>
+    <LicensedTo>Fujitsu Services Ltd</LicensedTo>
+    <LicenseType>Developer OEM</LicenseType>
+    <LicenseNote>Limited to 1 developer.</LicenseNote>
+    <OrderID>121030051236</OrderID>
+    <OEM>This is a redistributable license</OEM>
+    <Products>
+      <Product>Aspose.Total</Product>
+    </Products>
+    <EditionType>Enterprise</EditionType>
+    <SerialNumber>2fa5d705-73ba-41fb-927b-892edf4ed894</SerialNumber>
+    <SubscriptionExpiry>20131030</SubscriptionExpiry>
+    <LicenseVersion>2.2</LicenseVersion>
+  </Data>
+  <Signature>fZkwECCHyqQGYcgJ6w+LcR95lgS7Wlb1tBb2JZ3H0x138EHK4MbqE61KH+jpkIeK30q57HKJDyCFUX0WJ5FbfWTRmBojiJOtbFHs8BfYq3oDIEOgIp6y6tQKN0IvuoaHnrM2GCItXMPnggspxov7smDUOnd5Tkmh3qWQZWwViQo=</Signature>
+</License>

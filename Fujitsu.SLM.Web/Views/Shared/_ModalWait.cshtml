@@ -1,0 +1,63 @@
+﻿@model ModalWaitViewModel
+<script type="text/javascript">
+    var spinner;
+    $(document).ready(function() {
+
+        var model = @Html.Raw(Json.Encode(new { Model.ButtonClicks }));
+
+        $("#window").kendoWindow({
+            actions: {},
+            draggable: false,
+            height: "200px",
+            modal: true,
+            resizable: false,
+            title: "Please wait...",
+            width: "150px",
+            visible: false,
+        });
+
+        if (model.ButtonClicks) {
+            for (var i in model.ButtonClicks) {
+                $("#" + model.ButtonClicks[i]).click(function() {
+                    startSpinner();
+                });
+            }
+        }
+    });
+
+    function startSpinner() {
+        var opts = {
+            lines: 13, // The number of lines to draw
+            length: 22, // The length of each line
+            width: 5, // The line thickness
+            radius: 16, // The radius of the inner circle
+            corners: 1, // Corner roundness (0..1)
+            rotate: 0, // The rotation offset
+            direction: 1, // 1: clockwise, -1: counterclockwise
+            color: '#7ea700', // #rgb or #rrggbb or array of colors
+            speed: 1, // Rounds per second
+            trail: 60, // Afterglow percentage
+            shadow: false, // Whether to render a shadow
+            hwaccel: false, // Whether to use hardware acceleration
+            className: 'spinner', // The CSS class to assign to the spinner
+            zIndex: 2e9, // The z-index (defaults to 2000000000)
+            top: 'auto', // Top position relative to parent in px
+            left: 'auto' // Left position relative to parent in px
+        };
+        var target = document.getElementById("spinContainer");
+        spinner = new Spinner(opts).spin(target);
+        $("#window").data("kendoWindow").center().open();
+    }
+
+    function stopSpinner() {
+        if (spinner) {
+            spinner.stop();
+        }
+        $("#window").data("kendoWindow").close();
+    }
+</script>
+<div id="window">
+    <div id="windowContent" style="height:140px">
+        <span id="spinContainer" style="position: absolute;display: block;top: 50%;left: 50%;"></span>
+    </div>
+</div>

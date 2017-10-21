@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "Archives";
+    var isArchitect = @User.IsInRole(UserRoles.Architect);
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { ArchivesSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "archives" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+@(Html.Kendo().Grid<CustomerViewModel>()
+        .Name("ArchivesGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.CustomerName).Width(100);
+            columns.Bound(c => c.CustomerNotes).Width(300);
+            columns.Bound(o => o.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(30);
+            columns.Bound(o => o.UpdatedBy).Width(75);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Activate").Click("activateCustomer");
+                cmd.Custom("Delete").Click("deleteCustomer");
+            }).Width(150).Title("").Visible(isArchitect);
+
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model => model.Id(p => p.Id))
+            .Events(events => events.Error("onError").Sync("syncHandler"))
+            .Read(read => read.Action("ReadAjaxArchivesGrid", "Customer"))
+            .Sort(sort => sort.Add(col => col.CustomerName))
+        )
+        .Events(e =>
+        {
+            e.DataBound("addIcons");
+            e.Cancel("onCancel");
+        })
+        .Editable(edt => edt.Mode(GridEditMode.PopUp).DisplayDeleteConfirmation("Are you sure you want to delete this Archive?")
+        .Window(w => w.Title("Customer").Width(600)))
+)
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#ArchivesGrid .k-grid-add").on("click", function (e) {
+            isCreating = true;
+        });
+
+        popupGridEditorButtonNamingOnInsert("#ArchivesGrid");
+    });
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Activate > span").addClass("k-icon k-i-reset");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function activateCustomer(e) {
+        var grid = $("#ArchivesGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Activate</strong> this Customer?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ActivateCustomer", "Customer")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Customer successfully activated.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+
+    }
+
+    function onCancel() {
+        var grid = $("#ArchivesGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function deleteCustomer(e) {
+        var grid = $("#ArchivesGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Archive?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteArchivedCustomer", "Customer")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Customer successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

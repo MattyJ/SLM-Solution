@@ -1,0 +1,596 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web User Interface", "Web User Interface", "{E5E327F9-AEED-4FAB-80D8-BBE20B9638BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{3E5A92A8-EA00-4E55-BD13-FC735F546ECC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{A7F378AC-7085-4944-A4D0-FBF39974564B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Core", "Fujitsu.SLM.Core\Fujitsu.SLM.Core.csproj", "{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Enumerations", "Fujtisu.SLM.Enumerations\Fujitsu.SLM.Enumerations.csproj", "{2D99FA85-14F1-4019-8951-5A3CC29DE804}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Web.Context", "Fujitsu.SLM.Web.Context\Fujitsu.SLM.Web.Context.csproj", "{EA96972E-47CB-4EF0-8665-5A3C049BBA00}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{B4C8C6A3-9E60-4F57-92FD-F5FFAB4094EA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Model", "Fujitsu.SLM.Model\Fujitsu.SLM.Model.csproj", "{1E4B9F25-20BE-467B-9559-11056FF04000}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{1F6A8232-ACFC-4A38-86CF-DCE2D7003F00}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Constants", "Fujitsu.SLM.Constants\Fujitsu.SLM.Constants.csproj", "{C250E534-FD0A-47CE-B1E3-C46E39DB3544}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Extensions", "Fujitsu.SLM.Extensions\Fujitsu.SLM.Extensions.csproj", "{3FF40663-DC0A-4B5B-8001-CFE8B083F269}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.Exceptions.Framework", "Fujitsu.Exceptions.Framework\Fujitsu.Exceptions.Framework.csproj", "{66D72D78-84B2-47F4-A702-24CDF11F2D0E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B84881F6-029C-45CD-94A2-B9135805695C}"
+	ProjectSection(SolutionItems) = preProject
+		CodeCoverage.runsettings = CodeCoverage.runsettings
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Web.Tests", "Fujitsu.SLM.Web.Tests\Fujitsu.SLM.Web.Tests.csproj", "{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Data", "Fujitsu.SLM.Data\Fujitsu.SLM.Data.csproj", "{C1CEA65C-3724-4D17-8862-7B512C61D899}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3BBF8AFB-36FB-45DD-A2B2-EB45FC2C12FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Services", "Fujitsu.SLM.Services\Fujitsu.SLM.Services.csproj", "{5FA955B4-94C9-443E-B926-CCFEE42293E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Services.Tests", "Fujitsu.SLM.Services.Tests\Fujitsu.SLM.Services.Tests.csproj", "{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.UnitTesting", "Fujitsu.SLM.UnitTesting\Fujitsu.SLM.UnitTesting.csproj", "{6A28C86D-620C-4CE4-81B0-4369D818DA72}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Web.Resources", "Fujitsu.SLM.Web.Resources\Fujitsu.SLM.Web.Resources.csproj", "{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Web", "Fujitsu.SLM.Web\Fujitsu.SLM.Web.csproj", "{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.Exceptions.Framework.Tests", "Fujitsu.Exceptions.Framework.Tests\Fujitsu.Exceptions.Framework.Tests.csproj", "{7B5549AC-2CF6-4362-A947-D0E011CB1353}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Core.Tests", "Fujitsu.SLM.Core.Tests\Fujitsu.SLM.Core.Tests.csproj", "{C28EA206-BF22-41FB-892F-E5BD772F691C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Web.Context.Tests", "Fujitsu.SLM.Web.Context.Tests\Fujitsu.SLM.Web.Context.Tests.csproj", "{540AC683-874E-436E-B6F4-39278D2EDFDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Extension.Tests", "Fujitsu.SLM.Extension.Tests\Fujitsu.SLM.Extension.Tests.csproj", "{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Web.Model.Tests", "Fujitsu.SLM.Web.Model.Tests\Fujitsu.SLM.Web.Model.Tests.csproj", "{FF21A974-1206-43A5-A23A-FAFF413228BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.ModelHelpers", "Fujitsu.SLM.ModelHelpers\Fujitsu.SLM.ModelHelpers.csproj", "{3348044A-DAE8-4D25-9CA9-8B22BCD68528}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.ModelHelpers.Tests", "Fujitsu.SLM.ModelHelpers.Tests\Fujitsu.SLM.ModelHelpers.Tests.csproj", "{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Enumerations.Tests", "Fujitsu.SLM.Enumerations.Tests\Fujitsu.SLM.Enumerations.Tests.csproj", "{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Diagrams", "Diagrams", "{0E24EB52-E32C-4F55-B90D-249B3FD7972A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Diagrams", "Fujitsu.SLM.Diagrams\Fujitsu.SLM.Diagrams.csproj", "{42AED40B-130F-40EC-988E-CB0E0B6875C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Diagram.Tests", "Fujitsu.SLM.Diagram.Tests\Fujitsu.SLM.Diagram.Tests.csproj", "{28680BC9-09B7-472C-9273-A3161118D167}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{18B26C60-6E6C-4AE7-A50A-0AE25F893AEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{9AEBEF0F-3920-4CB0-B3E7-571D92525DC2}"
+	ProjectSection(SolutionItems) = preProject
+		CreateEventSource.ps1 = CreateEventSource.ps1
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aspose", "Aspose", "{8FBD0EE1-EE07-443D-8BB9-4D3114FD77FB}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\Aspose\Aspose.Cells.dll = Dependencies\Aspose\Aspose.Cells.dll
+		Dependencies\Aspose\Aspose.Cells.xml = Dependencies\Aspose\Aspose.Cells.xml
+		Dependencies\Aspose\Aspose.Total.lic = Dependencies\Aspose\Aspose.Total.lic
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kendo", "Kendo", "{CFF1FDE8-1C8C-4BEA-95B7-8CFFD7C92F09}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\Kendo\Kendo.Mvc.dll = Dependencies\Kendo\Kendo.Mvc.dll
+		Dependencies\Kendo\Kendo.Mvc.xml = Dependencies\Kendo\Kendo.Mvc.xml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Importers", "Importers", "{7475BCB4-4950-4FB2-9A64-626CC6A6F1DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.Aspose.Spreadsheets", "Fujitsu.Aspose.Spreadsheets\Fujitsu.Aspose.Spreadsheets.csproj", "{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.Aspose.Spreadsheets.Tests", "Fujitsu.Aspose.Spreadsheets.Tests\Fujitsu.Aspose.Spreadsheets.Tests.csproj", "{F9A5DC47-769F-4411-8CE0-34405CEAC272}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.DataImporters", "Fujitsu.SLM.DataImporters\Fujitsu.SLM.DataImporters.csproj", "{900B7938-973D-4071-9C2D-0320110D9C04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.DataImportProcessors", "Fujitsu.SLM.DataImportProcessors\Fujitsu.SLM.DataImportProcessors.csproj", "{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.DataImportProcessors.Tests", "Fujitsu.SLM.DataImportProcessors.Tests\Fujitsu.SLM.DataImportProcessors.Tests.csproj", "{728DF56F-A40F-4661-B21E-DDBA3F8AB445}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Transformers", "Fujitsu.SLM.Transformers\Fujitsu.SLM.Transformers.csproj", "{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.Transformers.Tests", "Fujitsu.SLM.Transformers.Tests\Fujitsu.SLM.Transformers.Tests.csproj", "{A70F8B79-C342-4E14-939E-09327A49C41F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.TemplateProcessors", "Fujitsu.SLM.TemplateProcessors\Fujitsu.SLM.TemplateProcessors.csproj", "{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.TemplateProcessors.Tests", "Fujitsu.SLM.TemplateProcessors.Tests\Fujitsu.SLM.TemplateProcessors.Tests.csproj", "{103F8296-452C-4D41-990C-E3B7ADF6FBEA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{E3B39E9F-7D3F-4181-A534-627F557FBDFD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fujitsu.SLM.CustomerMigration.Console", "Fujitsu.SLM.CustomerMigration.Console\Fujitsu.SLM.CustomerMigration.Console.csproj", "{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Templates", "Templates", "{5920F92A-39DC-4EA7-9E5C-72072EBF741C}"
+	ProjectSection(SolutionItems) = preProject
+		Dependencies\Templates\ServiceDecompositionImportTemplate.xlsx = Dependencies\Templates\ServiceDecompositionImportTemplate.xlsx
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Azure|Any CPU = Azure|Any CPU
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		SystemTest|Any CPU = SystemTest|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{1E4B9F25-20BE-467B-9559-11056FF04000}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{C1CEA65C-3724-4D17-8862-7B512C61D899}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.Release|Any CPU.Build.0 = Release|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.SystemTest|Any CPU.ActiveCfg = SystemTest|Any CPU
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353}.SystemTest|Any CPU.Build.0 = SystemTest|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{C28EA206-BF22-41FB-892F-E5BD772F691C}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{540AC683-874E-436E-B6F4-39278D2EDFDF}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{FF21A974-1206-43A5-A23A-FAFF413228BD}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{28680BC9-09B7-472C-9273-A3161118D167}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.SystemTest|Any CPU.ActiveCfg = SystemTest|Any CPU
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}.SystemTest|Any CPU.Build.0 = SystemTest|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.SystemTest|Any CPU.ActiveCfg = SystemTest|Any CPU
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272}.SystemTest|Any CPU.Build.0 = SystemTest|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{900B7938-973D-4071-9C2D-0320110D9C04}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.Azure|Any CPU.ActiveCfg = Azure|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.Azure|Any CPU.Build.0 = Azure|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.Release|Any CPU.Build.0 = Release|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{A70F8B79-C342-4E14-939E-09327A49C41F}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.Azure|Any CPU.ActiveCfg = Release|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.Azure|Any CPU.Build.0 = Release|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.SystemTest|Any CPU.ActiveCfg = Release|Any CPU
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA}.SystemTest|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{2D99FA85-14F1-4019-8951-5A3CC29DE804} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{EA96972E-47CB-4EF0-8665-5A3C049BBA00} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{1E4B9F25-20BE-467B-9559-11056FF04000} = {B4C8C6A3-9E60-4F57-92FD-F5FFAB4094EA}
+		{C250E534-FD0A-47CE-B1E3-C46E39DB3544} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{3FF40663-DC0A-4B5B-8001-CFE8B083F269} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{66D72D78-84B2-47F4-A702-24CDF11F2D0E} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{C1CEA65C-3724-4D17-8862-7B512C61D899} = {B4C8C6A3-9E60-4F57-92FD-F5FFAB4094EA}
+		{5FA955B4-94C9-443E-B926-CCFEE42293E4} = {3BBF8AFB-36FB-45DD-A2B2-EB45FC2C12FF}
+		{500DEF5B-2116-4AD6-A5EA-A1EF4AD15540} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{6A28C86D-620C-4CE4-81B0-4369D818DA72} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E} = {E5E327F9-AEED-4FAB-80D8-BBE20B9638BF}
+		{CCB42BF8-D97B-435A-B5F7-F6309500B6E3} = {E5E327F9-AEED-4FAB-80D8-BBE20B9638BF}
+		{7B5549AC-2CF6-4362-A947-D0E011CB1353} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{C28EA206-BF22-41FB-892F-E5BD772F691C} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{540AC683-874E-436E-B6F4-39278D2EDFDF} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{A81AA8DE-24B9-4151-BB0A-514BB9F333FA} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{FF21A974-1206-43A5-A23A-FAFF413228BD} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{3348044A-DAE8-4D25-9CA9-8B22BCD68528} = {B4C8C6A3-9E60-4F57-92FD-F5FFAB4094EA}
+		{F82BC8DF-B7A7-4BC8-9D7E-A5C43424D003} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{1B2E02C7-E7D6-43A0-A623-FA333FF16C4F} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{42AED40B-130F-40EC-988E-CB0E0B6875C3} = {0E24EB52-E32C-4F55-B90D-249B3FD7972A}
+		{28680BC9-09B7-472C-9273-A3161118D167} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{9AEBEF0F-3920-4CB0-B3E7-571D92525DC2} = {18B26C60-6E6C-4AE7-A50A-0AE25F893AEA}
+		{8FBD0EE1-EE07-443D-8BB9-4D3114FD77FB} = {3E5A92A8-EA00-4E55-BD13-FC735F546ECC}
+		{CFF1FDE8-1C8C-4BEA-95B7-8CFFD7C92F09} = {3E5A92A8-EA00-4E55-BD13-FC735F546ECC}
+		{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7} = {A7F378AC-7085-4944-A4D0-FBF39974564B}
+		{F9A5DC47-769F-4411-8CE0-34405CEAC272} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{900B7938-973D-4071-9C2D-0320110D9C04} = {7475BCB4-4950-4FB2-9A64-626CC6A6F1DD}
+		{AEE3937C-8C8F-43C3-8846-BC3831C62CD0} = {7475BCB4-4950-4FB2-9A64-626CC6A6F1DD}
+		{728DF56F-A40F-4661-B21E-DDBA3F8AB445} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{F6326A6F-AAA6-45BA-B987-BE6CB94D5935} = {7475BCB4-4950-4FB2-9A64-626CC6A6F1DD}
+		{A70F8B79-C342-4E14-939E-09327A49C41F} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{DC65A3AB-4FFC-4306-91FC-F717FAB296C7} = {7475BCB4-4950-4FB2-9A64-626CC6A6F1DD}
+		{103F8296-452C-4D41-990C-E3B7ADF6FBEA} = {B84881F6-029C-45CD-94A2-B9135805695C}
+		{6AED258D-A4D9-4FD1-A3CA-E80EA6067DBA} = {E3B39E9F-7D3F-4181-A534-627F557FBDFD}
+		{5920F92A-39DC-4EA7-9E5C-72072EBF741C} = {3E5A92A8-EA00-4E55-BD13-FC735F546ECC}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 35
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://europevuk231.europe.fs.fujitsu.com:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = Fujitsu.Exceptions.Framework\\Fujitsu.Exceptions.Framework.csproj
+		SccProjectTopLevelParentUniqueName1 = SLM\u0020Solution.sln
+		SccProjectName1 = Fujitsu.Exceptions.Framework
+		SccLocalPath1 = Fujitsu.Exceptions.Framework
+		SccProjectUniqueName2 = Fujitsu.SLM.Constants\\Fujitsu.SLM.Constants.csproj
+		SccProjectTopLevelParentUniqueName2 = SLM\u0020Solution.sln
+		SccProjectName2 = Fujitsu.SLM.Constants
+		SccLocalPath2 = Fujitsu.SLM.Constants
+		SccProjectUniqueName3 = Fujitsu.SLM.Core\\Fujitsu.SLM.Core.csproj
+		SccProjectTopLevelParentUniqueName3 = SLM\u0020Solution.sln
+		SccProjectName3 = Fujitsu.SLM.Core
+		SccLocalPath3 = Fujitsu.SLM.Core
+		SccProjectUniqueName4 = Fujitsu.SLM.Extensions\\Fujitsu.SLM.Extensions.csproj
+		SccProjectTopLevelParentUniqueName4 = SLM\u0020Solution.sln
+		SccProjectName4 = Fujitsu.SLM.Extensions
+		SccLocalPath4 = Fujitsu.SLM.Extensions
+		SccProjectUniqueName5 = Fujitsu.SLM.Web.Context\\Fujitsu.SLM.Web.Context.csproj
+		SccProjectTopLevelParentUniqueName5 = SLM\u0020Solution.sln
+		SccProjectName5 = Fujitsu.SLM.Web.Context
+		SccLocalPath5 = Fujitsu.SLM.Web.Context
+		SccProjectUniqueName6 = Fujitsu.SLM.Web.Tests\\Fujitsu.SLM.Web.Tests.csproj
+		SccProjectTopLevelParentUniqueName6 = SLM\u0020Solution.sln
+		SccProjectName6 = Fujitsu.SLM.Web.Tests
+		SccLocalPath6 = Fujitsu.SLM.Web.Tests
+		SccProjectUniqueName7 = Fujitsu.SLM.Data\\Fujitsu.SLM.Data.csproj
+		SccProjectTopLevelParentUniqueName7 = SLM\u0020Solution.sln
+		SccProjectName7 = Fujitsu.SLM.Data
+		SccLocalPath7 = Fujitsu.SLM.Data
+		SccProjectUniqueName8 = Fujitsu.SLM.Services\\Fujitsu.SLM.Services.csproj
+		SccProjectTopLevelParentUniqueName8 = SLM\u0020Solution.sln
+		SccProjectName8 = Fujitsu.SLM.Services
+		SccLocalPath8 = Fujitsu.SLM.Services
+		SccProjectUniqueName9 = Fujitsu.SLM.Model\\Fujitsu.SLM.Model.csproj
+		SccProjectTopLevelParentUniqueName9 = SLM\u0020Solution.sln
+		SccProjectName9 = Fujitsu.SLM.Model
+		SccLocalPath9 = Fujitsu.SLM.Model
+		SccProjectUniqueName10 = Fujitsu.SLM.Services.Tests\\Fujitsu.SLM.Services.Tests.csproj
+		SccProjectTopLevelParentUniqueName10 = SLM\u0020Solution.sln
+		SccProjectName10 = Fujitsu.SLM.Services.Tests
+		SccLocalPath10 = Fujitsu.SLM.Services.Tests
+		SccProjectUniqueName11 = Fujitsu.SLM.UnitTesting\\Fujitsu.SLM.UnitTesting.csproj
+		SccProjectTopLevelParentUniqueName11 = SLM\u0020Solution.sln
+		SccProjectName11 = Fujitsu.SLM.UnitTesting
+		SccLocalPath11 = Fujitsu.SLM.UnitTesting
+		SccProjectUniqueName12 = Fujitsu.SLM.Web.Resources\\Fujitsu.SLM.Web.Resources.csproj
+		SccProjectTopLevelParentUniqueName12 = SLM\u0020Solution.sln
+		SccProjectName12 = Fujitsu.SLM.Web.Resources
+		SccLocalPath12 = Fujitsu.SLM.Web.Resources
+		SccProjectUniqueName13 = Fujtisu.SLM.Enumerations\\Fujitsu.SLM.Enumerations.csproj
+		SccProjectTopLevelParentUniqueName13 = SLM\u0020Solution.sln
+		SccProjectName13 = Fujtisu.SLM.Enumerations
+		SccLocalPath13 = Fujtisu.SLM.Enumerations
+		SccProjectUniqueName14 = Fujitsu.SLM.Web\\Fujitsu.SLM.Web.csproj
+		SccProjectTopLevelParentUniqueName14 = SLM\u0020Solution.sln
+		SccProjectName14 = Fujitsu.SLM.Web
+		SccLocalPath14 = Fujitsu.SLM.Web
+		SccProjectUniqueName15 = Fujitsu.Exceptions.Framework.Tests\\Fujitsu.Exceptions.Framework.Tests.csproj
+		SccProjectTopLevelParentUniqueName15 = SLM\u0020Solution.sln
+		SccProjectName15 = Fujitsu.Exceptions.Framework.Tests
+		SccLocalPath15 = Fujitsu.Exceptions.Framework.Tests
+		SccProjectUniqueName16 = Fujitsu.SLM.Core.Tests\\Fujitsu.SLM.Core.Tests.csproj
+		SccProjectTopLevelParentUniqueName16 = SLM\u0020Solution.sln
+		SccProjectName16 = Fujitsu.SLM.Core.Tests
+		SccLocalPath16 = Fujitsu.SLM.Core.Tests
+		SccProjectUniqueName17 = Fujitsu.SLM.Web.Context.Tests\\Fujitsu.SLM.Web.Context.Tests.csproj
+		SccProjectTopLevelParentUniqueName17 = SLM\u0020Solution.sln
+		SccProjectName17 = Fujitsu.SLM.Web.Context.Tests
+		SccLocalPath17 = Fujitsu.SLM.Web.Context.Tests
+		SccProjectUniqueName18 = Fujitsu.SLM.Extension.Tests\\Fujitsu.SLM.Extension.Tests.csproj
+		SccProjectTopLevelParentUniqueName18 = SLM\u0020Solution.sln
+		SccProjectName18 = Fujitsu.SLM.Extension.Tests
+		SccLocalPath18 = Fujitsu.SLM.Extension.Tests
+		SccProjectUniqueName19 = Fujitsu.SLM.Web.Model.Tests\\Fujitsu.SLM.Web.Model.Tests.csproj
+		SccProjectTopLevelParentUniqueName19 = SLM\u0020Solution.sln
+		SccProjectName19 = Fujitsu.SLM.Web.Model.Tests
+		SccLocalPath19 = Fujitsu.SLM.Web.Model.Tests
+		SccProjectUniqueName20 = Fujitsu.SLM.ModelHelpers\\Fujitsu.SLM.ModelHelpers.csproj
+		SccProjectTopLevelParentUniqueName20 = SLM\u0020Solution.sln
+		SccProjectName20 = Fujitsu.SLM.ModelHelpers
+		SccLocalPath20 = Fujitsu.SLM.ModelHelpers
+		SccProjectUniqueName21 = Fujitsu.SLM.ModelHelpers.Tests\\Fujitsu.SLM.ModelHelpers.Tests.csproj
+		SccProjectTopLevelParentUniqueName21 = SLM\u0020Solution.sln
+		SccProjectName21 = Fujitsu.SLM.ModelHelpers.Tests
+		SccLocalPath21 = Fujitsu.SLM.ModelHelpers.Tests
+		SccProjectUniqueName22 = Fujitsu.SLM.Enumerations.Tests\\Fujitsu.SLM.Enumerations.Tests.csproj
+		SccProjectTopLevelParentUniqueName22 = SLM\u0020Solution.sln
+		SccProjectName22 = Fujitsu.SLM.Enumerations.Tests
+		SccLocalPath22 = Fujitsu.SLM.Enumerations.Tests
+		SccProjectUniqueName23 = Fujitsu.SLM.Diagrams\\Fujitsu.SLM.Diagrams.csproj
+		SccProjectTopLevelParentUniqueName23 = SLM\u0020Solution.sln
+		SccProjectName23 = Fujitsu.SLM.Diagrams
+		SccLocalPath23 = Fujitsu.SLM.Diagrams
+		SccProjectUniqueName24 = Fujitsu.SLM.Diagram.Tests\\Fujitsu.SLM.Diagram.Tests.csproj
+		SccProjectTopLevelParentUniqueName24 = SLM\u0020Solution.sln
+		SccProjectName24 = Fujitsu.SLM.Diagram.Tests
+		SccLocalPath24 = Fujitsu.SLM.Diagram.Tests
+		SccProjectUniqueName25 = Fujitsu.Aspose.Spreadsheets\\Fujitsu.Aspose.Spreadsheets.csproj
+		SccProjectTopLevelParentUniqueName25 = SLM\u0020Solution.sln
+		SccProjectName25 = Fujitsu.Aspose.Spreadsheets
+		SccLocalPath25 = Fujitsu.Aspose.Spreadsheets
+		SccProjectUniqueName26 = Fujitsu.Aspose.Spreadsheets.Tests\\Fujitsu.Aspose.Spreadsheets.Tests.csproj
+		SccProjectTopLevelParentUniqueName26 = SLM\u0020Solution.sln
+		SccProjectName26 = Fujitsu.Aspose.Spreadsheets.Tests
+		SccLocalPath26 = Fujitsu.Aspose.Spreadsheets.Tests
+		SccProjectUniqueName27 = Fujitsu.SLM.DataImporters\\Fujitsu.SLM.DataImporters.csproj
+		SccProjectTopLevelParentUniqueName27 = SLM\u0020Solution.sln
+		SccProjectName27 = Fujitsu.SLM.DataImporters
+		SccLocalPath27 = Fujitsu.SLM.DataImporters
+		SccProjectUniqueName28 = Fujitsu.SLM.DataImportProcessors\\Fujitsu.SLM.DataImportProcessors.csproj
+		SccProjectTopLevelParentUniqueName28 = SLM\u0020Solution.sln
+		SccProjectName28 = Fujitsu.SLM.DataImportProcessors
+		SccLocalPath28 = Fujitsu.SLM.DataImportProcessors
+		SccProjectUniqueName29 = Fujitsu.SLM.DataImportProcessors.Tests\\Fujitsu.SLM.DataImportProcessors.Tests.csproj
+		SccProjectTopLevelParentUniqueName29 = SLM\u0020Solution.sln
+		SccProjectName29 = Fujitsu.SLM.DataImportProcessors.Tests
+		SccLocalPath29 = Fujitsu.SLM.DataImportProcessors.Tests
+		SccProjectUniqueName30 = Fujitsu.SLM.Transformers\\Fujitsu.SLM.Transformers.csproj
+		SccProjectTopLevelParentUniqueName30 = SLM\u0020Solution.sln
+		SccProjectName30 = Fujitsu.SLM.Transformers
+		SccLocalPath30 = Fujitsu.SLM.Transformers
+		SccProjectUniqueName31 = Fujitsu.SLM.Transformers.Tests\\Fujitsu.SLM.Transformers.Tests.csproj
+		SccProjectTopLevelParentUniqueName31 = SLM\u0020Solution.sln
+		SccProjectName31 = Fujitsu.SLM.Transformers.Tests
+		SccLocalPath31 = Fujitsu.SLM.Transformers.Tests
+		SccProjectUniqueName32 = Fujitsu.SLM.TemplateProcessors\\Fujitsu.SLM.TemplateProcessors.csproj
+		SccProjectTopLevelParentUniqueName32 = SLM\u0020Solution.sln
+		SccProjectName32 = Fujitsu.SLM.TemplateProcessors
+		SccLocalPath32 = Fujitsu.SLM.TemplateProcessors
+		SccProjectUniqueName33 = Fujitsu.SLM.TemplateProcessors.Tests\\Fujitsu.SLM.TemplateProcessors.Tests.csproj
+		SccProjectTopLevelParentUniqueName33 = SLM\u0020Solution.sln
+		SccProjectName33 = Fujitsu.SLM.TemplateProcessors.Tests
+		SccLocalPath33 = Fujitsu.SLM.TemplateProcessors.Tests
+		SccProjectUniqueName34 = Fujitsu.SLM.CustomerMigration.Console\\Fujitsu.SLM.CustomerMigration.Console.csproj
+		SccProjectTopLevelParentUniqueName34 = SLM\u0020Solution.sln
+		SccProjectName34 = Fujitsu.SLM.CustomerMigration.Console
+		SccLocalPath34 = Fujitsu.SLM.CustomerMigration.Console
+	EndGlobalSection
+EndGlobal

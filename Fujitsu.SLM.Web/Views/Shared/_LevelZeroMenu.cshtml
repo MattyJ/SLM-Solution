@@ -1,0 +1,21 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+@using Fujitsu.SLM.Web.Session
+
+@model LevelZeroMenuModel
+
+@{
+    var appUserContext = AppUserContext.GetAppUserContext();
+}
+
+@if (@User.IsInRole(UserRoles.Architect))
+{
+    @Html.NavigationLinkListItem("Service Decomposition", Model.ServiceDecompositionsSelected, "EditCustomer", "ServiceDecomposition", new { id = @appUserContext.Current.CurrentCustomer.Id}, new { id = "lnkServiceDecomposition" })
+    @Html.NavigationLinkListItem("Add Service Desk", Model.AddServiceDeskSelected, "Add", "ServiceDesk", new { level = NavigationLevelNames.LevelZero }, new { id = "lnkAddServiceDesks" })
+}
+@if (@User.IsInRole(UserRoles.Viewer))
+{
+    @Html.NavigationLinkListItem("Service Desks", Model.ServiceDeskInputsSelected, "Index", "ServiceDesk", new { level = NavigationLevelNames.LevelZero }, new { id = "lnkServiceDesks" })
+    @Html.NavigationLinkListItem("Service Domains", Model.ServiceDomainsSelected, "Index", "ServiceDomain", new { level = NavigationLevelNames.LevelZero }, new { id = "lnkServiceDomains" })
+    @Html.NavigationLinkListItem("Resolvers", Model.ResolversSelected, "Index", "Resolver", new { level = NavigationLevelNames.LevelZero }, new { id = "lnkResolvers" })
+    @Html.NavigationLinkListItem("Diagrams", Model.DiagramsSelected, "Index", "Diagram", new { level = NavigationLevelNames.LevelZero }, new { id = "lnkDiagrams" })
+}

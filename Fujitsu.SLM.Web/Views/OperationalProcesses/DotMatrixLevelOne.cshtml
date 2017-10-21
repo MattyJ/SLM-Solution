@@ -1,0 +1,23 @@
+﻿@model ViewProcessDotMatrixViewModel
+@{
+    ViewBag.Title = LevelNames.LevelOne + " > Process Dot Matrix";
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelOneMenu", new LevelOneMenuModel { ProcessDotMatrixSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "dotmatrixlevelone" })
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_DotMatrix", Model)

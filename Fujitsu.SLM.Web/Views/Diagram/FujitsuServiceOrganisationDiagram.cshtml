@@ -1,0 +1,554 @@
+﻿@model ChartViewModel
+@{
+    var level = Model.Level;
+    var levelTitle = level == 1 ? LevelNames.LevelOne : LevelNames.LevelTwo;
+    ViewBag.Title = $"{levelTitle} > Diagrams > {Diagram.FujitsuServiceOrganisationTitle}";
+}
+
+@section navigation
+{
+    @switch (level)
+    {
+        case 1:
+            @Html.Partial("_LevelOneDiagramMenu", new DiagramMenuModel { ServiceOrganisationFujitsuSelected = true })
+            break;
+        case 2:
+            @Html.Partial("_LevelTwoDiagramMenu", new DiagramMenuModel { ServiceOrganisationFujitsuSelected = true })
+            break;
+    }
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "diagramlevelone" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div id="diagram-entities">
+    <div class="diagram-entity">
+        @(Html.Kendo().CheckBox().Name("Resolvers").Checked(Model.Resolvers).Label("Resolvers"))
+    </div>
+    <div class="diagram-entity">
+        @(Html.Kendo().CheckBox().Name("Components").Checked(Model.ServiceComponents).Label("Service Components"))
+    </div>
+    <div class="diagram-entity">
+        @(Html.Kendo().CheckBox().Name("Activities").Checked(Model.ServiceActivities).Label("Service Activities"))
+    </div>
+</div>
+
+<div id="btn-group" role="group">
+    <button type="button" class="k-button k-button-icontext slm-button generate-diagram">Generate</button>
+    @Html.Partial("_DiagramButtonGroup")
+</div>
+
+<div id="diagram" class="js-content">
+    @(Html.Kendo().Diagram()
+          .Name("FujitsuServiceOrganisationDiagram")
+          .DataSource(dataSource => dataSource
+              .Custom()
+              .Schema(schema => schema.Model(model => model.HasChildren("hasChildren").Id("flatIndex")))
+              .Transport(transport => transport.Read("readHandler")))
+          .Editable(false)
+          .ShapeDefaults(sd => sd
+              .Visual("visualTemplate")
+              .Content(c => c.Template("#= dataItem.CenteredTitle #").FontSize(16).FontFamily("Segoe UI")))
+          .ConnectionDefaults(cd => cd
+              .Stroke(s => s
+                  .Color("#979797")
+                  .Width(2))
+              .EndCap("ArrowEnd")
+              .FromConnector("Bottom")
+              .ToConnector("Top"))
+    )
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        });
+
+    var dataMap = [];
+    var lastRoot;
+    var response;
+    var lastRootTimeout;
+
+    function readHandler(options) {
+        var data = {
+            Id: @Model.Id,
+            svcComponents: $('#Components').is(':checked'),
+            resolverGroups: $("#Resolvers").is(":checked"),
+            svcActivities: $("#Activities").is(":checked"),
+            opProcs: $("#OpProcs").is(":checked")
+        };
+
+        if (!dataMap.length) {
+            startSpinner();
+            $.ajax({
+                url: '@Url.Action("ReadFujitsuServiceOrganisationChart", "Diagram")',
+                data: JSON.stringify(data),
+                type: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    $("#FujitsuServiceOrganisationDiagram").hide();
+                    loaded = true;
+                    response = result;
+                    flatten(result.slice(0), 0);
+                    options.success(result);
+                },
+                error: function() {
+                    diagramError();
+                    stopSpinner();
+                }
+            });
+        } else {
+            var root = dataMap[options.data.flatIndex];
+            var successHandler = function () {
+                options.success(root.Units);
+                if (root === lastRoot) {
+                    lastRootTimeout = setTimeout(function () {
+                        lastRootTimeout = undefined;
+                        var diagram = $("#FujitsuServiceOrganisationDiagram").getKendoDiagram();
+                        diagram.layout({
+                            type: "tree"
+                        });
+                        onRequestEnd({
+                            response: response
+                        });
+                    }, 0);
+                }
+            }
+
+            if (lastRootTimeout) {
+                clearTimeout(lastRootTimeout);
+                lastRoot = root;
+            }
+
+            if (root.itemLevel % 15 !== 0) {
+                successHandler();
+            } else {
+                setTimeout(successHandler, 0);
+            }
+        }
+    }
+
+    var FJS_WATERMARK_WIDTH = 489;
+    var FJS_WATERMARK_HEIGHT = 625;
+    var FJS_WATERMARK_URL = '@Url.Content("~/Images/Infinity-Mark-Watermark-Grey-1-RGB.png")';
+
+    var activityHeight = 20;
+
+    $(".generate-diagram").click(function() {
+        var diagram = $("#FujitsuServiceOrganisationDiagram").getKendoDiagram();
+        dataMap = [];
+
+        diagram.dataSource.read();
+    });
+
+    function visualTemplate(options) {
+        var wordWrapLength = 45;
+        var textBlocks = [];
+        var dataviz = kendo.dataviz;
+        var g = new dataviz.diagram.Group();
+        var dataItem = options.dataItem;
+
+        if (dataItem.Type === "@DecompositionTypeNames.EmptyForLayout") {
+            g.append(new dataviz.diagram.TextBlock({
+                height: 0,
+                width: 0
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.InputTypeNumber") {
+            g.append(new dataviz.diagram.Circle({
+                radius: 25,
+                stroke: {
+                    width: 2,
+                    color: dataItem.Color || "#586477"
+                },
+
+                fill: "#ffffff"
+            }));
+
+        } else if (dataItem.Type === "@DecompositionTypeNames.InputTypeName") {
+            g.append(new dataviz.diagram.Rectangle({
+                fontSize: 18,
+                width: 250,
+                height: 25,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+
+        } else if (dataItem.Type === "@DecompositionTypeNames.Desk") {
+            g.append(new dataviz.diagram.Rectangle({
+                width: dataItem.Width,
+                height: 67,
+                stroke: {
+                    width: 3
+                },
+
+                fill: "#ffffff"
+            }));
+
+        } else if (dataItem.Type === "@DecompositionTypeNames.Component") {
+            g.append(new dataviz.diagram.Rectangle({
+                width: 325,
+                height: 80,
+                stroke: {
+                    width: 2
+                },
+                fill: "#ffffff"
+            }));
+
+            textBlocks = [];
+            if (dataItem.Title.length > wordWrapLength) {
+                var result = wordwrap(dataItem.Title, wordWrapLength, "\r\n");
+                var wordWrapResult = result.split("\r\n");
+                for (var j = 0; j < wordWrapResult.length; j++) {
+                    textBlocks.push(wordWrapResult[j]);
+                }
+            } else {
+                textBlocks.push(dataItem.Title);
+            }
+
+            var y = 10;
+
+            for (var i = 0; i < textBlocks.length; i++) {
+                g.append(new dataviz.diagram.TextBlock({
+                    text: textBlocks[i],
+                    fontSize: 12,
+                    fontFamily: "Segoe UI",
+                    x: 75,
+                    y: y,
+                    color: "#00000"
+                }));
+
+                y = y + 20;
+            }
+
+            g.append(new dataviz.diagram.Image({
+                source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceComponentIcon.png")))",
+                x: 3,
+                y: 3,
+                width: 60,
+                height: 60
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.LineForDummyChildComponent") {
+            g.append(new dataviz.diagram.Path({
+                data: "M 10 0 L 10 82Z",
+                stroke: {
+                    width: 0,
+                },
+                fill: "#ffffff"
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.Resolver") {
+            g.append(new dataviz.diagram.Rectangle({
+                width: 325,
+                height: 80,
+                stroke: {
+                    width: 2
+                },
+                fill: "#ffffff"
+            }));
+
+            g.append(new dataviz.diagram.Image({
+                source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceResolverIcon.png")))",
+                x: 3,
+                y: 3,
+                width: 60,
+                height: 60
+            }));
+
+            g.append(new dataviz.diagram.TextBlock({
+                text: dataItem.Title,
+                fontSize: 12,
+                fontFamily: "Segoe UI",
+                x: 75,
+                y: 10,
+                color: "#00000"
+            }));
+
+            g.append(new dataviz.diagram.TextBlock({
+                text: dataItem.TitleTwo,
+                fontSize: 12,
+                fontFamily: "Segoe UI",
+                x: 75,
+                y: 30,
+                color: "#00000"
+            }));
+
+            g.append(new dataviz.diagram.TextBlock({
+                text: dataItem.TitleThree,
+                fontSize: 12,
+                fontFamily: "Segoe UI",
+                x: 75,
+                y: 50,
+                color: "#00000"
+            }));
+
+        } else if (dataItem.Type === "@DecompositionTypeNames.Activity") {
+            var activities = dataItem.Title.split("\r\n");
+            var activitiesWordWrapLength = 55;
+            textBlocks = [];
+            for (var h = 0; h < activities.length; h++) {
+                if (activities[h].length > activitiesWordWrapLength) {
+                    var result = wordwrap(activities[h], activitiesWordWrapLength, "\r\n");
+                    var wordWrapResult = result.split("\r\n");
+                    for (var j = 0; j < wordWrapResult.length; j++) {
+                        textBlocks.push(wordWrapResult[j]);
+                    }
+                } else {
+                    textBlocks.push(activities[h]);
+                }
+            }
+
+            var calcHeight = textBlocks.length * 20;
+            if (calcHeight > activityHeight) {
+                activityHeight = calcHeight;
+            }
+
+            g.append(new dataviz.diagram.Rectangle({
+                width: 325,
+                height: activityHeight,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+
+            g.append(new dataviz.diagram.Image({
+                source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceActivitiesIcon.png")))",
+                x: 132.5,
+                y: 3,
+                width: 60,
+                height: 60
+            }));
+
+            var y = 75;
+
+            for (var i = 0; i < textBlocks.length; i++) {
+                g.append(new dataviz.diagram.TextBlock({
+                    text: textBlocks[i],
+                    fontSize: 12,
+                    fontFamily: "Segoe UI",
+                    x: 20,
+                    y: y,
+                    color: "#00000"
+                }));
+
+                y = y + 20;
+            }
+        };
+
+
+        return g;
+    }
+
+    function onRequestEnd(e) {
+        var data = e.response;
+        setTimeout(function() {
+            var diagram = $("#FujitsuServiceOrganisationDiagram").getKendoDiagram();
+            var bbox = diagram.boundingBox();
+
+            var shape;
+
+            for (var i = 0; i < diagram.shapes.length; i++) {
+                shape = diagram.shapes[i];
+
+                if (shape.dataItem.Type === "@DecompositionTypeNames.LineForDummyChildComponent") {
+                    diagram.remove(shape.connections());
+                } else if (shape.dataItem.Type === "@DecompositionTypeNames.Desk") {
+                    // Resize the width of the Service Desk and span across
+                    if (bbox.width - 5 > shape.dataItem.Width) {
+                        shape.dataItem.Width = bbox.width - 5;
+                        shape.redrawVisual();
+                        shape.content(shape.content());
+                        shape.position({ x: bbox.x + 1, y: shape.position().y });
+                    }
+                } else if (shape.dataItem.Type === "@DecompositionTypeNames.LineForDummyChildComponent") {
+                    diagram.remove(shape.connections());
+                } else if (shape.dataItem.Type === "@DecompositionTypeNames.Activity") {
+                    diagram.remove(shape.connections());
+                    shape.height = activityHeight;
+                }
+            }
+
+            var diagramConnections = diagram.connections;
+            var shapeConnections;
+
+            for (var k = 0; k < diagramConnections.length; k++) {
+                shape = diagram.shapes[k];
+                if (shape.dataItem.Type === "@DecompositionTypeNames.LineForDummyChildComponent") {
+                    shapeConnections = shape.connections();
+                    for (var l = 0; l < shapeConnections.length; l++) {
+                        shapeConnections[l].redraw({
+                            endCap: "none"
+                        });
+                        break;
+                    }
+                }
+            }
+
+            var inputs = data[0].Inputs;
+            var inputWidth = 250;
+            var inputHeight = 25;
+            var inputNumberSize = 50;
+            var separation = 50;
+            var y = bbox.y - 3 * separation - inputHeight - inputNumberSize;
+            var x = (bbox.width - (inputs.length * inputWidth + (inputs.length - 1) * separation)) / 2;
+
+            for (var m = 0; m < inputs.length; m++) {
+                var inputShape = diagram.addShape({
+                    x: x,
+                    y: y,
+                    dataItem: inputs[m]
+                });
+
+                var bounds = inputShape.bounds();
+                var numberInputShape = diagram.addShape({
+                    x: bounds.center().x - inputNumberSize / 2 - 1,
+                    y: y + separation + inputHeight,
+                    dataItem: inputs[m].Units[0]
+                });
+
+                diagram.connect(inputShape, numberInputShape, {
+                    endCap: "none"
+                });
+
+                diagram.connect(numberInputShape, new kendo.dataviz.diagram.Point(x + bounds.width / 2, bbox.y - separation));
+
+                x += inputWidth + separation;
+            }
+
+            diagram.element.show();
+            onDiagram("#FujitsuServiceOrganisationDiagram");
+            diagram.bringIntoView(diagram.shapes);
+            stopSpinner();
+        }, 0);
+    }
+
+    $(".js-save-pdf").click(function () {
+        startSpinner();
+        var diagram = $("#FujitsuServiceOrganisationDiagram").getKendoDiagram();
+        var group = diagram.exportVisual();
+        var cbox = group.clippedBBox();
+        var center = cbox.center();
+
+        var rect = new kendo.geometry.Rect([center.x - FJS_WATERMARK_WIDTH / 2, center.y - FJS_WATERMARK_HEIGHT / 2], [FJS_WATERMARK_WIDTH, FJS_WATERMARK_HEIGHT]);
+        var background = new kendo.drawing.Image(FJS_WATERMARK_URL, rect);
+
+        group.insertAt(background, 0);
+
+        kendo.drawing.exportPDF(group, {
+            paperSize: "auto",
+            title: "@Model.Title",
+            author: "@Model.Author",
+            creator: "@Model.Creator",
+            date: new Date(),
+            subject: "@Model.Subject",
+            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+        }).done(function (data) {
+            saveDiagram('@Url.Action("SaveDiagram", "Diagram")', data, "@Model.Filename"+".pdf", @Model.Level, "@NotificationTypeNames.Success");
+        });
+
+    });
+
+    $(".js-save-svg").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an SVG
+                return kendo.drawing.exportSVG(group);
+            })
+            .done(function(data) {
+                saveDiagram("@Url.Action("SaveDiagram", "Diagram")", data, "@Model.Filename" + ".svg", @Model.Level, "@NotificationTypeNames.Success");
+            });
+    });
+
+    $(".js-export-pdf").click(function () {
+        startSpinner();
+        var diagram = $("#FujitsuServiceOrganisationDiagram").getKendoDiagram();
+        var group = diagram.exportVisual();
+        var cbox = group.clippedBBox();
+        var center = cbox.center();
+
+        var rect = new kendo.geometry.Rect([center.x - FJS_WATERMARK_WIDTH / 2, center.y - FJS_WATERMARK_HEIGHT / 2], [FJS_WATERMARK_WIDTH, FJS_WATERMARK_HEIGHT]);
+        var background = new kendo.drawing.Image(FJS_WATERMARK_URL, rect);
+
+        group.insertAt(background, 0);
+
+        group.transform(kendo.geometry.transform().scale(0.1, 0.1));
+
+        kendo.drawing.exportPDF(group, {
+            paperSize: "auto",
+            title: "@Model.Title",
+            author: "@Model.Author",
+            creator: "@Model.Creator",
+            date: new Date(),
+            subject: "@Model.Subject",
+            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+        }).done(function (data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "@Model.Filename"
+            });
+            stopSpinner();
+        });
+    });
+
+    $(".js-export-svg").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an SVG
+                return kendo.drawing.exportSVG(group);
+            })
+            .done(function(data) {
+                // Save the SVG file
+                saveAs(dataURLtoBlob(data), "@Model.Filename"+".svg");
+            });
+    });
+
+    @*$(".js-save-img").click(function () {
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an image
+                return kendo.drawing.exportImage(group);
+            })
+            .done(function(data) {
+                // Save the image file
+                saveDiagram("@Url.Action("SaveDiagram", "Diagram")", data, "@Model.Filename" + ".png", @Model.Level, "@NotificationTypeNames.Success");
+            });
+    });
+
+    $(".js-export-img").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        startSpinner();
+        try {
+            kendo.drawing.drawDOM($(".js-content"))
+                .then(function(group) {
+                // Render the result as an image
+                return kendo.drawing.exportImage(group);
+            })
+            .done(function(data) {
+                // Save the image file
+                saveAs(dataURLtoBlob(data), "@Model.Filename" + ".png");
+            });
+        } catch (e) {
+            kendoErrorAlert("An unexpected error has occurred the details of which have been logged. Please try again and if the problem persists, contact an administrator.");
+        } finally {
+            stopSpinner();
+        }
+    });*@
+
+</script>

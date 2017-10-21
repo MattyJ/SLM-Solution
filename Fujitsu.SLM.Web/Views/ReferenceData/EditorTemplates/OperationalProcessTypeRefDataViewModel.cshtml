@@ -1,0 +1,107 @@
+﻿@model OperationalProcessTypeRefDataViewModel
+
+<div>
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        <legend>Operational Process Type</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.OperationalProcessTypeName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.OperationalProcessTypeName, "WindowWideText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.OperationalProcessTypeName)
+                </div>
+            </div>
+        </div>
+        @if (User.IsInRole(UserRoles.Administrator))
+        {
+            <div id="OperationalProcessTypeRefDataGridVisible">
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.Visible)</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.Kendo().CheckBoxFor(x => x.Visible).Name("Visible").Label("")
+                        <div class="kendo-validation">
+                            @Html.ValidationMessageFor(model => model.Visible)
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.Standard)</label>
+                    </div>
+                    <div class="editor-field">
+                        @(Html.Kendo().CheckBox().Name("Standard"))
+                    </div>
+                </div>
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.SortOrder)</label>
+                    </div>
+                    <div class="editor-field">
+                        @(Html.EditorFor(x => x.SortOrder, "SmallInteger"))
+                        <div class="kendo-validation">
+                            @Html.ValidationMessageFor(model => model.SortOrder)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="NonOperationalProcessTypeRefDataGridVisible">
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.Visible)</label>
+                    </div>
+                    <div class="editor-field">
+                        @*JavaScript is only able to access the first rendered element with a given ID*@
+                        @Html.Kendo().CheckBoxFor(x => x.Visible).Name("OperationalProcessTypeVisible").Checked(false).Label("")
+                        <div class="kendo-validation">
+                            @Html.ValidationMessageFor(model => model.Visible)
+                        </div>
+                    </div>
+                </div>
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.Standard)</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.Kendo().CheckBoxFor(x => x.Standard).Name("OperationalProcessTypeStandard").Checked(false).Label("")
+                    </div>
+                </div>
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.SortOrder)</label>
+                    </div>
+                    <div class="editor-field">
+                        @(Html.Kendo().NumericTextBoxFor(m => m.SortOrder).Name("OperationalProcessTypeSortOrder")
+                          .HtmlAttributes(new { style = "width:80px" })
+                          .Format("#")
+                          .Min(int.MinValue)
+                          .Max(int.MaxValue)
+                        )
+                        <div class="kendo-validation">
+                            @Html.ValidationMessageFor(model => model.SortOrder)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </fieldset>
+</div>
+
+@Html.Partial("_KendoValidation")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var operationalProcessTypeRefDataGrid = $("#OperationalProcessTypeRefDataGrid").data("kendoGrid");
+        if (operationalProcessTypeRefDataGrid !== null && operationalProcessTypeRefDataGrid !== undefined) {
+            $('div#OperationalProcessTypeRefDataGridVisible').show();
+            $('div#NonOperationalProcessTypeRefDataGridVisible').remove();
+        } else {
+            $('div#OperationalProcessTypeRefDataGridVisible').hide();
+            $('div#NonOperationalProcessTypeRefDataGridVisible').show();
+        }
+    });
+</script>

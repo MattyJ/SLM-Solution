@@ -1,0 +1,49 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model OperationalProcessTypesViewModel
+
+<div id="operationalProcessTypesViewModelContainer">
+    <fieldset class="form-wider-popup-fieldset">
+        <legend>Operational Process Types</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.OperationalProcessTypes)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().MultiSelectFor(x => x.OperationalProcessTypes)
+                      .HtmlAttributes(new { style = "width:350px" })
+                      .Popup(p => p.AppendTo("body"))  // Kendo Bug 985 workaround, append popup manually to body
+                      .DataTextField("OperationalProcessTypeName")
+                      .DataValueField("Id")
+                      .AutoBind(true)
+                      .DataSource(source => source.Read(read => read.Action("GetAllAndNotVisibleOperationalProcessTypesForCustomer", "ReferenceData")))
+                      //.ItemTemplate("<span class=\"#:data.Visible? 'generic' : 'customerSpecific' #\"> #: data.OperationalProcessTypeName #</span>")
+                      .Placeholder(WebResources.DefaultDropDownListText)
+                )
+                <p class="multiselect-hint">
+                    To make Operational Process Type selections please click within the textarea above.
+                </p>
+                <p>
+                    <input id="createOperationalProcessType" type="button" name="Create Process" value="Create Operational Process Name" class="k-button k-button-icontext slm-wide-button"/>
+                </p>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_AddOperationalProcessTypeWindow")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#createOperationalProcessType").click(function(e) {
+            e.preventDefault();
+
+            var wnd = $("#process-type-window").data("kendoWindow");
+            wnd.bind('activate', function () {
+                $("input#OperationalProcessTypeName").focus();
+            });
+
+            wnd.refresh().center().open();
+        });
+    });
+
+</script>

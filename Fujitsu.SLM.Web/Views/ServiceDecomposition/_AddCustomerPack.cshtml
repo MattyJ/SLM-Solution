@@ -1,0 +1,84 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model AddCustomerPackViewModel
+
+@using (Html.BeginForm("AddCustomerPack", "ServiceDecomposition", FormMethod.Post, new { id = "addCustomerPackForm" }))
+{
+    @Html.AntiForgeryToken()
+    <div>
+        <fieldset class="form-popup-fieldset">
+            <legend>Add Diagram Pack</legend>
+
+            @if (Model.DisplayLevel)
+            {
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.EditLevel)</label>
+                    </div>
+                    <div class="editor-field">
+                        @(Html.Kendo().DropDownListFor(x => x.EditLevel)
+                              .AutoBind(true)
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .OptionLabel(WebResources.DefaultDropDownListText)
+                              .BindTo(Model.Levels))
+                        <div class="kendo-validation">
+                            @Html.ValidationMessageFor(x => x.EditLevel)
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                @Html.HiddenFor(x => x.EditLevel)
+            }
+
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.Filename)</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.EditorFor(x => x.Filename, "WideText"))
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(x => x.Filename)
+                    </div>
+                </div>
+            </div>
+
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.PackNotes)</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.EditorFor(x => x.PackNotes, "MultiLineText"))
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(x => x.PackNotes)
+                    </div>
+                </div>
+            </div>
+
+            <div class="layout-row">
+                <fieldset>
+                    <p>
+                        <input id="addDiagramPackSubmit" type="button" name="action" class="k-button k-button-icontext slm-button" value="Create" />
+                    </p>
+                </fieldset>
+            </div>
+        </fieldset>
+    </div>
+}
+@Html.Partial("_KendoValidation")
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        highlightRequiredFields();
+        var validator = $("#addCustomerPackForm").kendoValidator().data("kendoValidator");
+        //$("form").kendoValidator();
+        $("#addDiagramPackSubmit").click(function (clk) {
+            if (validator.validate()) {
+                startSpinner();
+                $("#addCustomerPackForm").submit();
+            } else {
+                clk.preventDefault();
+            }
+        });
+    });
+</script>

@@ -1,0 +1,42 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model MoveServiceDomainViewModel
+
+@using (Html.BeginForm("Move", "ServiceDomain"))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="moveServiceDomainContainer">
+        <fieldset class="form-popup-fieldset">
+            @Html.HiddenFor(x => x.ServiceDomainId)
+            <legend>Move Service Domain</legend>
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.ServiceDesks)</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(model => model.ServiceDeskId)
+                          .Name("ServiceDeskId")
+                          .AutoBind(true)
+                          .DataTextField("Value")
+                          .DataValueField("Key")
+                          .OptionLabel(WebResources.DefaultDropDownListText)
+                          .BindTo(Model.ServiceDesks))
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(model => model.ServiceDeskId)
+                    </div>
+                </div>
+            </div>
+            <div class="layout-row">
+                <div class="editor-label"></div>
+                <div class="editor-field">
+                    @(Html.Kendo().Button()
+                          .HtmlAttributes(new { type = "button" })
+                          .Name("moveDomainType")
+                          .Content("Move"))
+                </div>
+            </div>
+        </fieldset>
+    </div>
+}
+
+@Html.Partial("_KendoValidation")

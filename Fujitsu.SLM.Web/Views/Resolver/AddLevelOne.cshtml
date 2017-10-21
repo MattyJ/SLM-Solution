@@ -1,0 +1,29 @@
+﻿@model AddResolverViewModel
+
+@{
+    ViewBag.Title = LevelNames.LevelOne + " > Add Resolver";
+    var menuModel = new LevelOneMenuModel { ServiceComponentsSelected = Model.HasServiceComponentContext, ResoversSelected = !Model.HasServiceComponentContext };
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelOneMenu", menuModel)
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "addresolverlevelone" })
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_Add", Model)

@@ -1,0 +1,38 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+@using Fujitsu.SLM.Web.Session
+@model Fujitsu.SLM.Web.Models.Menu.AdministrationMenuModel
+<script id="treeview-template" type="text/kendo-ui-template">
+    <a href='\#'><span>#: item.text #</span></a>
+</script>
+
+@if (User.IsInRole(UserRoles.Administrator))
+{
+    @Html.NavigationLinkListItem("Customers", Model.CustomersSelected, "Customers", "Customer", null, new {id = "lnkAdministrationCustomers"})
+    @Html.NavigationLinkListItem("Archives", Model.ArchivesSelected, "Archives", "Customer", null, new {id = "lnkAdministrationArchives"})
+    @Html.NavigationLinkListItem("Templates", Model.TemplatesSelected, "Index", "Template", null, new {id = "lnkAdministrationTemplates"})
+    @Html.NavigationLinkListItem("Parameters", Model.ParametersSelected, "Parameters", "Administration", null, new {id = "lnkAdministrationParameters"})
+    @Html.NavigationLinkListItem("Videos", Model.VideosSelected, "Videos", "Administration", null, new {id = "lnkAdministrationVideos"})
+    @Html.NavigationLinkListItem("Users", Model.UsersSelected, "Users", "Administration", null, new {id = "lnkAdministrationUsers"})
+
+    @(Html.Kendo().TreeView().Name("MenuTree").Events(evt => evt.Select("onSelectMenuItem")).Items(actions =>
+{
+    actions.Add().Text("Regions").Action("Regions", "Administration").Selected(Model.RegionsSelected).HtmlAttributes(new { id = "lnkRegions"});
+    actions.Add()
+        .Text("User Roles")
+        .Expanded(Model.AdministratorRoleSelected || Model.ArchitectRoleSelected || Model.ViewerRoleSelected)
+        .Items(children =>
+        {
+            children.Add().Text("Administrator").Action("Roles", "Administration", new {role = UserRoles.Administrator}).Selected(Model.AdministratorRoleSelected).HtmlAttributes(new {id = "lnkRoleAdministrator"});
+            children.Add().Text("Architect").Action("Roles", "Administration", new {role = UserRoles.Architect}).Selected(Model.ArchitectRoleSelected).HtmlAttributes(new {id = "lnkRoleArchitect"});
+            children.Add().Text("Viewer").Action("Roles", "Administration", new {role = UserRoles.Viewer}).Selected(Model.ViewerRoleSelected).HtmlAttributes(new {id = "lnkRoleViewer"});
+        });
+
+}))
+}
+<script>
+
+    $(document).ready(function () {
+        highlightSelectedNode();
+    });
+
+</script>

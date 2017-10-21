@@ -1,0 +1,124 @@
+﻿@using Fujitsu.SLM.Web.Session
+@{
+    var appUserContext = AppUserContext.GetAppUserContext();
+}
+@(Html.Kendo().Grid<AuditViewModel>()
+        .Name("AuditGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Visible(false);
+            columns.Bound(m => m.VersionNumber).Width(30);
+            columns.Bound(m => m.ReasonForIssue).Width(100);
+            columns.Bound(m => m.Notes).Width(200);
+            columns.Bound(m => m.InsertedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(m => m.InsertedBy).Width(75);
+        })
+        .ToolBar(toolbar =>
+        {
+            toolbar.Create().Text("Add Version").HtmlAttributes(new { id = "js-addVersion" });
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Id(m => m.Id);
+                model.Field(field => field.CustomerId).DefaultValue(appUserContext.Current.CurrentCustomer.Id);
+                model.Field(field => field.InsertedBy).DefaultValue(User.Identity.Name);
+                model.Field(field => field.UpdatedBy).DefaultValue(User.Identity.Name);
+            })
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+                e.RequestEnd("onRequestEnd");
+            })
+            .Read(read => read.Action("ReadAjaxAuditGrid", "Audit"))
+            .Create(create => create.Action("CreateAjaxAuditGrid", "Audit"))
+            .Sort(sort => sort.Add(col => col.VersionNumber))
+        )
+        .Events(e =>
+        {
+            e.Change("onRowSelectAudit");
+            e.Cancel("onCancel");
+            e.Edit("onCreate");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+        .Editable(edt => edt.Mode(GridEditMode.PopUp)
+        .Window(w => w.Title("Audit").Width(600)))
+      )
+
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $("#AuditGrid .k-grid-add").on("click",
+            function (e) {
+                isCreating = true;
+            });
+
+        popupGridEditorButtonNamingOnInsert("#AuditGrid");
+
+        $("#js-addVersion > span").addClass("k-icon k-i-track-changes");
+    });
+
+    function onCreate(e) {
+        if (e.model.isNew()) {
+            var arg = e;
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetNextVersionNumber", "Audit")',
+                contentType: "application/json; charset=utf-8",
+                success: function (result) {
+                    arg.container.find("[name=Version]").data("kendoNumericTextBox").value(result.VersionNumber);
+                    var uid = $("#CustomerId").closest("[data-role=window]").data("uid");
+                    var model = $("#AuditGrid").data("kendoGrid").dataSource.getByUid(uid);
+                    model.set("Version", result.VersionNumber);
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                },
+                complete: function () {
+                }
+            });
+
+            arg.container.data('kendoWindow').bind('activate', function () {
+                $("input#ReasonForIssue").focus(); // taking focus away from first element applies the version number mask/format
+            });
+        }
+    }
+
+    function onCancel() {
+        var grid = $("#AuditGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onRowSelectAudit() {
+        var selectGrid = $('#AuditGrid').data("kendoGrid");
+        var row = selectGrid.select();
+        var data = selectGrid.dataItem(row);
+        var url = '@Url.Action("Edit", "Audit", new {id = "XXXId"})';
+        window.location.href = url.replace('XXXId', data.id);
+    }
+
+    function onRequestEnd(e) {
+        if (e.type == "create") {
+            if (e.response.Errors == null) {
+                displayNotification("Version successfully created.", "@NotificationTypeNames.Success");
+            } else {
+                $("#AuditGrid").data("kendoGrid").dataSource.read();
+                this.cancelChanges();
+            }
+        }
+    }
+
+</script>

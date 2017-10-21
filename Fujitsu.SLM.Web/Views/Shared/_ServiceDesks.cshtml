@@ -1,0 +1,130 @@
+﻿@using Fujitsu.SLM.Model
+@using Fujitsu.SLM.Web.Session
+@model ServiceDeskGridViewModel
+
+@{
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+    var appUserContext = AppUserContext.GetAppUserContext();
+}
+
+@(Html.Kendo().Grid<ServiceDeskViewModel>()
+        .Name("ServiceDeskGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.CustomerId).Visible(false);
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.DeskName).Width(200);
+            columns.Bound(o => o.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(30);
+            columns.Bound(o => o.UpdatedBy).Width(30);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Delete").Click("onDeleteServiceDesk");
+            }).Title("").Width(50).Visible(isArchitect);
+
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(10)
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Id(p => p.Id);
+                model.Field(field => field.CustomerId).DefaultValue(appUserContext.Current.CurrentCustomer.Id);
+                model.Field(field => field.DeskInputTypes).DefaultValue(new List<InputTypeRefData>());
+            })
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxServiceDeskGrid", "ServiceDesk"))
+            .Sort(sort =>
+            {
+                sort.Add(col => col.DeskName);
+            })
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Change("onRowSelectServiceDesk");
+            e.Cancel("onCancel");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+)
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadKendoGridUsingSavedState("#ServiceDeskGrid");
+        $("#ServiceDeskGrid .k-grid-add").on("click", function (e) {
+            isCreating = true;
+        });
+
+        popupGridEditorButtonNamingOnInsert("#ServiceDeskGrid");
+    });
+
+    function onRowSelectServiceDesk() {
+        var selectGrid = $('#ServiceDeskGrid').data("kendoGrid");
+        var row = selectGrid.select();
+        var data = selectGrid.dataItem(row);
+        var url = '@Url.Action("Edit", "ServiceDesk", new { level = "XXXLevel", id = "XXXId" })';
+        url = url.replace('XXXLevel', '@Model.EditLevel');
+        window.location.href = url.replace('XXXId', data.id);
+
+    }
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Edit > span").addClass("k-icon k-i-pencil");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+        saveKendoGridState("#ServiceDeskGrid");
+    }
+
+    function onCancel() {
+        var grid = $("#ServiceDeskGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteServiceDesk(e) {
+        var grid = $("#ServiceDeskGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Service Desk?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteServiceDesk", "ServiceDesk")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Service Desk successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

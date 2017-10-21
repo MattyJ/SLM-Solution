@@ -1,0 +1,129 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+@section navigation
+{
+    @Html.Action("HomeMenu", "Menu")
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "register" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+{
+    <hr/>
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.Email)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.EditorFor(x => x.Email))
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+    </div>
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.FirstName)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.EditorFor(x => x.FirstName))
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+    </div>
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.LastName)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.EditorFor(x => x.LastName))
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+    </div>
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.RegionTypeId)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.Kendo().DropDownListFor(x => x.RegionTypeId)
+                      .AutoBind(true)
+                      .Filter(FilterType.Contains)
+                      .DataTextField("RegionName")
+                      .DataValueField("Id")
+                      .DataSource(source => source.Read(read => read.Action("GetRegionTypes", "ReferenceData")))
+                      .OptionLabel(WebResources.DefaultDropDownListText)
+                      .HtmlAttributes(new { style = "width:250px" }))
+            <div class="kendo-validation">
+                @Html.ValidationMessageFor(x => x.RegionTypeId)
+            </div>
+        </div>
+    </div>
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.Password)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.EditorFor(x => x.Password))
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+    </div>
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.ConfirmPassword)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.EditorFor(x => x.ConfirmPassword))
+            @Html.ValidationMessageFor(model => model.ConfirmPassword)
+        </div>
+    </div>
+
+    <fieldset>
+        <p>
+            <input type="submit" name="action" class="k-button k-button-icontext slm-button" value="Register" />
+        </p>
+    </fieldset>
+}
+
+@(Html.Kendo().Tooltip()
+        .For("#Email")
+        .Position(TooltipPosition.Top)
+        .Content(WebResources.TooltipEmail)
+        .Animation(true)
+        .Width(350)
+)
+
+@(Html.Kendo().Tooltip()
+        .For("#Password")
+        .Position(TooltipPosition.Top)
+        .Content(WebResources.TooltipPasswordComplexityRules)
+        .Animation(true)
+        .Width(350)
+)
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnBack").hide();
+        $("#customer-details").hide();
+
+        highlightRequiredFields();
+    });
+</script>

@@ -1,0 +1,13 @@
+﻿@(Html.Kendo().Window()
+    .Name("resolver-group-type-window")
+    .Title("Resolver Group Type")
+    .Width(630)
+    .Height(275)
+    .Modal(true)
+    .Visible(false)
+    .Events(events =>
+    {
+        events.Refresh("onResolverGroupTypeRefresh");
+    })
+    .Actions(actions => actions.Close())
+    .LoadContentFrom("CreateResolverGroupType", "ReferenceData"))

@@ -1,0 +1,112 @@
+﻿@model EditServiceComponentLevel1WithNoChildComponentOrResolverViewModel
+
+@{
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm("EditLevel1WithNoChildComponentOrResolver", "ServiceComponent"))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="editServiceComponentLevel1NoChildOrResolverContainer" class="edit-service-component">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ReturnUrl)
+        @Html.HiddenFor(m => m.EditLevel)
+        @Html.HiddenFor(m => m.InputMode, new { id = "inputMode" })
+
+        @Html.EditorFor(m => m.ComponentName)
+        @Html.EditorFor(m => m.ServiceActivities)
+        @Html.EditorFor(m => m.DiagramOrder)
+
+        @(Html.Kendo().TabStrip()
+              .Name("editServiceComponentInputMode")
+              .Items(tabstrip =>
+              {
+                  tabstrip.Add().Text("Allocate Resolver")
+                      .Selected(true)
+                      .Content(content => Html.Kendo()
+                          .PanelBar()
+                          .Name("EditServiceComponentAddResolverPanel")
+                          .ExpandMode(PanelBarExpandMode.Multiple)
+                          .SelectedIndex(0)
+                          .Items(subItems =>
+                          {
+                              subItems.Add()
+                                  .Text("Service Delivery Organisation").Items(subItem =>
+                                  {
+                                      subItem
+                                          .Add()
+                                          .Expanded(true)
+                                          .Content(@<text>@Html.EditorFor(m => m.ResolverServiceDeliveryOrganisation)</text>);
+                                  });
+                              subItems.Add()
+                                  .Text("Service Delivery Unit").Items(subItem =>
+                                  {
+                                      subItem
+                                          .Add()
+                                          .Expanded(true)
+                                          .Content(@<text>@Html.EditorFor(m => m.ResolverServiceDeliveryUnit)</text>);
+                                  });
+                              subItems.Add()
+                                  .Text("Resolver Group").Items(subItem =>
+                                  {
+                                      subItem
+                                          .Add()
+                                          .Expanded(true)
+                                          .Content(@<text>@Html.EditorFor(m => m.ResolverGroup)</text>);
+                              });
+                      }));
+
+              tabstrip.Add().Text("Add Service Component (Level 2)")
+                    .Content(content => Html.Kendo()
+                    .PanelBar()
+                    .Name("EditServiceComponentAddComponentPanel")
+                    .ExpandMode(PanelBarExpandMode.Multiple)
+                    .SelectedIndex(1)
+                    .Items(subItems =>
+                    {
+                        subItems.Add()
+                            .Text("Service Component (Level 2)");
+                    }));
+                    })
+                    .Events(events => events.Select("onInputModelSelect")))
+
+        <fieldset>
+            <p>
+                <input type="submit" name="Save" class="k-button k-button-icontext slm-button" value="Save" />
+                <input id="editServiceComponentReturn" type="submit" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+            </p>
+        </fieldset>
+    </div>
+}
+<script>
+        $(function () {
+            highlightRequiredFields();
+            $("form").kendoValidator();
+        });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#editServiceComponentReturn").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            window.location.href = url; //"@Model.ReturnUrl";
+        });
+    });
+
+    function onInputModelSelect(e) {
+        var tabStrip = $(e.item).index();
+        $("#inputMode").val(tabStrip);
+        if (tabStrip !== undefined && tabStrip === 1) {
+            startSpinner();
+            var url = '@Url.Action("AddLevel2", "ServiceComponent", new { level = "XXXLevel", id = "XXXId" })';
+            url = url.replace('XXXLevel', '@Model.EditLevel');
+            window.location.href = url.replace('XXXId', '@Model.Id');
+        }
+    }
+</script>

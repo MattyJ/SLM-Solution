@@ -1,0 +1,29 @@
+﻿@model AddServiceDeskViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.HiddenFor(x => x.EditLevel)
+    @Html.HiddenFor(x => x.ReturnUrl)
+    @Html.EditorFor(m => m.ServiceDesk)
+
+    <fieldset>
+        <p>
+            <input type="submit" name="action" class="k-button k-button-icontext slm-button" value="Save" />
+            <input id="buttonCancel" type="submit" name="action" class="k-button k-button-icontext slm-button" value="Cancel" />
+        </p>
+    </fieldset>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        // Cancel button.
+        $("#buttonCancel").click(function () {
+        startSpinner();
+            window.location.href = url; //'@Model.ReturnUrl';
+        });
+    });
+</script>

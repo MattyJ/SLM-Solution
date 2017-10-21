@@ -1,0 +1,234 @@
+﻿@using Fujitsu.SLM.Web.Session
+@{
+    ViewBag.Title = "Customers";
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { CustomersSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "customers" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+@(Html.Kendo().Grid<CustomerViewModel>()
+        .Name("CustomersGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.Active).Visible(false);
+            columns.Bound(c => c.CustomerName).Width(100);
+            columns.Bound(c => c.CustomerNotes).Width(250);
+            columns.Bound(c => c.AssignedArchitect).Width(75);
+            columns.Bound(c => c.Baseline).ClientTemplate("#= Baseline? 'Contractural' : 'Pre-Contract' #").Width(30);
+            columns.Bound(o => o.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(30);
+            columns.Bound(o => o.UpdatedBy).Width(75);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Baseline").Click("baselineCustomer");
+                cmd.Custom("Archive").Click("archiveCustomer");
+                cmd.Custom("Change Owner").Click("changeCustomerOwner");
+            }).Width(250).Title("").Visible(isArchitect);
+
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model =>
+            {
+                model.Id(p => p.Id);
+                model.Field(field => field.UpdatedBy).DefaultValue(@User.Identity.Name);
+            })
+            .Events(events => events.Error("onError").Sync("syncHandler"))
+            .Read(read => read.Action("ReadAjaxCustomersGrid", "Customer"))
+            .Sort(sort => sort.Add(col => col.CustomerName))
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Change("onRowSelectMyCustomer");
+            e.Cancel("onCancel");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+        .Editable(edt => edt.Mode(GridEditMode.PopUp).DisplayDeleteConfirmation("Are you sure you want to delete this Customer?")
+        .Window(w => w.Title("Customer").Width(600)))
+      )
+
+@Html.Partial("_SelectUserWindow", new SelectUserWindowViewModel{RoleName=UserRoles.Architect, WindowTitle="Change Owning Architect"})
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $("#CustomersGrid .k-grid-add").on("click", function(e) {
+            isCreating = true;
+        });
+
+        popupGridEditorButtonNamingOnInsert("#CustomersGrid");
+    });
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Baseline > span").addClass("k-icon k-i-lock");
+        e.sender.tbody.find(".k-grid-Archive > span").addClass("k-icon k-i-clock");
+        e.sender.tbody.find(".k-grid-ChangeOwner > span").addClass("k-icon k-i-redo");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+        hideBaselineButtons(e);
+    }
+
+    function hideBaselineButtons() {
+        // Selects all Baseline buttons
+        $("#CustomersGrid tbody tr .k-grid-Baseline").each(function() {
+            var currentDataItem = $("#CustomersGrid").data("kendoGrid").dataItem($(this).closest("tr"));
+            if (currentDataItem.Baseline == true) {
+                $(this).remove();
+            }
+        });
+    }
+
+    function onRowSelectMyCustomer() {
+        localStorage.clear();
+        var selectGrid = $('#CustomersGrid').data("kendoGrid");
+        var row = selectGrid.select();
+        var data = selectGrid.dataItem(row);
+        var currentCustomer = "Current Customer : <b>" + data.customerName + "</b>";
+        $("#customer-details").html(currentCustomer);
+        var url = '@Url.Action("EditCustomer", "ServiceDecomposition", new { id = "XXXId"})';
+        window.location.href = url.replace('XXXId', data.id);
+    }
+
+    function baselineCustomer(e) {
+        var grid = $("#CustomersGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Baseline</strong> this Customer?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("CreateCustomerBaseline", "Audit")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Customer baseline successfully created.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+
+    function archiveCustomer(e) {
+        var grid = $("#CustomersGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Archive</strong> this Customer?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ArchiveCustomer", "Customer")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Customer successfully archived.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+
+    function onCancel() {
+        var grid = $("#CustomersGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    var changeOwnerCustomerId;
+    function changeCustomerOwner(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        changeOwnerCustomerId = dataItem.Id;
+        openSelectUserWindow();
+    }
+
+    function onSelectUserRefresh() {
+        $("#selectUserButton").click(function(clk) {
+            clk.preventDefault();
+            var validator = $("#selectUserContainer").kendoValidator().data("kendoValidator");
+            if (validator.validate()) {
+                startSpinner();
+                var userEmail = getSelectUserSelected();
+                var data = { CustomerId: changeOwnerCustomerId, Email: userEmail };
+                var grid = $("#CustomersGrid").data("kendoGrid");
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ChangeOwner", "Customer")',
+                    data: JSON.stringify(data),
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function (result) {
+                        grid.dataSource.read();
+                        grid.refresh();
+                        displayNotification("Customer owner successfully changed.", "@NotificationTypeNames.Success");
+                    },
+                    error: function (result) {
+                        handleResponseTextError(result);
+                    },
+                    complete: function () {
+                        stopSpinner();
+                    }
+                });
+                closeSelectUserWindow();
+            }
+        });
+    }
+</script>

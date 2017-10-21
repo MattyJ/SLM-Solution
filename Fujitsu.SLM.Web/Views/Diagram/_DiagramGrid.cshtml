@@ -1,0 +1,145 @@
+﻿@using Fujitsu.SLM.Extensions
+@using Fujitsu.SLM.Web.Helpers
+@model DiagramGridViewModel
+
+<p>Please select a diagram from the navigation menu or alternatively generate a diagram pack or select a saved diagram to view/download or delete.</p>
+<br/>
+
+@{
+    var isAdministrator = User.IsInRole(UserRoles.Administrator);
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@(Html.Kendo().Grid<DiagramViewModel>()
+        .Name("DiagramGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Visible(false);
+            columns.Bound(m => m.Level).Width(20);
+            columns.Bound(m => m.Filename).Width(400);
+            columns.Bound(m => m.DiagramNotes);
+            columns.Bound(m => m.InsertedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(m => m.InsertedBy).Width(75);
+            columns.Bound(m => m.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(m => m.UpdatedBy).Width(75);
+            columns.Command(cmd =>
+            {
+                cmd.Edit();
+                cmd.Custom("Download").Click("downloadDiagram");
+                cmd.Custom("Delete").Click("onDeleteDiagram");
+            }).Title("").Width(250).Visible(isArchitect);
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isAdministrator || (isArchitect && !SettingsHelper.Environment.SafeEquals(EnvironmentTypeNames.Test)))
+            {
+                toolbar.Custom().Text("Create Customer Pack").HtmlAttributes(new {id = "generateCustomerPack"});
+                toolbar.Custom().Text("Upload Customer File").HtmlAttributes(new {id = "uploadCustomerFile" });
+            }
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Id(m => m.Id);
+                model.Field(m => m.Level).Editable(false);
+            })
+            .Events(events =>
+            {
+                events.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxDiagramGrid", "Diagram", new { Level = Model.EditLevel }))
+            .Update(update => update.Action("UpdateAjaxDiagramGrid", "Diagram"))
+            .Create(create => create.Action("CreateAjaxDiagramGrid", "Diagram", new { Level = Model.EditLevel }))
+            .Sort(sort => sort.Add(col => col.UpdatedDate).Descending())
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Cancel("onCancel");
+        })
+        .Editable(edt => edt.Mode(GridEditMode.PopUp)
+        .Window(w => w.Title("Diagram").Width(600)))
+      )
+
+@Html.Partial("_AddCustomerPackWindow", new AddCustomerPackWindowViewModel {EditLevel = Model.EditLevel})
+@Html.Partial("_UploadCustomerFileWindow", new UploadCustomerFileWindowViewModel { EditLevel = Model.EditLevel })
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $("#generateCustomerPack > span").addClass("k-icon k-i-file-zip");
+        $("#generateCustomerPack").click(function (clk) {
+            clk.preventDefault();
+            onAddCustomerPackClick();
+        });
+        $("#uploadCustomerFile > span").addClass("k-icon k-i-upload");
+        $("#uploadCustomerFile").click(function (clk) {
+            clk.preventDefault();
+            onUploadCustomerFileClick();
+        });
+    });
+
+    function downloadDiagram(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var url = '@Url.Action("DownloadDiagram", "Diagram", new { id = "XXXId" })';
+        window.location.href = url.replace('XXXId', dataItem.Id);
+    }
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Download > span").addClass("k-icon k-i-download");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+    }
+
+    function onCancel() {
+        var grid = $("#DiagramGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteDiagram(e) {
+        var grid = $("#DiagramGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Asset?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete", "Diagram")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Asset successfully deleted.", "@NotificationTypeNames.Success");
+
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

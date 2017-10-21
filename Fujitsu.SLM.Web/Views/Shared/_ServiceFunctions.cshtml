@@ -1,0 +1,143 @@
+﻿@model ServiceFunctionGridViewModel
+
+@{
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@(Html.Kendo().Grid<ServiceFunctionViewModel>()
+        .Name("ServiceFunctionGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.ServiceDomainId).Visible(false);
+            columns.Bound(c => c.ServiceDeskName).Visible(!Model.HasServiceDomainContext);
+            columns.Bound(c => c.ServiceDomainName).Visible(!Model.HasServiceDomainContext);
+            columns.Bound(c => c.FunctionName);
+            columns.Bound(c => c.AlternativeName);
+            columns.Bound(c => c.DiagramOrder);
+            columns.Bound(o => o.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(o => o.UpdatedBy).Width(300);
+            columns.Command(cmd =>
+            {
+                if (Model.CanMoveServiceFunction)
+                {
+                    cmd.Custom("Move").Click("moveServiceFunctionType").HtmlAttributes(new {data_move = "moveServiceFunctionTypeButton"});
+                }
+
+                cmd.Custom("Delete").Click("onDeleteServiceFunction");
+            }).Title("").Width(250).Visible(isArchitect);
+
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isArchitect)
+            {
+                toolbar.Custom().Url(Url.Action("Add", "ServiceFunction", new {Level = Model.EditLevel, Id = Model.ServiceDomainId})).Text("Add Service Function").HtmlAttributes(new { id = "js-addServiceFunction" });
+            }
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model => {
+                model.Id(p => p.Id);
+                model.Field(field => field.ServiceDomainId).DefaultValue(Model.ServiceDomainId);
+            })
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxServiceFunctionGrid", "ServiceFunction", new {Model.ServiceDomainId}))
+            .Sort(sort =>
+            {
+                sort.Add(col => col.ServiceDeskName);
+                sort.Add(col => col.DiagramOrder);
+                sort.Add(col => col.FunctionName);
+            })
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Change("onRowSelectServiceFunction");
+            e.Cancel("onCancel");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+)
+
+@Html.Partial("_ServiceFunctionMove")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#js-addServiceFunction > span").addClass("k-icon k-i-add");
+        loadKendoGridUsingSavedState("#ServiceFunctionGrid");
+        $("#ServiceFunctionGrid .k-grid-add").on("click", function(e) {
+            isCreating = true;
+        });
+    });
+
+    function onRowSelectServiceFunction() {
+        var serviceDomainGrid = $('#ServiceFunctionGrid').data("kendoGrid");
+        var row = serviceDomainGrid.select();
+        var data = serviceDomainGrid.dataItem(row);
+        var url = '@Url.Action("Edit", "ServiceFunction", new { level = "XXXLevel", id = "XXXId" })';
+        url = url.replace('XXXLevel', '@Model.EditLevel');
+        window.location.href = url.replace('XXXId', data.id);
+    }
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Move > span").addClass("k-icon k-i-connector");
+        e.sender.tbody.find(".k-grid-Edit > span").addClass("k-icon k-i-pencil");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+        saveKendoGridState("#ServiceFunctionGrid");
+    }
+
+    function onCancel() {
+        var grid = $("#ServiceFunctionGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteServiceFunction(e) {
+        var grid = $("#ServiceFunctionGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Service Function?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteServiceFunction", "ServiceFunction")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Service Function successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

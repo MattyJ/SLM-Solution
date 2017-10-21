@@ -1,0 +1,11 @@
+﻿@model AddCustomerPackWindowViewModel
+
+@(Html.Kendo().Window()
+            .Name("add-customer-pack-window")
+            .Title("Customer Pack")
+            .Width(600)
+            .Height(350)
+            .Modal(true)
+            .Visible(false)
+            .Actions(actions => actions.Close())
+            .LoadContentFrom("AddCustomerPack", "ServiceDecomposition", new {Level = Model.EditLevel}))

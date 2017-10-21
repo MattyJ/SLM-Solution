@@ -1,0 +1,49 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                @User.Identity.GetUserName()
+            <span class="caret"></span></a>
+            <ul class="dropdown-menu dropdown-menu-right">
+                <li class="dropdown-header">User Details</li>
+                <li><a href="@Url.Action("MyIdentity", "Account")">Identity</a></li>
+                <li><a href="@Url.Action("ChangePassword", "Manage")">Change Password</a></li>
+                @*<li role="separator" class="divider"></li>
+                <li><a href="@Url.Action("About", "Home")">About</a></li>*@
+                <li role="separator" class="divider"></li>
+                <li class="dropdown-header">What's New & Roadmap</li>
+                <li><a href="@Url.Action("WhatsNew", "Home")">What's New</a></li>
+                <li><a href="@Url.Action("Roadmap", "Home")">Roadmap</a></li>
+                <li><a href="@Url.Action("ReleaseHistory", "Home")">Release History</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="@Url.Action("About", "Home")">About</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+
+            </ul>
+        </div>
+    }
+}
+else
+{
+    <div id="authentication-details">
+        <ul class="links">
+            <li>
+                <a href="@Url.Action("Login", "Account")" title="Log In" class="links">
+                    <img alt="User Icon" src="@Url.Content("~/Images/User-Profile.png")">
+                    Log In
+                </a>
+            </li>
+            <li>
+                <a href="@Url.Action("Register", "Account")" title="Register" class="links">
+                    Register
+                </a>
+            </li>
+        </ul>
+    </div>
+}

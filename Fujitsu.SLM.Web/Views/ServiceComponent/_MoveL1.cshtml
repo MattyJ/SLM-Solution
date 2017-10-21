@@ -1,0 +1,42 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model MoveServiceComponentLevel1ViewModel
+
+@using (Html.BeginForm("MoveLevel1", "ServiceComponent", FormMethod.Post, new { id = "moveServiceComponentLevel1Form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="moveServiceComponentLevel1Container">
+        <fieldset class="form-popup-fieldset">
+            @Html.HiddenFor(x => x.ServiceComponentId)
+            <legend>Move Service Component (Level 1)</legend>
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.DestinationServiceFunctionId)</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(model => model.DestinationServiceFunctionId)
+                          .AutoBind(true)
+                          .Filter(FilterType.Contains)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .OptionLabel(WebResources.DefaultDropDownListText)
+                          .BindTo(Model.ServiceFunctions))
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(model => model.DestinationServiceFunctionId)
+                    </div>
+                </div>
+            </div>
+            <div class="layout-row">
+                <div class="editor-label"></div>
+                <div class="editor-field">
+                    @(Html.Kendo().Button()
+                          .HtmlAttributes(new { type = "button" })
+                          .Name("moveServiceComponentLevel1")
+                          .Content("Move"))
+                </div>
+            </div>
+        </fieldset>
+    </div>
+}
+
+@Html.Partial("_KendoValidation")

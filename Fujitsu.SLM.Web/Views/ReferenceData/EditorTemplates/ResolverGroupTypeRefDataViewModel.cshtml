@@ -1,0 +1,71 @@
+﻿@model ResolverGroupTypeRefDataViewModel
+@{
+    var isAdministrator = @User.IsInRole(UserRoles.Administrator);
+}
+<div>
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        <legend>Resolver Group Type</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ResolverGroupTypeName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ResolverGroupTypeName, "WindowWideText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.ResolverGroupTypeName)
+                </div>
+            </div>
+        </div>
+        @if (isAdministrator)
+        {
+            <div id="ResolverGroupTypeRefDataGridVisible">
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.Visible)</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.Kendo().CheckBoxFor(x => x.Visible).Name("Visible").Label("")
+                    </div>
+                </div>
+            </div>
+            <div id="NonResolverGroupTypeRefDataGridVisible">
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.Visible)</label>
+                    </div>
+                    <div class="editor-field">
+                        @*JavaScript is only able to access the first rendered element with a given ID*@
+                        @Html.Kendo().CheckBoxFor(x => x.Visible).Name("IsVisible").Checked(false).Label("")
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.Order)</label>
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(x => x.Order, "SmallInteger")
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.Order)
+                </div>
+             </div>
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_KendoValidation")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var resolverGroupTypeRefDataGrid = $("#ResolverGroupTypeRefDataGrid").data("kendoGrid");
+        if (resolverGroupTypeRefDataGrid !== null && resolverGroupTypeRefDataGrid !== undefined) {
+            $('div#ResolverGroupTypeRefDataGridVisible').show();
+            $('div#NonResolverGroupTypeRefDataGridVisible').remove();
+        } else {
+            $('div#ResolverGroupTypeRefDataGridVisible').hide();
+            $('div#NonResolverGroupTypeRefDataGridVisible').show();
+        }
+    });
+</script>

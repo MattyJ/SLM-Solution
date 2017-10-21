@@ -1,0 +1,43 @@
+﻿@model CustomerViewModel
+<div>
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.Active)
+    @Html.HiddenFor(x => x.Owner)
+    <fieldset>
+        <legend>Customer</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.CustomerName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.CustomerName, "WideText"))
+                @Html.ValidationMessageFor(model => model.CustomerName)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.CustomerNotes)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.CustomerNotes, "MultiLineText"))
+                @Html.ValidationMessageFor(model => model.CustomerNotes)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="display-label">
+                @Html.LabelFor(model => model.AssignedArchitect)
+            </div>
+            <div class="display-field">
+                @Html.DisplayFor(model => model.AssignedArchitect)
+                @Html.HiddenFor(x => x.AssignedArchitect)
+            </div>
+        </div>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        highlightRequiredFields();
+    });
+</script>
+
+

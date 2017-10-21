@@ -1,0 +1,52 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model EditResolverServiceDeliveryUnitLevelZeroViewModel
+
+<div id="serviceDeliveryUnitViewModelContainer">
+    <fieldset class="form-popup-fieldset">
+        <legend>Service Delivery Unit</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ServiceDeliveryUnitTypeId)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().DropDownListFor(x => x.ServiceDeliveryUnitTypeId)
+                      .HtmlAttributes(new { style = "width:250px;" })
+                      .Popup(p => p.AppendTo("body")) // Kendo Bug 985 workaround, append popup manually to body
+                      .AutoBind(true)
+                      .Filter(FilterType.Contains)
+                      .DataTextField("ServiceDeliveryUnitTypeName")
+                      .DataValueField("Id")
+                      .DataSource(source => source.Read(read => read.Action("GetAllAndNotVisibleServiceDeliveryUnitTypesForCustomer", "ReferenceData")))
+                      //.Template("<span class=\"#:data.Visible? 'generic' : 'customerSpecific' #\"> #: data.ServiceDeliveryUnitTypeName #</span>")
+                      .OptionLabel(WebResources.DefaultDropDownListText))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(x => x.ServiceDeliveryUnitTypeId)
+                </div>
+                <p>
+                    <input id="createServiceDeliveryUnitType" type="button" name="Create Service Delivery Unit" value="Create Service Delivery Unit Name" class="k-button k-button-icontext slm-wide-button"/>
+                </p>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ServiceDeliveryUnitNotes)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ServiceDeliveryUnitNotes, "MultiLineText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.ServiceDeliveryUnitNotes)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_AddServiceDeliveryUnitTypeWindow")
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#createServiceDeliveryUnitType").click(function (e) {
+            addServiceDeliveryUnitType(e);
+        });
+    });
+</script>

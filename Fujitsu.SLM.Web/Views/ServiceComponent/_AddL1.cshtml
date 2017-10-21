@@ -1,0 +1,101 @@
+﻿@model AddServiceComponentLevel1ViewModel
+
+<div>Please note: any empty or incomplete rows will be ignored when saving. Also, moving away from the page without saving will also cause any changes made to be lost. To add more rows to the grid, click the 'Add More Rows' button.</div>
+<br/>
+
+@(Html.Kendo().Grid<BulkServiceComponentViewModel>()
+    .Name("AddServiceComponentsGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Id).Visible(false);
+        if (Model.HasServiceFunctionContext)
+        {
+            columns.Bound(p => p.ServiceFunctionId).Visible(false);
+        }
+        else
+        {
+            columns.ForeignKey(p => p.ServiceFunctionId, Model.ServiceFunctions, "Value", "Text").Width(300);
+        }
+        columns.Bound(p => p.ComponentName).Width(300);
+        columns.Bound(p => p.DiagramOrder).Width(50);
+        columns.Command(command => command.Destroy()).Width(100);
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text("Add More Rows").HtmlAttributes(new {id = "addMoreRowsToolbar"});
+        toolbar.Save().HtmlAttributes(new { id = "gridSave" });
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .Events(events =>
+        {
+            events.Error("onErrorNoCancel");
+            events.RequestStart("onRequestStart");
+            events.RequestEnd("onRequestEnd");
+        })
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            if (Model.HasServiceFunctionContext)
+            {
+                model.Field(f => f.ServiceFunctionId).DefaultValue(Model.ServiceFunctionId);
+            }
+        })
+        .Create(create => create.Action("CreateAjaxServiceAddComponentLevel1Grid", "ServiceComponent"))
+        .Read(read => read.Action("ReadAjaxServiceAddComponentGrid", "ServiceComponent"))
+        .Update(update => update.Action("UpdateAjaxServiceAddComponentGrid", "ServiceComponent"))
+        .Destroy(destroy => destroy.Action("DestroyAjaxServiceAddComponentGrid", "ServiceComponent"))
+    ))
+<fieldset>
+    <p>
+        <input id="buttonSave" type="button" name="Save" class="k-button k-button-icontext slm-button" value="Save" />
+        <input id="buttonReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+    </p>
+</fieldset>
+
+<script type="text/javascript">
+    var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+    $(document).ready(function () {
+        $("#addMoreRowsToolbar > span").removeClass("k-i-add").addClass("k-icon k-i-rows");
+        $("#addMoreRowsToolbar").click();
+
+        $(".k-grid-save-changes").hide();
+        $(".k-grid-cancel-changes").hide();
+
+        addServiceComponentClickHandlers();
+
+        $("#buttonSave").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            $(".k-grid-save-changes").click();
+        });
+
+        $("#buttonReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url; // '@Model.ReturnUrl';
+
+        });
+    });
+
+    function onRequestStart(e) {
+        if (e.type == "read") {
+            e.preventDefault();
+        }
+    }
+
+    function onRequestEnd(e) {
+        if (e.type == "create" && e.response.Errors == null) {
+            window.location.href = url; // '@Model.ReturnUrl';
+        } else {
+            stopSpinner();
+        }
+        e.preventDefault();
+    }
+</script>

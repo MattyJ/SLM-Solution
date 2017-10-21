@@ -1,0 +1,47 @@
+﻿@model ComponentRefDataViewModel
+<div>
+    <fieldset>
+        @Html.HiddenFor(x => x.Id)
+        <legend>Service Component</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ComponentLevel)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ComponentLevel, "SmallInteger"))
+                @Html.ValidationMessageFor(model => model.ComponentLevel)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ComponentName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ComponentName))
+                @Html.ValidationMessageFor(model => model.ComponentName)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.SortOrder)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.SortOrder, "SmallInteger"))
+                @Html.ValidationMessageFor(model => model.SortOrder)
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+
+
+        highlightRequiredFields();
+
+    });
+
+</script>
+
+

@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{42AED40B-130F-40EC-988E-CB0E0B6875C3}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fujitsu.SLM.Diagrams</RootNamespace>
+    <AssemblyName>Fujitsu.SLM.Diagrams</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure|AnyCPU'">
+    <OutputPath>bin\Azure\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Entities\ChartDataListItem.cs" />
+    <Compile Include="Extensions\ChartDataListItemExtensions.cs" />
+    <Compile Include="Extensions\ServiceOrganisationListItemExtensions.cs" />
+    <Compile Include="Generators\CustomerThirdPartyServiceOrganisation.cs" />
+    <Compile Include="Generators\CustomerServices.cs" />
+    <Compile Include="Generators\FujitsuServiceOrganisation.cs" />
+    <Compile Include="Generators\CustomerServiceOrganisation.cs" />
+    <Compile Include="Generators\ServiceDeskStructure.cs" />
+    <Compile Include="Generators\FujitsuDomains.cs" />
+    <Compile Include="Generators\ServiceDeskDotMatrix.cs" />
+    <Compile Include="Interfaces\IDiagramGenerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fujitsu.SLM.Constants\Fujitsu.SLM.Constants.csproj">
+      <Project>{C250E534-FD0A-47CE-B1E3-C46E39DB3544}</Project>
+      <Name>Fujitsu.SLM.Constants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Extensions\Fujitsu.SLM.Extensions.csproj">
+      <Project>{3ff40663-dc0a-4b5b-8001-cfe8b083f269}</Project>
+      <Name>Fujitsu.SLM.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Model\Fujitsu.SLM.Model.csproj">
+      <Project>{1E4B9F25-20BE-467B-9559-11056FF04000}</Project>
+      <Name>Fujitsu.SLM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Services\Fujitsu.SLM.Services.csproj">
+      <Project>{5FA955B4-94C9-443E-B926-CCFEE42293E4}</Project>
+      <Name>Fujitsu.SLM.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujtisu.SLM.Enumerations\Fujitsu.SLM.Enumerations.csproj">
+      <Project>{2D99FA85-14F1-4019-8951-5A3CC29DE804}</Project>
+      <Name>Fujitsu.SLM.Enumerations</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

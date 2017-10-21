@@ -1,0 +1,32 @@
+﻿@*
+    To use, make sure the ValidationMessageFor is wrapped as below:
+
+    <div class="kendo-validation">
+        @Html.ValidationMessageFor(x => x.PackNotes)
+    </div>
+
+    Then in the click event of the button, the following will be required:
+
+    $("#moveDomainType").click(function (clk) {
+        var form = $(this).closest("form");
+        var validator = form.kendoValidator().data("kendoValidator");
+        if (validator.validate()) {
+            // Do some stuff
+        } else {
+            clk.preventDefault();
+        }
+    });
+
+*@
+
+<script type="text/javascript">
+    $.validator.setDefaults({
+        ignore: []
+    });
+    $(document).ready(function (e) {
+        if ($.validator.unobtrusive != undefined) {
+            $.validator.unobtrusive.parse("form");
+        }
+        highlightRequiredFields();
+    });
+</script>

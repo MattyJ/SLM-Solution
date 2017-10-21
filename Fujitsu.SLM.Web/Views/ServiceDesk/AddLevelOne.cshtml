@@ -1,0 +1,34 @@
+﻿@model AddServiceDeskViewModel
+
+@{
+    ViewBag.Title = LevelNames.LevelOne + "> " + Model.ServiceDesk.CustomerName;
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelOneMenu", new LevelOneMenuModel { AddServiceDeskSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "addServiceDesk" })
+}
+
+@section contextcommands
+{
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_AddServiceDesk", Model)

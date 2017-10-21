@@ -1,0 +1,27 @@
+﻿@{
+    ViewBag.Title = LevelNames.LevelTwo + " > " + Model;
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelTwoMenu", new LevelTwoMenuModel { ServiceDeskInputsSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "deskleveltwo" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_ServiceDesks", new ServiceDeskGridViewModel { EditLevel = NavigationLevelNames.LevelTwo })

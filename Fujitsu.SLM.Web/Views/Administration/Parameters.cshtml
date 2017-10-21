@@ -1,0 +1,86 @@
+﻿@using Fujitsu.SLM.Web.Models.Menu
+
+@{
+    ViewBag.Title = "Parameters";
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { ParametersSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "parameters" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Kendo()
+    .Grid<ParameterViewModel>()
+    .Name("ParametersGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(o => o.Id).Visible(false);
+        columns.Bound(o => o.ParameterName);
+        columns.Bound(o => o.Type);
+        columns.Bound(o => o.ParameterValue);
+        columns.Command(commands => commands.Edit()).Title("").Width(180);
+    })
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .ColumnMenu()
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.Refresh(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .Events(e => e.DataBound("hideEditButtons"))
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .Model(model =>
+        {
+            model.Id(parameter => parameter.Id); // Specify the property which is the unique identifier of the model
+            model.Field(parameter => parameter.Id).Editable(false);
+            model.Field(parameter => parameter.ParameterName).Editable(false);
+            model.Field(parameter => parameter.Type).Editable(false);
+        })
+        .Events(events => events.Error("onError"))
+        .ServerOperation(false)     // Paging, sorting and grouping will be done client side
+        .Read(read => read.Action("ReadAjaxParametersGrid", "Administration"))
+        .Update(update => update.Action("UpdateAjaxParametersGrid", "Administration"))
+        .Sort(sort => sort.Add(col => col.ParameterName))
+    )
+)
+
+
+<script type="text/javascript">
+    $(function () {
+        $("form").kendoValidator();
+    });
+
+    function hideEditButtons() {
+        // Selects all edit buttons
+        $("#ParametersGrid tbody tr .k-grid-edit").each(function() {
+            var currentDataItem = $("#ParametersGrid").data("kendoGrid").dataItem($(this).closest("tr"));
+
+            // Hide the edit button if the Parameter Type is not Admin
+            if (currentDataItem.Type != "Admin") {
+                $(this).remove();
+            }
+        });
+    }
+
+</script>

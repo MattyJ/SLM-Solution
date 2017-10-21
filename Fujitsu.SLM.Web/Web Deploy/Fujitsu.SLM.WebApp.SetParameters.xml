@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <setParameter name="IIS Web Application Name" value="Default Web Site/PALM" />
+  <setParameter name="RoleBasedAccessDataContext-Web.config Connection String" value="Data Source=MSDV-MAF-SQL;Initial Catalog=FujitsuRoleBasedAccess;Integrated Security=True" />
+  <setParameter name="SLMDataContext-Web.config Connection String" value="Data Source=MSDV-MAF-SQL;Initial Catalog=SLM;Integrated Security=True" />
+</parameters>

@@ -1,0 +1,122 @@
+﻿@model ContributorGridViewModel
+
+@{
+    var isOwner = Model.Owner;
+}
+
+@(Html.Kendo().Grid<ContributorViewModel>()
+        .Name("ContributorGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.CustomerId).Visible(false);
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.UserId).Visible(false);
+            columns.Bound(c => c.EmailAddress).Width(200);
+            columns.Bound(o => o.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(30);
+            columns.Bound(o => o.UpdatedBy).Width(30);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Delete").Click("onDeleteContributor");
+            }).Title("").Width(50).Visible(isOwner);
+
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isOwner)
+            {
+                toolbar.Custom().Url(Url.Action("AddContributor", "ServiceDecomposition")).Text("Add Contributor").HtmlAttributes(new { id = "js-addContributor" });
+            }
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Id(p => p.Id);
+            })
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxContributorGrid", "Customer"))
+            .Sort(sort =>
+            {
+                sort.Add(col => col.EmailAddress);
+            })
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Cancel("onCancel");
+        })
+        .Editable(edt => edt.Mode(GridEditMode.PopUp)
+        .Window(w => w.Title("Contributor").Width(600)))
+)
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#js-addContributor > span").addClass("k-icon k-i-add");
+        $("#ServiceDeskGrid .k-grid-add").on("click", function (e) {
+            isCreating = true;
+        });
+
+        popupGridEditorButtonNamingOnInsert("#ContributorGrid");
+    });
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Edit > span").addClass("k-icon k-i-pencil");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+    }
+
+    function onCancel() {
+        var grid = $("#ContributorGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteContributor(e) {
+        var grid = $("#ContributorGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Contributor?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteContributor", "Customer")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Contributor successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

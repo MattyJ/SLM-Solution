@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Resolver Group Types";
+    var isAdministrator = User.IsInRole(UserRoles.Administrator);
+}
+
+@section navigation
+{
+    @Html.Partial("_ReferenceDataMenu", new ReferenceDataMenuModel { ResolverGroupTypesSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "resolvergrouptypesrefdata" })
+}
+
+<h2>@ViewBag.Title</h2>
+@(Html.Kendo().Grid<ResolverGroupTypeRefDataViewModel>()
+    .Name("ResolverGroupTypeRefDataGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Id).Visible(false);
+        columns.Bound(c => c.ResolverGroupTypeName).Width(200);
+        columns.Bound(o => o.Visible).Width(50).ClientTemplate("#= Visible? 'Yes' : 'No' #");
+        columns.Bound(c => c.Order).Width(100);
+        columns.Bound(c => c.UsageCount).Width(100);
+        columns.Command(cmd =>
+        {
+            cmd.Edit();
+            cmd.Destroy();
+        }).Width(100).Title("").Visible(isAdministrator);
+    })
+    .ToolBar(toolbar =>
+    {
+        if (isAdministrator)
+        {
+            toolbar.Create().Text("Add Resolver Group Type");
+        }
+    })
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .Groupable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            model.Field(f => f.Order).DefaultValue(5);
+        })
+        .Events(events => events.Error("onErrorResolverGroupTypes").Sync("syncHandler"))
+        .Read(read => read.Action("ReadAjaxResolverGroupTypesRefDataGrid", "ReferenceData"))
+        .Create(create => create.Action("CreateAjaxResolverGroupTypesRefDataGrid", "ReferenceData"))
+        .Update(update => update.Action("UpdateAjaxResolverGroupTypesRefDataGrid", "ReferenceData"))
+        .Destroy(destroy => destroy.Action("DeleteAjaxResolverGroupTypesRefDataGrid", "ReferenceData"))
+        .Sort(sort =>
+        {
+            sort.Add(col => col.Order);
+            sort.Add(col => col.ResolverGroupTypeName);
+        }))
+    .Events(e =>
+    {
+        e.Edit("onEdit");
+    })
+    .Editable(edt => edt.Mode(GridEditMode.PopUp).DisplayDeleteConfirmation("Are you sure you want to delete this Resolver Group Type?")
+    .Window(w => w.Title("Resolver Group Type").Width(600)))
+)
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#ResolverGroupTypeRefDataGrid .k-grid-add").on("click", function () {
+            isCreating = true;
+        });
+
+        popupGridEditorButtonNamingOnInsert("#ResolverGroupTypeRefDataGrid");
+
+        $("#btnBack").hide();
+    });
+
+    function onErrorResolverGroupTypes(e) {
+        onErrorCancelWithGridId(e, "#ResolverGroupTypeRefDataGrid");
+    }
+</script>

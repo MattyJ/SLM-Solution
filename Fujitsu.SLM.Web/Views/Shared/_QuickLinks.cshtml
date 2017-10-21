@@ -1,0 +1,26 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+@using Fujitsu.SLM.Web.Session
+
+@{
+    var appUserContext = AppUserContext.GetAppUserContext();
+    var customerId = appUserContext.Current.CurrentCustomer.Id;
+}
+
+<div id="quickLinks">
+    <div id="quickLinksLeft">
+        @Html.ImageActionLink(Url.Content("~/Images/Home.png"), "Home", "Index", "Home", tooltip: "Home", htmlAttributes: new { id = "btnHome" })
+        @if (@User.IsInRole(UserRoles.Architect))
+        {
+            @Html.ImageActionLink(Url.Content("~/Images/People.png"), "MyCustomers", "MyCustomers", "Customer", null, tooltip: "My Customers", htmlAttributes: new { id = "btnMyCustomers" })
+        }
+        @if (@User.IsInRole(UserRoles.Viewer))
+        {
+            @Html.ImageActionLink(Url.Content("~/Images/Data-Settings.png"), "Reference Data", "Index", "ReferenceData", null, tooltip: "Reference Data", htmlAttributes: new {id = "btnReferenceData"})
+            if (@customerId > 0)
+             {
+                 @Html.ImageActionLink(Url.Content("~/Images/Graph-Diagram.png"), "Customer Packs", "CustomerPack", "ServiceDecomposition", null, tooltip: "Customer Packs", htmlAttributes: new {id = "btnCustomerPacks"})
+             }
+        }
+
+   </div>
+</div>

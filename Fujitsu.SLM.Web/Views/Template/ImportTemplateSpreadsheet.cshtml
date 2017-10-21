@@ -1,0 +1,85 @@
+﻿@model ImportTemplateViewModel
+@{
+    ViewBag.Title = $"Import {Model.TemplateType} Template Spreadsheet";
+}
+
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { TemplatesSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "importSortTemplate" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div id="importTemplate">
+    <fieldset>
+        <legend>Results</legend>
+        <div id="ImportTemplates">
+            @using (Html.BeginForm("ImportTemplateSpreadsheet", "Template", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <fieldset>
+                    <legend>Import Spreadsheet</legend>
+                    <div class="layout-row">
+                        @Html.HiddenFor(x => x.TemplateType)
+                        <div class="editor-label">
+                            @Html.LabelFor(x => x.TemplateType) :
+                        </div>
+                        <div class="display-field">
+                            @Html.DisplayFor(x => x.TemplateType)
+                        </div>
+                    </div>
+                    <div class="layout-row">
+                        <div class="editor-label">
+                            @Html.LabelFor(x => x.SpreadsheetFile) :
+                        </div>
+                        <div class="editor-field">
+                            @Html.EditorFor(x => x.SpreadsheetFile)
+                        </div>
+                    </div>
+                    <div class="layout-row">
+                        <div class="editor-label">
+                        </div>
+                        <div class="editor-field">
+                            @Html.ValidationMessageFor(x => x.SpreadsheetFile)
+                            @Html.ValidationMessageFor(x => x.SpreadsheetFile.ContentLength)
+                            @Html.ValidationMessageFor(x => x.SpreadsheetFile.ContentType)
+                        </div>
+                    </div>
+                    <p>
+                        <input id="btnImportTemplateSpreadsheet" class="k-button k-button-icontext slm-wide-button" type="submit" value= "Import Template" />
+                        <input id="btnReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+                    </p>
+                </fieldset>
+            }
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_ModalWait", new ModalWaitViewModel { ButtonClicks = new[] { "btnImportTemplateSpreadsheet" } })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#btnReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url;
+        });
+    });
+</script>

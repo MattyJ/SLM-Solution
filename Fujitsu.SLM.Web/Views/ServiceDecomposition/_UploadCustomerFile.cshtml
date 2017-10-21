@@ -1,0 +1,122 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model UploadCustomerFileViewModel
+
+@using (Ajax.BeginForm("UploadCustomerFile", "ServiceDecomposition",
+    null,
+    new AjaxOptions{ HttpMethod = "POST" },
+    new { enctype = "multipart/form-data", id = "uploadCustomerFileForm" }))
+{
+        @Html.AntiForgeryToken()
+        <div>
+            <fieldset class="form-popup-fieldset">
+                <legend>Upload Diagram File</legend>
+
+                @if (Model.DisplayLevel)
+                {
+                    <div class="layout-row">
+                        <div class="editor-label">
+                            <label>@Html.LabelFor(x => x.EditLevel)</label>
+                        </div>
+                        <div class="editor-field">
+                            @(Html.Kendo().DropDownListFor(x => x.EditLevel)
+                              .AutoBind(true)
+                              .DataTextField("Text")
+                              .DataValueField("Value")
+                              .OptionLabel(WebResources.DefaultDropDownListText)
+                              .BindTo(Model.Levels))
+                            <div class="kendo-validation">
+                                @Html.ValidationMessageFor(x => x.EditLevel)
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    @Html.HiddenFor(x => x.EditLevel)
+                }
+
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.CustomerFile)</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.EditorFor(x => x.CustomerFile)
+                    </div>
+                </div>
+
+                <div class="layout-row">
+                    <div class="editor-label">
+                    </div>
+                    <div class="editor-field">
+                        @Html.ValidationMessageFor(x => x.CustomerFile)
+                        @Html.ValidationMessageFor(x => x.CustomerFile.ContentLength)
+                        @Html.ValidationMessageFor(x => x.CustomerFile.ContentType)
+                    </div>
+                </div>
+
+                <div class="layout-row">
+                    <div class="editor-label">
+                        <label>@Html.LabelFor(x => x.Notes)</label>
+                    </div>
+                    <div class="editor-field">
+                        @(Html.EditorFor(x => x.Notes, "MultiLineText"))
+                        <div class="kendo-validation">
+                            @Html.ValidationMessageFor(x => x.Notes)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layout-row">
+                    <fieldset>
+                        <p>
+                            <input id="uploadCustomerFileSubmit" type="button" name="action" class="k-button k-button-icontext slm-button" value="Save" />
+                        </p>
+                    </fieldset>
+                </div>
+            </fieldset>
+        </div>
+}
+@Html.Partial("_KendoValidation")
+<script type="text/javascript">
+    $(document)
+        .ready(function(e) {
+            $("#uploadCustomerFileSubmit")
+                .click(function(event) {
+                    var validator = $("#uploadCustomerFileForm").kendoValidator().data("kendoValidator");
+                    if (validator.validate()) {
+                        startSpinner();
+                        var dataString;
+                        event.preventDefault();
+                        if ($("#uploadCustomerFileForm").attr("enctype") == "multipart/form-data") {
+                            // We need to call .get(0) on the jQuery element to turn it into a regular DOM element so that FormData can use it.
+                            dataString = new FormData($("#uploadCustomerFileForm").get(0));
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("UploadCustomerFile", "ServiceDecomposition")',
+                                data: dataString,
+                                dataType: "json",
+                                contentType: false,
+                                processData: false,
+                                success: function() {
+                                    $("#upload-customer-file-window").data("kendoWindow").close();
+                                    displayNotification("Customer File uploaded successfully.", "@NotificationTypeNames.Success");
+                                    var grid = $("#DiagramGrid").data("kendoGrid");
+                                    grid.dataSource.read();
+                                    grid.refresh();
+                                },
+                                error: function(jqXHR) {
+                                    $("#upload-customer-file-window").data("kendoWindow").close();
+                                    handleResponseTextError(jqXHR);
+                                },
+                                complete: function () {
+                                    stopSpinner();
+                                }
+                        });
+                        }
+                    }
+                    else {
+                        event.preventDefault();
+                    }
+            });
+        });
+</script>

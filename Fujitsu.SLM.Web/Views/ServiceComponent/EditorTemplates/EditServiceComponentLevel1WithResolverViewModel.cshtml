@@ -1,0 +1,92 @@
+﻿@model EditServiceComponentLevel1WithResolverViewModel
+
+@{
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm("EditLevel1WithResolver", "ServiceComponent"))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="editServiceComponentLevel1WithResolverContainer" class="edit-service-component">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.EditUrl)
+        @Html.HiddenFor(m => m.ReturnUrl)
+        @Html.HiddenFor(m => m.EditLevel)
+
+        @Html.EditorFor(m => m.ComponentName)
+        @Html.EditorFor(m => m.ServiceActivities)
+        @Html.EditorFor(m => m.DiagramOrder)
+
+        @(Html.Kendo()
+              .PanelBar()
+              .Name("EditServiceComponentAddResolverPanel")
+              .ExpandMode(PanelBarExpandMode.Multiple)
+              .SelectedIndex(0)
+              .Items(subItems =>
+              {
+                  subItems.Add()
+                      .Text("Service Delivery Organisation").Items(subItem =>
+                      {
+                          subItem
+                              .Add()
+                              .Expanded(true)
+                              .Content(@<text>@Html.EditorFor(m => m.ResolverServiceDeliveryOrganisation)</text>);
+                      });
+                  subItems.Add()
+                      .Text("Service Delivery Unit").Items(subItem =>
+                      {
+                          subItem
+                              .Add()
+                              .Expanded(true)
+                              .Content(@<text>@Html.EditorFor(m => m.ResolverServiceDeliveryUnit)</text>);
+                      });
+                  subItems.Add()
+                      .Text("Resolver Group").Items(subItem =>
+                      {
+                          subItem
+                              .Add()
+                              .Expanded(true)
+                              .Content(@<text>@Html.EditorFor(m => m.ResolverGroup)</text>);
+                      });
+              }))
+
+        <fieldset id="editServiceComponentButtons">
+            <p>
+                <input type="submit" name="Save" class="k-button k-button-icontext slm-button" value="Save"/>
+                <input id="editServiceComponentReturn" type="submit" name="Return" class="k-button k-button-icontext slm-button" value="Cancel"/>
+            </p>
+            <p>
+                <input id="editServiceComponentEdit" type="button" name="Edit" class="k-button k-button-icontext slm-button" value="Edit" />
+            </p>
+        </fieldset>
+    </div>
+}
+
+<script>
+        $(function () {
+            highlightRequiredFields();
+            $("form").kendoValidator();
+        });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#editServiceComponentReturn").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            window.location.href = url; //"@Model.ReturnUrl";
+        });
+
+        $("#editServiceComponentEdit").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            window.location.href = "@Model.EditUrl";
+        });
+    });
+</script>

@@ -1,0 +1,29 @@
+﻿@model AddServiceComponentLevel1ViewModel
+
+@{
+    ViewBag.Title = "Service Decomposition > " + Model.ServiceFunctionName;
+    var menuModel = new LevelOneMenuModel
+    {
+        ServiceFunctionsSelected = Model.HasServiceFunctionContext,
+        ServiceComponentsSelected = !Model.HasServiceFunctionContext
+    };
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelOneMenu", menuModel)
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "addcomponentlevelonel1" })
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_AddL1", Model)

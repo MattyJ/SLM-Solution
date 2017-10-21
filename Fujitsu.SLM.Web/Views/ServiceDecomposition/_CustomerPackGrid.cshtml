@@ -1,0 +1,133 @@
+﻿@using Fujitsu.SLM.Extensions
+@using Fujitsu.SLM.Web.Helpers
+@model CustomerPackGridViewModel
+
+@{
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@(Html.Kendo().Grid<CustomerPackViewModel>()
+        .Name("CustomerPackGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(m => m.Id).Visible(false);
+            columns.Bound(m => m.Level).Width(20);
+            columns.Bound(m => m.Filename).Width(400);
+            columns.Bound(m => m.PackNotes);
+            columns.Bound(m => m.InsertedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(m => m.InsertedBy).Width(75);
+            columns.Bound(m => m.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(m => m.UpdatedBy).Width(75);
+            columns.Command(cmd =>
+            {
+                cmd.Edit();
+                cmd.Custom("Download").Click("downloadCustomerPack").HtmlAttributes(new { id = "downloadCustomerPack" });
+                cmd.Custom("Delete").Click("onDeleteCustomerPack");
+            }).Title("").Width(250).Visible(isArchitect);
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isArchitect && !SettingsHelper.Environment.SafeEquals(EnvironmentTypeNames.Test))
+            {
+                toolbar.Custom().Text("Create Customer Pack").HtmlAttributes(new { id = "generateCustomerPack" });
+            }
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(false)
+            .Model(model =>
+            {
+                model.Id(m => m.Id);
+                model.Field(m => m.Level).Editable(false);
+            })
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxCustomerPackGrid", "ServiceDecomposition"))
+            .Update(update => update.Action("UpdateAjaxCustomerPackGrid", "ServiceDecomposition"))
+            .Sort(sort => sort.Add(col => col.UpdatedDate))
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Cancel("onCancel");
+        })
+        .Editable(edt => edt.Mode(GridEditMode.PopUp)
+        .Window(w => w.Title("Diagram Pack").Width(600)))
+      )
+
+@Html.Partial("_AddCustomerPackWindow", new AddCustomerPackWindowViewModel { EditLevel = Model.EditLevel })
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        $("#generateCustomerPack > span").addClass("k-icon k-i-file-zip");
+        $("#generateCustomerPack").click(function (clk) {
+            clk.preventDefault();
+            onAddCustomerPackClick();
+        });
+    });
+
+    function downloadCustomerPack(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var url = '@Url.Action("DownloadCustomerPack", "ServiceDecomposition", new { id = "XXXId" })';
+        window.location.href = url.replace('XXXId', dataItem.Id);
+    }
+
+    function addIcons(e) {
+        var el = e.sender.tbody.find("#downloadCustomerPack > span");
+        el.addClass("k-icon k-i-download");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+    }
+
+    function onCancel() {
+        var grid = $("#CustomerPackGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteCustomerPack(e) {
+        var grid = $("#CustomerPackGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Customer Pack?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteCustomerPack", "ServiceDecomposition")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Customer Pack successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

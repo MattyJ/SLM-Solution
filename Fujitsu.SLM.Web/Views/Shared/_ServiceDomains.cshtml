@@ -1,0 +1,170 @@
+﻿@model ServiceDomainGridViewModel
+
+@{
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@(Html.Kendo().Grid<ServiceDomainViewModel>()
+        .Name("ServiceDomainGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.ServiceDeskId).Visible(false);
+            columns.Bound(c => c.ServiceDeskName).Visible(!Model.HasServiceDeskContext);
+            columns.Bound(c => c.DomainName);
+            columns.Bound(c => c.AlternativeName);
+            columns.Bound(c => c.DiagramOrder);
+            columns.Bound(o => o.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(o => o.UpdatedBy).Width(300);
+            columns.Command(cmd =>
+            {
+                if (Model.CanMoveServiceDomain)
+                {
+                    cmd.Custom("Move").Click("moveServiceDomainType").HtmlAttributes(new {data_move = "moveServiceDomainTypeButton"});
+                }
+
+                cmd.Custom("Delete").Click("onDeleteServiceDomain");
+            }).Title("").Width(250).Visible(isArchitect);
+
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isArchitect)
+            {
+                toolbar.Custom().Url(Url.Action("Add", "ServiceDomain", new {Level = Model.EditLevel, Id = Model.ServiceDeskId})).Text("Add Service Domain").HtmlAttributes(new {id = "js-addServiceDomain"});
+                toolbar.Custom().Text("Choose From Service Configurator Catalogue").HtmlAttributes(new { id = "js-chooseFromServiceConfiguratorCatalogue" });
+                toolbar.Custom().Text("Choose From SLM Catalogue").HtmlAttributes(new { id = "js-chooseFromSLMCatalogue" });
+                toolbar.Custom().Url(Url.Action("ImportServiceDecompositionSpreadsheet", "Template", new { Level = Model.EditLevel, Id = Model.ServiceDeskId })).Text("Import Service Decomposition Design").HtmlAttributes(new { id = "js-importServiceDecmompostionDesign" }); ;
+            }
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model => {
+                model.Id(p => p.Id);
+                model.Field(field => field.ServiceDeskId).DefaultValue(Model.ServiceDeskId);
+            })
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxServiceDomainGrid", "ServiceDomain", new {Model.ServiceDeskId}))
+            .Sort(sort =>
+            {
+                sort.Add(col => col.ServiceDeskName);
+                sort.Add(col => col.DiagramOrder);
+                sort.Add(col => col.DomainName);
+            }))
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Change("onRowSelectServiceDomain");
+            e.Cancel("onCancel");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single)))
+
+
+@Html.Partial("_ServiceDomainMove")
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#js-addServiceDomain > span").addClass("k-icon k-i-add");
+        $("#js-chooseFromServiceConfiguratorCatalogue > span").addClass("k-icon k-i-globe-outline");
+        $("#js-chooseFromSLMCatalogue > span").addClass("k-icon k-i-globe");
+        $("#js-importServiceDecmompostionDesign > span").addClass("k-icon k-i-upload");
+        loadKendoGridUsingSavedState("#ServiceDomainGrid");
+        $("#ServiceDomainGrid .k-grid-add").on("click",
+            function(e) {
+                isCreating = true;
+            });
+
+        $("#js-chooseFromServiceConfiguratorCatalogue").click(function(clk) {
+            clk.preventDefault();
+            if(Boolean(@Model.CanImportServiceConfiguratorTemplate.ToString().ToLower())) {
+                var url ='@Url.Action("AddServiceConfiguratorTemplate", "Template", new {level = "XXXLevel", id = "XXXId"})';
+                url = url.replace('XXXLevel', '@Model.EditLevel');
+                window.location.href = url.replace('XXXId', @Model.ServiceDeskId);
+            } else {
+                kendoErrorAlert("No Service Configurator Catalogue is available yet.");
+            }
+        });
+        $("#js-chooseFromSLMCatalogue").click(function(clk) {
+            clk.preventDefault();
+            if (Boolean(@Model.CanImportServiceLandscapeTemplate.ToString().ToLower())) {
+                var url = '@Url.Action("AddSLMTemplate", "Template", new {level = "XXXLevel", id = "XXXId"})';
+                url = url.replace('XXXLevel', '@Model.EditLevel');
+                window.location.href = url.replace('XXXId', @Model.ServiceDeskId);
+            } else {
+                kendoErrorAlert("No Service Landscape Catalogue Templates/Exemplars are available yet.");
+            }
+        });
+    });
+
+
+    function onRowSelectServiceDomain() {
+        var serviceDomainGrid = $("#ServiceDomainGrid").data("kendoGrid");
+        var row = serviceDomainGrid.select();
+        var data = serviceDomainGrid.dataItem(row);
+        var url = '@Url.Action("Edit", "ServiceDomain", new { level = "XXXLevel", id = "XXXId" })';
+        url = url.replace('XXXLevel', '@Model.EditLevel');
+        window.location.href = url.replace('XXXId', data.id);
+    }
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Move > span").addClass("k-icon k-i-connector");
+        e.sender.tbody.find(".k-grid-Edit > span").addClass("k-icon k-i-pencil");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+        saveKendoGridState("#ServiceDomainGrid");
+    }
+
+    function onCancel() {
+        var grid = $("#ServiceDomainGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteServiceDomain(e) {
+        var grid = $("#ServiceDomainGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Service Domain?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteServiceDomain", "ServiceDomain")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Service Domain successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function() {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

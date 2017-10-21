@@ -1,0 +1,24 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+@using Fujitsu.SLM.Web.Session
+
+@model LevelOneMenuModel
+
+@{
+    var appUserContext = AppUserContext.GetAppUserContext();
+}
+
+@if (@User.IsInRole(UserRoles.Architect))
+{
+    @Html.NavigationLinkListItem("Service Decomposition", Model.ServiceDecompositionsSelected, "EditCustomer", "ServiceDecomposition", new { id = @appUserContext.Current.CurrentCustomer.Id}, new { id = "lnkServiceDecomposition" })
+    @Html.NavigationLinkListItem("Add Service Desk", Model.AddServiceDeskSelected, "Add", "ServiceDesk", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkAddServiceDesks" })
+}
+@if (@User.IsInRole(UserRoles.Viewer))
+{
+    @Html.NavigationLinkListItem("Service Desks", Model.ServiceDeskInputsSelected, "Index", "ServiceDesk", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkServiceDesks" })
+    @Html.NavigationLinkListItem("Service Domains", Model.ServiceDomainsSelected, "Index", "ServiceDomain", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkServiceDomains" })
+    @Html.NavigationLinkListItem("Service Functions", Model.ServiceFunctionsSelected, "Index", "ServiceFunction", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkServiceFunctions" })
+    @Html.NavigationLinkListItem("Service Components", Model.ServiceComponentsSelected, "Index", "ServiceComponent", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkServiceComponents" })
+    @Html.NavigationLinkListItem("Resolvers", Model.ResoversSelected, "Index", "Resolver", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkResolvers" })
+    @Html.NavigationLinkListItem("Process Dot Matrix", Model.ProcessDotMatrixSelected, "Index", "OperationalProcesses", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkOperationalProcesses" })
+    @Html.NavigationLinkListItem("Diagrams", Model.DiagramsSelected, "Index", "Diagram", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkDiagrams" })
+}

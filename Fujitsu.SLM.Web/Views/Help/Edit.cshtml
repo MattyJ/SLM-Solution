@@ -1,0 +1,21 @@
+﻿@model ContextHelpRefDataViewModel
+
+@{
+    ViewBag.Title = "Service Decomposition Help - " + (string.IsNullOrEmpty(Model.Title) ? "Edit" : Model.Title);
+    Layout = "~/Views/Shared/_HelpLayout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel()
+    <p></p>
+    <p>
+        <input id="btnEditHelp" type="submit" value="Update" class="k-button" name="button" />
+        <input type="submit" value="Cancel" class="cancel k-button" name="button" />
+    </p>
+}
+
+@Html.Partial("_ModalWait", new ModalWaitViewModel { ButtonClicks = new[] { "btnEditHelp" } })

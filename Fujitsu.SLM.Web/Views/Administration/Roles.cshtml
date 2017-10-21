@@ -1,0 +1,109 @@
+﻿@model RoleViewModel
+
+@{
+    ViewBag.Title = $"{Model.RoleName}s";
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel
+        {
+            AdministratorRoleSelected = Model.RoleName == UserRoles.Administrator,
+            ArchitectRoleSelected = Model.RoleName == UserRoles.Architect,
+            ViewerRoleSelected = Model.RoleName == UserRoles.Viewer
+        })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "roles" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Kendo().Grid<UserViewModel>()
+    .Name("UserRoleGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Id).Visible(false);
+        columns.Bound(c => c.UserName).Width(100);
+        columns.Bound(c => c.Email).Width(100);
+        columns.Bound(c => c.LockoutEnabled).ClientTemplate("#= LockoutEnabled? 'Yes' : 'No' #").Width(30);
+        columns.Bound(c => c.LockoutEndDateUtc).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(30);
+        columns.Bound(c => c.AccessFailedCount).Width(50);
+        columns.Bound(c => c.LastLoginUtc).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(30);
+        columns.Command(cmd =>
+        {
+            cmd.Destroy().Text("Delete");
+        }).Width(100).Title("").Visible(isArchitect);
+
+    })
+        .ToolBar(toolbar =>
+        {
+            if (isArchitect)
+            {
+                toolbar.Custom().Text("Add User To Role").HtmlAttributes(new { id = "gridaddusertorole" });
+            }
+        })
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .ServerOperation(true)
+        .Model(model => model.Id(p => p.Id))
+        .Events(events => events.Error("onError").Sync("syncHandler"))
+        .Read(read => read.Action("ReadAjaxUserRolesGrid", "Administration", new { role = Model.RoleName }))
+        .Destroy(destroy => destroy.Action("DeleteUserRolesGrid", "Administration", new { role = Model.RoleName }))
+        .Sort(sort => sort.Add(col => col.UserName))
+    )
+    .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+    .Editable(edt => edt.Mode(GridEditMode.PopUp).DisplayDeleteConfirmation("Are you sure you want to delete this User from this Role?"))
+)
+
+@(Html.Kendo().Window()
+    .Name("add-user-to-role-window")
+    .Title("Add User To Role")
+    .Width(600)
+    .Height(175)
+    .Modal(true)
+    .Visible(false)
+    .Actions(actions => actions.Close())
+    .LoadContentFrom("AddUserToRole", "Administration", new { role = Model.RoleName }))
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#gridaddusertorole > span").addClass("k-icon k-add");
+        $("#gridaddusertorole").click(function (clk) {
+            clk.preventDefault();
+            var wnd = $("#add-user-to-role-window").data("kendoWindow");
+            wnd.refresh().center().open();
+        });
+    });
+
+    function addUserToRole() {
+        var wnd = $("#add-user-to-role-window").data("kendoWindow");
+        wnd.refresh().center().open();
+    }
+</script>

@@ -1,0 +1,28 @@
+﻿@model System.String
+@(Html.Kendo()
+        .EditorFor(model => model)
+        .Encode(false)
+        .Tools(tools => tools
+              .Clear()
+              .Bold().Italic().Underline().Strikethrough()
+              .JustifyLeft().JustifyCenter().JustifyRight().JustifyFull()
+              .InsertUnorderedList().InsertOrderedList()
+              .Outdent().Indent()
+              .CreateLink().Unlink()
+              .InsertImage()
+              .InsertFile()
+              .TableEditing()
+              .ViewHtml()
+              .Formatting()
+              .CleanFormatting()
+              .FontName()
+              .FontSize()
+              .FontColor().BackColor()
+              .CustomButton(cb => cb.Name("custom").ToolTip("Insert a horizontal rule").Exec(@<text>
+                function(e) {
+                var editor = $(this).data("kendoEditor");
+                editor.exec("inserthtml", { value: "<hr />" });
+                }</text>))
+         .Print()
+         )
+      )

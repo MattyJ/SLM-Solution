@@ -1,0 +1,79 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model ImportServiceDecompositionSpreadsheetViewModel
+<div id="importServiceDecompositionSpreadsheetTemplate">
+    <fieldset>
+        <legend>Results</legend>
+        <div id="ImportServiceDecompositionSpreadsheetTemplates">
+            @using (Html.BeginForm("ImportServiceDecompositionSpreadsheet", "Template", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                <fieldset>
+                    <legend>Import Spreadsheet</legend>
+                    @Html.HiddenFor(x => x.HasServiceDeskContext)
+                    @Html.HiddenFor(x => x.ReturnUrl)
+                    @if (Model.HasServiceDeskContext)
+                    {
+                        @Html.HiddenFor(x => x.ServiceDeskId)
+                    }
+                    else
+                    {
+                        <div>
+                            <fieldset>
+                                <legend>Service Desk</legend>
+                                <div class="layout-row">
+                                    <div class="editor-label">
+                                        <label>@Html.LabelFor(x => x.ServiceDeskId) :</label>
+                                    </div>
+                                    <div class="editor-field">
+                                        @(Html.Kendo().DropDownListFor(x => x.ServiceDeskId)
+                                              .Popup(p => p.AppendTo("body")) // Kendo Bug 985 workaround, append popup manually to body
+                                              .Filter(FilterType.Contains)
+                                              .BindTo(Model.ServiceDesks)
+                                              .OptionLabel(WebResources.DefaultDropDownListText))
+                                        <div class="kendo-validation">
+                                            @Html.ValidationMessageFor(x => x.ServiceDeskId)
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                        </div>
+                    }
+                    <div class="layout-row">
+                        <div class="editor-label">
+                            @Html.LabelFor(x => x.SpreadsheetFile) :
+                        </div>
+                        <div class="editor-field">
+                            @Html.EditorFor(x => x.SpreadsheetFile)
+                        </div>
+                    </div>
+                    <div class="layout-row">
+                        <div class="editor-label">
+                        </div>
+                        <div class="editor-field">
+                            @Html.ValidationMessageFor(x => x.SpreadsheetFile)
+                            @Html.ValidationMessageFor(x => x.SpreadsheetFile.ContentLength)
+                            @Html.ValidationMessageFor(x => x.SpreadsheetFile.ContentType)
+                        </div>
+                    </div>
+                    <p>
+                        <input id="btnImportServiceDecompositionSpreadsheet" class="k-button k-button-icontext slm-wide-button" type="submit" value="Import Spreadsheet" />
+                        <input id="btnReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+                    </p>
+                </fieldset>
+            }
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_ModalWait", new ModalWaitViewModel { ButtonClicks = new[] { "btnImportServiceDecompositionSpreadsheet" } })
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#btnReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url;
+        });
+    });
+</script>

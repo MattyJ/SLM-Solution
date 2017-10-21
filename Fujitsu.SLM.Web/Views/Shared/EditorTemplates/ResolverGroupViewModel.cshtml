@@ -1,0 +1,44 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model BaseResolverGroupViewModel
+
+<div id="resolverGroupViewModelContainer">
+    <fieldset class="form-popup-fieldset">
+        <legend>Resolver Group</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ResolverGroupTypeId)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().DropDownListFor(x => x.ResolverGroupTypeId)
+                      .HtmlAttributes(new { style = "width:250px;" })
+                      .Popup(p => p.AppendTo("body")) // Kendo Bug 985 workaround, append popup manually to body
+                      .AutoBind(true)
+                      .Filter(FilterType.Contains)
+                      .DataTextField("ResolverGroupTypeName")
+                      .DataValueField("Id")
+                      .DataSource(source => source.Read(read => read.Action("GetAllAndNotVisibleResolverGroupTypesForCustomer", "ReferenceData")))
+                      //.Template("<span class=\"#:data.Visible? 'generic' : 'customerSpecific' #\"> #: data.ResolverGroupTypeName #</span>")
+                      .OptionLabel(WebResources.DefaultDropDownListText))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(x => x.ResolverGroupTypeId)
+                </div>
+                <p>
+                    <input id="createResolverGroupType" type="button" name="Create Resolver Group" value="Create Resolver Group Name" class="k-button k-button-icontext slm-wide-button" />
+                </p>
+            </div>
+
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_AddResolverGroupTypeWindow")
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#createResolverGroupType").click(function (e) {
+            addResolverGroupType(e);
+        });
+    });
+
+</script>
+

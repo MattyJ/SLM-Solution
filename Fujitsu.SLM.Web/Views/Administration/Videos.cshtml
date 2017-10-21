@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Videos";
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { VideosSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "videos" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Kendo().Grid<AssetViewModel>()
+        .Name("VideosGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.OriginalFileName).Width(100);
+            columns.Bound(c => c.MimeType).Width(50);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Download").Click("onDownloadAsset");
+                cmd.Custom("Delete").Click("onDeleteAsset");
+            }).Width(200).Title("");
+
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model => model.Id(p => p.Id))
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxVideosGrid", "Administration"))
+            .Sort(sort => sort.Add(col => col.OriginalFileName))
+        )
+        .Events(e =>
+        {
+            e.Cancel("onCancel");
+        })
+        .Events(e => e.DataBound("onDataBound"))
+)
+
+<script type="text/javascript">
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Download > span").addClass("k-icon k-i-download");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+    }
+
+
+    function onCancel() {
+        var grid = $("#VideosGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDownloadAsset(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var url = '@Url.Action("DownloadAsset", "Administration", new { id = "XXXId" })';
+        window.location.href = url.replace('XXXId', dataItem.Id);
+    }
+
+    function onDeleteAsset(e) {
+        var grid = $("#VideosGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Video?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteAsset", "Administration")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    stopSpinner();
+                    displayNotification("Video successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

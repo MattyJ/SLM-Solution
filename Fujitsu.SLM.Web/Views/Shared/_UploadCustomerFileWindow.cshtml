@@ -1,0 +1,11 @@
+﻿@model UploadCustomerFileWindowViewModel
+
+@(Html.Kendo().Window()
+            .Name("upload-customer-file-window")
+            .Title("Customer File")
+            .Width(650)
+            .Height(450)
+            .Modal(true)
+            .Visible(false)
+            .Actions(actions => actions.Close())
+            .LoadContentFrom("UploadCustomerFile", "ServiceDecomposition", new {Level = Model.EditLevel}))

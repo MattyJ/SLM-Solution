@@ -1,0 +1,146 @@
+﻿@model ResolverGridLevelZeroViewModel
+
+@{
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@(Html.Kendo().Grid<ResolverLevelZeroViewModel>()
+        .Name("ResolverLevelZeroGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.ServiceDeskId).Visible(false);
+            columns.Bound(c => c.ServiceDeskName);
+            columns.Bound(c => c.ServiceDeliveryOrganisationTypeName);
+            columns.Bound(c => c.ServiceDeliveryUnitTypeName);
+            columns.Bound(c => c.ServiceDeliveryUnitNotes).Encoded(false).ClientTemplate("<div>#= formatMultiLineString(ServiceDeliveryUnitNotes)#</div>");
+            columns.Bound(c => c.ResolverGroupName);
+            columns.Command(cmd =>
+            {
+                if (Model.CanMoveResolver)
+                {
+                    cmd.Custom("Move").Click("moveResolver");
+                }
+                cmd.Custom("Delete").Click("onDeleteResolver");
+            }).Title("").Width(250).Visible(isArchitect);
+
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isArchitect)
+            {
+                toolbar.Custom().Url(Url.Action("Add", "Resolver", new { Level = Model.EditLevel})).Text("Add Resolver");
+            }
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model => model.Id(p => p.Id))
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxResolverLevelZeroGrid", "Resolver"))
+            .Sort(sort => sort.Add(col => col.ResolverGroupName))
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Change("onRowSelectResolver");
+            e.Cancel("onCancel");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+)
+
+@Html.Partial("_ResolverMoveLevelZero")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        loadKendoGridUsingSavedState("#ResolverLevelZeroGrid");
+        $("#ResolverLevelZeroGrid .k-grid-add").on("click", function (e) {
+            isCreating = true;
+        });
+    });
+
+    function onRowSelectResolver() {
+        var resolverGrid = $('#ResolverLevelZeroGrid').data("kendoGrid");
+        var row = resolverGrid.select();
+        var data = resolverGrid.dataItem(row);
+        var url = '@Url.Action("Edit", "Resolver", new { level = "XXXLevel", id = "XXXId" })';
+        url = url.replace('XXXLevel', '@Model.EditLevel');
+        window.location.href = url.replace('XXXId', data.id);
+    }
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Move > span").addClass("k-icon k-i-connector");
+        e.sender.tbody.find(".k-grid-Edit > span").addClass("k-icon k-i-pencil");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+        saveKendoGridState("#ResolverLevelZeroGrid");
+    }
+
+    function onCancel() {
+        var grid = $("#ResolverLevelZeroGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function moveResolver(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        openMoveResolverLevelZeroWindow(dataItem);
+        e.preventDefault();
+    }
+
+    function formatMultiLineString(e) {
+        if (!e || e.length == 0) {
+            return "";
+        }
+        var formatted = '<ul class="service-delivery-unit-notes"><li>' + e.replace(/\r/g, '').replace(/\n/g, '</li><li>') + '</li></ul>';
+        formatted = formatted.replace('/<li><\/li>/g', '');
+        return formatted;
+    }
+
+    function onDeleteResolver(e) {
+        var grid = $("#ResolverLevelZeroGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Resolver?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteResolver", "Resolver")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Resolver successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

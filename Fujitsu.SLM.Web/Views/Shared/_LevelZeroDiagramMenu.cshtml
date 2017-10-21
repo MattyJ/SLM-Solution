@@ -1,0 +1,12 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+
+@model DiagramMenuModel
+
+
+@if (@User.IsInRole(UserRoles.Viewer))
+{
+    @Html.NavigationLinkListItem(LevelNames.LevelZero, Model.LevelZeroSelected, "Index", "ServiceDesk", new { level = NavigationLevelNames.LevelZero }, new { id = "lnkLevelZeroServiceDesk" })
+    @Html.NavigationLinkListItem("Assets", Model.DiagramsSelected, "Index", "Diagram", new { level = NavigationLevelNames.LevelZero }, new { id = "lnkLevelZeroDiagrams" })
+    @Html.NavigationLinkListItem("Fujitsu Domains", Model.FujitsuDomainsSelected, "FujitsuDomains", "Diagram", new { level = 0 }, new { id = "lnkFujitsuDomains" })
+    @Html.NavigationLinkListItem("Customer Services", Model.CustomerServicesSelected, "CustomerServices", "Diagram", new { level = 0 }, new { id = "lnkCustomerServices" })
+}

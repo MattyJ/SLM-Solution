@@ -1,0 +1,29 @@
+﻿@model AddCustomerContributorViewModel
+
+@{
+    ViewBag.Title = "Service Decomposition > " + @Model.CustomerName;
+}
+
+@section navigation
+{
+    @Html.Partial("_ServiceDecompositionMenu", new ServiceDecompositionMenuModel { ServiceDecompositionsSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "addcustomercontributor" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_AddCustomerContributor", Model)

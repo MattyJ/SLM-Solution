@@ -1,0 +1,49 @@
+﻿
+<script type="text/kendo" id="deskInputTypesTemplate">
+    <ul>
+        #for(var i = 0; i< data.length; i++){#
+        <li>#:data[i].InputTypeName#</li>
+        #}#
+    </ul>
+</script>
+
+<script type="text/javascript">
+    var deskInputTypesTemplate = kendo.template($("#deskInputTypesTemplate").html(), { useWithBlock: false });
+</script>
+
+@(Html.Kendo().Grid<ServiceDeskViewModel>()
+        .Name("ServiceDesksForDiagramGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.DeskName).Width(350);
+            columns.Bound(c => c.DeskInputTypes).Width(150).ClientTemplate("#=deskInputTypesTemplate(DeskInputTypes)#");
+            columns.Bound(o => o.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(30);
+            columns.Bound(o => o.UpdatedBy).Width(30);
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(false)
+            .Model(model => model.Id(p => p.Id))
+            .Events(events => events.Error("onError").Sync("syncHandler"))
+            .Read(read => read.Action("ReadAjaxServiceDeskGrid", "ServiceDesk"))
+            .Sort(sort =>
+            {
+                sort.Add(col => col.DeskName);
+            })
+        )
+        .Events(e =>
+        {
+            e.Change("onRowSelect");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+)

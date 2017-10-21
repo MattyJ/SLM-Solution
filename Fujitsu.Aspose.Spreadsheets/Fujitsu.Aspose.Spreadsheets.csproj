@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A48BBDC6-DDF1-4F87-8965-C17F5D814BE7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fujitsu.Aspose.Spreadsheets</RootNamespace>
+    <AssemblyName>Fujitsu.Aspose.Spreadsheets</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SystemTest|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\SystemTest\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure|AnyCPU'">
+    <OutputPath>bin\Azure\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Aspose.Cells">
+      <HintPath>..\Dependencies\Aspose\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Attributes\WorksheetColumnHeaderStyleAttribute.cs" />
+    <Compile Include="Attributes\WorksheetColumnStyleAttribute.cs" />
+    <Compile Include="Attributes\StyleAttribute.cs" />
+    <Compile Include="Attributes\WorksheetRowAttribute.cs" />
+    <Compile Include="Attributes\WorksheetRowMultipleRegExItemValueAttribute.cs" />
+    <Compile Include="Attributes\WorksheetStyleAttribute.cs" />
+    <Compile Include="Attributes\WorksheetFilterAttribute.cs" />
+    <Compile Include="Attributes\WorksheetFreezeAttribute.cs" />
+    <Compile Include="Attributes\WorkbookCustomPropertyAttribute.cs" />
+    <Compile Include="Attributes\WorkbookBuiltInPropertyAttribute.cs" />
+    <Compile Include="Attributes\WorkbookNamedRangeAttribute.cs" />
+    <Compile Include="Attributes\WorksheetAttribute.cs" />
+    <Compile Include="Attributes\WorksheetColumnAttribute.cs" />
+    <Compile Include="Attributes\WorksheetItemAttribute.cs" />
+    <Compile Include="Attributes\WorksheetItemValueAttribute.cs" />
+    <Compile Include="Attributes\WorksheetRowItemAttribute.cs" />
+    <Compile Include="Attributes\WorksheetRowItemValueAttribute.cs" />
+    <Compile Include="Attributes\WorksheetRowMultipleItemValueAttribute.cs" />
+    <Compile Include="Constants\FontUnderlineTypeValues.cs" />
+    <Compile Include="Constants\CellBorderTypeValues.cs" />
+    <Compile Include="Constants\ColorValues.cs" />
+    <Compile Include="Constants\BackgroundTypeValues.cs" />
+    <Compile Include="Constants\TextAlignmentTypeValues.cs" />
+    <Compile Include="Dependency\DependencyResolver.cs" />
+    <Compile Include="Dependency\ICellValue.cs" />
+    <Compile Include="Dependency\IObjectFactory.cs" />
+    <Compile Include="Exceptions\MissingAttributeException.cs" />
+    <Compile Include="Exceptions\MissingValueAttributeException.cs" />
+    <Compile Include="Extensions\AttributeExtensions.cs" />
+    <Compile Include="Extensions\PropertyExtensions.cs" />
+    <Compile Include="Extensions\WorkbookExtensions.cs" />
+    <Compile Include="Extensions\WorksheetExtensions.cs" />
+    <Compile Include="Helpers\ReportDefinitionHelper.cs" />
+    <Compile Include="ImportListResult.cs" />
+    <Compile Include="ImportResult.cs" />
+    <Compile Include="ImportValidationResult.cs" />
+    <Compile Include="IWorksheetGenerator.cs" />
+    <Compile Include="Properties\Version.cs" />
+    <Compile Include="Types\Definition\ColumnDefinition.cs" />
+    <Compile Include="Types\Definition\FilterDefinition.cs" />
+    <Compile Include="Types\Definition\FreezeDefinition.cs" />
+    <Compile Include="Types\Definition\RowContentDefinition.cs" />
+    <Compile Include="Types\Definition\RowDefinition.cs" />
+    <Compile Include="Types\Definition\StyleDefinition.cs" />
+    <Compile Include="Types\Definition\WorksheetStyleDefinition.cs" />
+    <Compile Include="Types\NamedValue.cs" />
+    <Compile Include="Types\PropertyInfoWrapper.cs" />
+    <Compile Include="Types\Definition\ReportDefinition.cs" />
+    <Compile Include="WorksheetGenerator.cs" />
+    <Compile Include="WorksheetImporter.cs" />
+    <Compile Include="WorksheetListGenerator.cs" />
+    <Compile Include="WorksheetListImporter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

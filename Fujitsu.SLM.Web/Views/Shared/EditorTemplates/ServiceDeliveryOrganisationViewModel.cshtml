@@ -1,0 +1,36 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model BaseServiceDeliveryOrganisationViewModel
+
+<div id="resolverGroupViewModelContainer">
+    <fieldset class="form-popup-fieldset">
+        <legend>Service Delivery Organisation</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ServiceDeliveryOrganisationTypeId)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().DropDownListFor(x => x.ServiceDeliveryOrganisationTypeId)
+                      .Popup(p => p.AppendTo("body"))  // Kendo Bug 985 workaround, append popup manually to body
+                      .Filter(FilterType.Contains)
+                      .DataTextField("ServiceDeliveryOrganisationTypeName")
+                      .DataValueField("Id")
+                      .DataSource(source => source.Read(read => read.Action("GetServiceDeliveryOrganisationTypes", "ReferenceData")))
+                      .OptionLabel(WebResources.DefaultDropDownListText))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(x => x.ServiceDeliveryOrganisationTypeId)
+                </div>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ServiceDeliveryOrganisationNotes)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ServiceDeliveryOrganisationNotes, "MultiLineText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.ServiceDeliveryOrganisationNotes)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

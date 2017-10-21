@@ -1,0 +1,34 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+@using Microsoft.AspNet.Identity
+@model Fujitsu.SLM.Web.Models.HomePageViewModel
+
+@{
+    ViewBag.Title = "Release History";
+}
+
+@section navigation
+{
+    @Html.Action("HomeMenu", "Menu")
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+ @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new {id = "btnContextHelp", target="servicedecompositionhelp"}, routeValues: new {helpKey = "releasehistorypage"})
+}
+
+
+<div class="landing-image">
+
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btnBack").hide();
+        $("#customer-details").hide();
+    });
+</script>

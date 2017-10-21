@@ -1,0 +1,822 @@
+﻿@model ChartViewModel
+
+@{
+    var level = Model.Level;
+    var levelTitle = level == 1 ? LevelNames.LevelOne : LevelNames.LevelTwo;
+    ViewBag.Title = $"{levelTitle} > Diagrams > {Diagram.ServiceDeskStructureTitle}";
+}
+
+@section navigation
+{
+    @switch (level)
+    {
+        case 1:
+            @Html.Partial("_LevelOneDiagramMenu", new DiagramMenuModel { ServiceDeskStructureSelected = true })
+            break;
+        case 2:
+            @Html.Partial("_LevelTwoDiagramMenu", new DiagramMenuModel { ServiceDeskStructureSelected = true })
+            break;
+    }
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "servicedeskstructurediagram" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="export-block">
+    <div id="diagram-entities">
+        <div class="diagram-entity">
+            @(Html.Kendo().TreeView()
+                    .Name("DomainDataTreeView")
+                    .BindTo(Model.InlineDomainData)
+                    .Checkboxes(checkboxes => checkboxes
+                        .Name("domainsSelected")
+                        .CheckChildren(true)
+                        .Template("<input type='checkbox' id='_#= item.uid #' class='k-checkbox' checked='#= item.checked #' /><label class='k-checkbox-label' for='_#= item.uid #'></label>")
+                    ))
+        </div>
+        <div class="diagram-entity">
+            @(Html.Kendo().CheckBox().Name("Functions").Checked(Model.ServiceFunctions).Label("Service Functions"))
+        </div>
+        <div class="diagram-entity">
+            @(Html.Kendo().CheckBox().Name("Components").Checked(Model.ServiceComponents).Label("Service Components"))
+        </div>
+        <div class="diagram-entity">
+            @(Html.Kendo().CheckBox().Name("Resolvers").Checked(Model.Resolvers).Label("Resolvers"))
+        </div>
+        <div class="diagram-entity">
+            @(Html.Kendo().CheckBox().Name("Activities").Checked(Model.ServiceActivities).Label("Service Activities"))
+        </div>
+        <div class="diagram-entity">
+            @(Html.Kendo().CheckBox().Name("OpProcs").Checked(Model.OperationalProcesses).Label("Operational Processes"))
+        </div>
+    </div>
+
+    <div id="btn-group" role="group">
+        <button type="button" class="k-button k-button-icontext slm-button generate-diagram">Generate</button>
+        @Html.Partial("_DiagramButtonGroup")
+    </div>
+</div>
+
+<div id="diagram" class="js-content">
+    @(Html.Kendo().Diagram()
+        .Name("ServiceDeskStructureDiagram")
+        .DataSource(dataSource => dataSource
+            .Custom()
+            .Schema(schema => schema.Model(model => model.HasChildren("hasChildren").Id("flatIndex")))
+            .Transport(transport => transport.Read("readHandler"))
+            .Events(e => e.Error("onError")))
+        .Editable(false)
+        .ShapeDefaults(sd => sd
+            .Visual("visualTemplate")
+            .Content(c => c.Template("#= dataItem.CenteredTitle #").FontSize(16).FontFamily("Segoe UI")))
+        .ConnectionDefaults(cd => cd
+            .Stroke(s => s
+                .Color("#979797")
+                .Width(2))
+            .EndCap("ArrowEnd")
+            .FromConnector("Bottom")
+            .ToConnector("Top"))
+    )
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#Components").click(function (e) {
+            opResolversActivitiesCheckBox(this);
+        });
+        $("#Resolvers").click(function (e) {
+            opProcsCheckBox(this);
+        });
+
+        opProcsCheckBox($("#Components"));
+        opProcsCheckBox($("#Resolvers"));
+
+        //var treeview = $("#DomainDataTreeView").data("kendoTreeView");
+        //treeview.collapse(".k-item");
+    });
+
+    var dataMap = [];
+    var lastRoot;
+    var response;
+    var lastRootTimeout;
+
+    function readHandler(options) {
+        var treeview = $("#DomainDataTreeView").data("kendoTreeView");
+        var selection = treeview.getCheckedItems();
+
+        var data = {
+            Id: @Model.Id,
+            svcDomains :isEmpty(selection),
+            domainsSelected: selection,
+            svcFunctions: $("#Functions").is(":checked"),
+            svcComponents: $("#Components").is(":checked"),
+            resolverGroups: $("#Resolvers").is(":checked"),
+            svcActivities: $("#Activities").is(":checked"),
+            opProcs: $("#OpProcs").is(":checked")
+        };
+
+        if (!dataMap.length) {
+            startSpinner();
+            $.ajax({
+                url: '@Url.Action("ReadServiceDeskStructureChart", "Diagram")',
+                data: JSON.stringify(data),
+                type: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    $("#ServiceDeskStructureDiagram").hide();
+                    loaded = true;
+                    response = result;
+                    flatten(result.slice(0), 0);
+                    options.success(result);
+                },
+                error: function() {
+                    diagramError();
+                    stopSpinner();
+                }
+            });
+        } else {
+            var root = dataMap[options.data.flatIndex];
+            var successHandler = function () {
+                options.success(root.Units);
+                if (root === lastRoot) {
+                    lastRootTimeout = setTimeout(function () {
+                        lastRootTimeout = undefined;
+                        var diagram = $("#ServiceDeskStructureDiagram").getKendoDiagram();
+                        diagram.layout({
+                            type: "tree"
+                        });
+                        onRequestEnd({
+                            response: response
+                        });
+                    }, 0);
+                }
+            }
+
+            if (lastRootTimeout) {
+                clearTimeout(lastRootTimeout);
+                lastRoot = root;
+            }
+
+            if (root.itemLevel % 15 !== 0) {
+                successHandler();
+            } else {
+                setTimeout(successHandler, 0);
+            }
+        }
+    }
+
+    var FJS_WATERMARK_WIDTH = 489;
+    var FJS_WATERMARK_HEIGHT = 625;
+    var FJS_WATERMARK_URL = '@Url.Content("~/Images/Infinity-Mark-Watermark-Grey-1-RGB.png")';
+    var activityHeight = 20;
+
+    // Attach method to the prototype of the TreeView
+    kendo.ui.TreeView.prototype.getCheckedItems = (function(){
+
+        function getCheckedItems(){
+            var nodes = this.dataSource.view();
+            return getCheckedNodes(nodes);
+        }
+
+        function getCheckedNodes(nodes){
+            var node, childCheckedNodes;
+            var checkedNodes = [];
+
+            for (var i = 0; i < nodes.length; i++) {
+                node = nodes[i];
+                if (node.checked) {
+                    checkedNodes.push(node.id);
+                }
+
+                // To understand recursion, first you must understand recursion!
+                if (node.hasChildren) {
+                    childCheckedNodes = getCheckedNodes(node.children.view());
+                    if (childCheckedNodes.length > 0){
+                        checkedNodes = checkedNodes.concat(childCheckedNodes);
+                    }
+                }
+
+            }
+
+            return checkedNodes;
+        }
+
+        return getCheckedItems;
+    })();
+
+    $(".generate-diagram").click(function() {
+        var diagram = $("#ServiceDeskStructureDiagram").getKendoDiagram();
+        dataMap = [];
+        diagram.dataSource.read();
+    });
+
+    function opResolversActivitiesCheckBox(componentCb) {
+        var resolversCb = $("#Resolvers");
+        var activitiesCb = $("#Activities");
+        var opProcsCb = $("#OpProcs");
+        if ($(componentCb).is(":checked")) {
+            resolversCb.removeAttr("disabled");
+            activitiesCb.removeAttr("disabled");
+        } else {
+            opProcsCb.attr("disabled", true);
+            opProcsCb.attr("checked", false);
+            activitiesCb.attr("disabled", true);
+            activitiesCb.attr("checked", false);
+            resolversCb.attr("disabled", true);
+            resolversCb.attr("checked", false);
+        }
+    }
+
+    function opProcsCheckBox(resGrpCb) {
+        var opProcsCb = $("#OpProcs");
+        if ($(resGrpCb).is(":checked")) {
+            opProcsCb.removeAttr("disabled");
+        } else {
+            opProcsCb.attr("disabled", true);
+            opProcsCb.attr("checked", false);
+        }
+    }
+
+    function visualTemplate(options) {
+        var wordWrapLength = 45;
+        var textBlocks = [];
+        var dataviz = kendo.dataviz;
+        var g = new dataviz.diagram.Group();
+        var dataItem = options.dataItem;
+        var resolverGroupsChecked = $("#Resolvers").is(":checked");
+        var svcActivitiesChecked = $("#Activities").is(":checked");
+        var result;
+        var wordWrapResult;
+
+        if (dataItem.Type === "@DecompositionTypeNames.EmptyForLayout") {
+            g.append(new dataviz.diagram.TextBlock({
+                height: 0,
+                width: 0
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.InputTypeNumber") {
+            g.append(new dataviz.diagram.Circle({
+                radius: 25,
+                stroke: {
+                    width: 2,
+                    color: dataItem.Color || "#586477"
+                },
+
+                fill: "#ffffff"
+            }));
+
+        } else if (dataItem.Type === "@DecompositionTypeNames.InputTypeName") {
+            g.append(new dataviz.diagram.Rectangle({
+                fontSize: 18,
+                width: 250,
+                height: 25,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+
+        } else if (dataItem.Type === "@DecompositionTypeNames.Desk") {
+            g.append(new dataviz.diagram.Rectangle({
+                width: dataItem.Width,
+                height: 67,
+                stroke: {
+                    width: 3
+                },
+
+                fill: "#ffffff"
+            }));
+
+        } else {
+            if (dataItem.Type === "@DecompositionTypeNames.Domain") {
+                g.append(new dataviz.diagram.Rectangle({
+                    width: 325,
+                    height: 80,
+                    stroke: {
+                        width: 2
+                    },
+                    fill: "#ffffff"
+                }));
+
+                textBlocks = [];
+                if (dataItem.Title.length > wordWrapLength) {
+                    result = wordwrap(dataItem.Title, wordWrapLength, "\r\n");
+                    wordWrapResult = result.split("\r\n");
+                    for (var j = 0; j < wordWrapResult.length; j++) {
+                        textBlocks.push(wordWrapResult[j]);
+                    }
+                } else {
+                    textBlocks.push(dataItem.Title);
+                }
+
+                var y = 10;
+
+                for (var i = 0; i < textBlocks.length; i++) {
+                    g.append(new dataviz.diagram.TextBlock({
+                        text: textBlocks[i],
+                        fontSize: 12,
+                        fontFamily: "Segoe UI",
+                        x: 75,
+                        y: y,
+                        color: "#00000"
+                    }));
+
+                    y = y + 20;
+                }
+
+                g.append(new dataviz.diagram.Image({
+                    source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceDomainIcon.png")))",
+                    x: 3,
+                    y: 3,
+                    width: 60,
+                    height: 60
+                }));
+            } else if (dataItem.Type === "@DecompositionTypeNames.Function") {
+                g.append(new dataviz.diagram.Rectangle({
+                    width: 325,
+                    height: 80,
+                    stroke: {
+                        width: 2
+                    },
+                    fill: "#ffffff"
+                }));
+
+                textBlocks = [];
+                if (dataItem.Title.length > wordWrapLength) {
+                    result = wordwrap(dataItem.Title, wordWrapLength, "\r\n");
+                    wordWrapResult = result.split("\r\n");
+                    for (var j = 0; j < wordWrapResult.length; j++) {
+                        textBlocks.push(wordWrapResult[j]);
+                    }
+                } else {
+                    textBlocks.push(dataItem.Title);
+                }
+
+                var y = 10;
+
+                for (var i = 0; i < textBlocks.length; i++) {
+                    g.append(new dataviz.diagram.TextBlock({
+                        text: textBlocks[i],
+                        fontSize: 12,
+                        fontFamily: "Segoe UI",
+                        x: 75,
+                        y: y,
+                        color: "#00000"
+                    }));
+
+                    y = y + 20;
+                }
+
+                g.append(new dataviz.diagram.Image({
+                    source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceFunctionIcon.png")))",
+                    x: 3,
+                    y: 3,
+                    width: 60,
+                    height: 60
+                }));
+            } else if (dataItem.Type === "@DecompositionTypeNames.Component") {
+                g.append(new dataviz.diagram.Rectangle({
+                    width: 325,
+                    height: 80,
+                    stroke: {
+                        width: 2
+                    },
+                    fill: "#ffffff"
+                }));
+
+                textBlocks = [];
+                if (dataItem.Title.length > wordWrapLength) {
+                    result = wordwrap(dataItem.Title, wordWrapLength, "\r\n");
+                    wordWrapResult = result.split("\r\n");
+                    for (var j = 0; j < wordWrapResult.length; j++) {
+                        textBlocks.push(wordWrapResult[j]);
+                    }
+                } else {
+                    textBlocks.push(dataItem.Title);
+                }
+
+                var y = 10;
+
+                for (var i = 0; i < textBlocks.length; i++) {
+                    g.append(new dataviz.diagram.TextBlock({
+                        text: textBlocks[i],
+                        fontSize: 12,
+                        fontFamily: "Segoe UI",
+                        x: 75,
+                        y: y,
+                        color: "#00000"
+                    }));
+
+                    y = y + 20;
+                }
+
+                g.append(new dataviz.diagram.Image({
+                    source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceComponentIcon.png")))",
+                    x: 3,
+                    y: 3,
+                    width: 60,
+                    height: 60
+                }));
+            } else if (dataItem.Type === "@DecompositionTypeNames.LineForDummyChildComponent") {
+                var lineWidth = 2;
+                if (!resolverGroupsChecked && svcActivitiesChecked) {
+                    lineWidth = 0;
+                }
+                g.append(new dataviz.diagram.Path({
+                    data: "M10 0 L10 82Z",
+                    stroke: {
+                        width: lineWidth
+                    },
+                    fill: "#ffffff"
+                }));
+            } else if (dataItem.Type === "@DecompositionTypeNames.Resolver") {
+                g.append(new dataviz.diagram.Rectangle({
+                    width: 325,
+                    height: 80,
+                    stroke: {
+                        width: 2
+                    },
+                    fill: "#ffffff"
+                }));
+
+                g.append(new dataviz.diagram.Image({
+                    source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceResolverIcon.png")))",
+                    x: 3,
+                    y: 3,
+                    width: 60,
+                    height: 60
+                }));
+
+                g.append(new dataviz.diagram.TextBlock({
+                    text: dataItem.Title,
+                    fontSize: 12,
+                    fontFamily: "Segoe UI",
+                    x: 75,
+                    y: 10,
+                    color: "#00000"
+                }));
+
+                g.append(new dataviz.diagram.TextBlock({
+                    text: dataItem.TitleTwo,
+                    fontSize: 12,
+                    fontFamily: "Segoe UI",
+                    x: 75,
+                    y: 30,
+                    color: "#00000"
+                }));
+
+                g.append(new dataviz.diagram.TextBlock({
+                    text: dataItem.TitleThree,
+                    fontSize: 12,
+                    fontFamily: "Segoe UI",
+                    x: 75,
+                    y: 50,
+                    color: "#00000"
+                }));
+
+            } else if (dataItem.Type === "@DecompositionTypeNames.Activity") {
+                var activities = dataItem.Title.split("\r\n");
+                var activitiesWordWrapLength = 55;
+                textBlocks = [];
+                for (var h = 0; h < activities.length; h++) {
+                    if (activities[h].length > activitiesWordWrapLength) {
+                        result = wordwrap(activities[h], activitiesWordWrapLength, "\r\n");
+                        wordWrapResult = result.split("\r\n");
+                        for (var j = 0; j < wordWrapResult.length; j++) {
+                            textBlocks.push(wordWrapResult[j]);
+                        }
+                    } else {
+                        textBlocks.push(activities[h]);
+                    }
+                }
+
+                var calcHeight = textBlocks.length * 20;
+                if (calcHeight > activityHeight) {
+                    activityHeight = calcHeight;
+                }
+
+                g.append(new dataviz.diagram.Rectangle({
+                    width: 325,
+                    height: activityHeight,
+                    stroke: {
+                        width: 0
+                    },
+                    fill: "#ffffff"
+                }));
+
+                g.append(new dataviz.diagram.Image({
+                    source: "@(new Uri(Request.Url, Url.Content("~/Images/ServiceActivitiesIcon.png")))",
+                    x: 132.5,
+                    y: 3,
+                    width: 60,
+                    height: 60
+                }));
+
+                var y = 75;
+
+                for (var i = 0; i < textBlocks.length; i++) {
+                    g.append(new dataviz.diagram.TextBlock({
+                        text: textBlocks[i],
+                        fontSize: 12,
+                        fontFamily: "Segoe UI",
+                        x: 20,
+                        y: y,
+                        color: "#00000"
+                    }));
+
+                    y = y + 20;
+                }
+            } else if (dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcessSelected") {
+                g.append(new dataviz.diagram.Rectangle({
+                    width: 300,
+                    height: 40,
+                    stroke: {
+                        width: 1,
+                        dashType: 'solid'
+                    },
+                    fill: "#ffffff"
+                }));
+                g.append(new dataviz.diagram.Circle({
+                    width: 30,
+                    height: 30,
+                    fill: "#000000",
+                    x: 5,
+                    y: 5
+                }));
+                g.append(new dataviz.diagram.TextBlock({
+                    text: dataItem.Title,
+                    fontSize: 10,
+                    fontFamily: "Segoe UI",
+                    color: "#00000",
+                    y: 13,
+                    x: 40
+                }));
+            } else if (dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcess") {
+                g.append(new dataviz.diagram.Rectangle({
+                    width: 300,
+                    height: 40,
+                    stroke: {
+                        width: 1,
+                        dashType: 'solid'
+                    },
+                    fill: "#ffffff"
+                }));
+                g.append(new dataviz.diagram.Circle({
+                    width: 30,
+                    height: 30,
+                    x: 5,
+                    y: 5
+                }));
+                g.append(new dataviz.diagram.TextBlock({
+                    text: dataItem.Title,
+                    fontSize: 10,
+                    fontFamily: "Segoe UI",
+                    color: "#00000",
+                    y: 13,
+                    x: 40
+                }));
+            }
+        }
+        return g;
+    }
+
+    function onRequestEnd(e) {
+        var data = e.response;
+        var resolverGroupsChecked = $("#Resolvers").is(":checked");
+        var svcActivitiesChecked = $("#Activities").is(":checked");
+        setTimeout(function() {
+            var diagram = $("#ServiceDeskStructureDiagram").getKendoDiagram();
+            var diagramConnections = diagram.connections;
+            var bbox = diagram.boundingBox();
+            var shapeConnections;
+            var connection;
+            var shape;
+
+            for (var i = 0; i < diagram.shapes.length; i++) {
+                shape = diagram.shapes[i];
+
+                if (shape.dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcess" ||
+                    shape.dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcessSelected") {
+                    var bottomLeft = shape.bounds().bottomLeft();
+                    shapeConnections = shape.connections();
+                    for (var j = 0; j < shapeConnections.length; j++) {
+                        connection = shapeConnections[j];
+                        if (connection.to !== shape) {
+                            connection.to.position({ x: connection.to.position().x, y: bottomLeft.y });
+                        }
+                    }
+                    diagram.remove(shapeConnections);
+                } else if (shape.dataItem.Type === "@DecompositionTypeNames.Activity") {
+                    diagram.remove(shape.connections());
+                    shape.height = activityHeight;
+                } else if (shape.dataItem.Type === "@DecompositionTypeNames.Desk") {
+                    // Resize the width of the Service Desk and span across
+                    if (bbox.width - 5 > shape.dataItem.Width) {
+                        shape.dataItem.Width = bbox.width - 5;
+                        shape.redrawVisual();
+                        shape.content(shape.content());
+                        shape.position({ x: bbox.x + 1, y: shape.position().y });
+                    }
+                }
+
+
+                if (!resolverGroupsChecked && svcActivitiesChecked) {
+                    if (shape.dataItem.Type === "@DecompositionTypeNames.LineForDummyChildComponent") {
+                        shapeConnections = shape.connections();
+                        for (var j = 0; j < shapeConnections.length; j++) {
+                            connection = shapeConnections[j];
+                            diagram.remove(connection);
+                        }
+                        diagram.remove(shapeConnections);
+                    }
+                }
+
+
+            }
+
+            if (resolverGroupsChecked && !svcActivitiesChecked) {
+                for (var k = 0; k < diagramConnections.length; k++) {
+                    shape = diagram.shapes[k];
+                    if (shape.dataItem.Type === "@DecompositionTypeNames.LineForDummyChildComponent") {
+                        shapeConnections = shape.connections();
+                        for (var l = 0; l < shapeConnections.length; l++) {
+                            shapeConnections[l].redraw({
+                                endCap: "none"
+                            });
+                            break;
+                        }
+                    }
+                }
+            }
+
+            var inputs = data[0].Inputs;
+            var inputWidth = 250;
+            var inputHeight = 25;
+            var inputNumberSize = 50;
+            var separation = 50;
+            var y = bbox.y - 3 * separation - inputHeight - inputNumberSize;
+            var x = (bbox.width - (inputs.length * inputWidth + (inputs.length - 1) * separation)) / 2;
+
+            for (var m = 0; m < inputs.length; m++) {
+                var inputShape = diagram.addShape({
+                    x: x,
+                    y: y,
+                    dataItem: inputs[m]
+                });
+
+                var bounds = inputShape.bounds();
+                var numberInputShape = diagram.addShape({
+                    x: bounds.center().x - inputNumberSize / 2 - 1,
+                    y: y + separation + inputHeight,
+                    dataItem: inputs[m].Units[0]
+                });
+
+                diagram.connect(inputShape, numberInputShape, {
+                    endCap: "none"
+                });
+
+                diagram.connect(numberInputShape, new kendo.dataviz.diagram.Point(x + bounds.width / 2, bbox.y - separation));
+
+                x += inputWidth + separation;
+            }
+
+            diagram.element.show();
+            onDiagram("#ServiceDeskStructureDiagram");
+            diagram.bringIntoView(diagram.shapes);
+            stopSpinner();
+        }, 0);
+    }
+
+
+
+    $(".js-export-pdf").click(function () {
+        startSpinner();
+        var diagram = $("#ServiceDeskStructureDiagram").getKendoDiagram();
+        var group = diagram.exportVisual();
+        var cbox = group.clippedBBox();
+        var center = cbox.center();
+        var rect = new kendo.geometry.Rect([center.x - FJS_WATERMARK_WIDTH / 2, center.y - FJS_WATERMARK_HEIGHT / 2], [FJS_WATERMARK_WIDTH, FJS_WATERMARK_HEIGHT]);
+        var background = new kendo.drawing.Image(FJS_WATERMARK_URL, rect);
+        group.insertAt(background, 0);
+        group.transform(kendo.geometry.transform().scale(0.1, 0.1));
+
+        kendo.drawing.exportPDF(group, {
+            paperSize: "auto",
+            title: "@Model.Title",
+            author: "@Model.Author",
+            creator: "@Model.Creator",
+            date: new Date(),
+            subject: "@Model.Subject",
+            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+        }).done(function (data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "@Model.Filename"+".pdf"
+            });
+            stopSpinner();
+        });
+    });
+
+
+    $(".js-export-svg").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an SVG
+                return kendo.drawing.exportSVG(group);
+            })
+            .done(function(data) {
+                // Save the SVG file
+                saveAs(dataURLtoBlob(data), "@Model.Filename" + ".svg");
+            });
+    });
+
+    $(".js-save-pdf").click(function () {
+        startSpinner();
+        var diagram = $("#ServiceDeskStructureDiagram").getKendoDiagram();
+        var group = diagram.exportVisual();
+        var cbox = group.clippedBBox();
+        var center = cbox.center();
+        var rect = new kendo.geometry.Rect([center.x - FJS_WATERMARK_WIDTH / 2, center.y - FJS_WATERMARK_HEIGHT / 2], [FJS_WATERMARK_WIDTH, FJS_WATERMARK_HEIGHT]);
+        var background = new kendo.drawing.Image(FJS_WATERMARK_URL, rect);
+        group.insertAt(background, 0);
+        group.transform(kendo.geometry.transform().scale(0.1, 0.1));
+
+        kendo.drawing.exportPDF(group, {
+            paperSize: "auto",
+            title: "@Model.Title",
+            author: "@Model.Author",
+            creator: "@Model.Creator",
+            date: new Date(),
+            subject: "@Model.Subject",
+            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+        }).done(function (data) {
+            saveDiagram('@Url.Action("SaveDiagram", "Diagram")', data, "@Model.Filename"+".pdf", @Model.Level, "@NotificationTypeNames.Success");
+        });
+
+    });
+
+    $(".js-save-svg").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an SVG
+                return kendo.drawing.exportSVG(group);
+            })
+            .done(function(data) {
+                saveDiagram("@Url.Action("SaveDiagram", "Diagram")", data, "@Model.Filename" + ".svg", @Model.Level, "@NotificationTypeNames.Success");
+            });
+    });
+
+    @*$(".js-export-img").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        startSpinner();
+        try {
+            kendo.drawing.drawDOM($(".js-content"))
+                .then(function(group) {
+                    // Render the result as an image
+                    return kendo.drawing.exportImage(group); //, {cors: "false"});
+                })
+            .done(function(data) {
+                // Save the image file
+                saveAs(dataURLtoBlob(data), "@Model.Filename" + ".png");
+                // Old way subject to browser limitations on size, currently around 1.5Mb
+                //kendo.saveAs({
+                //    dataURI: data,
+                //    fileName: "@Model.Filename" + ".png"
+                //});
+                });
+        } catch (e) {
+            console.log(e);
+            kendoErrorAlert("An unexpected error has occurred the details of which have been logged. Please try again and if the problem persists, contact an administrator.");
+        } finally {
+            stopSpinner();
+        }
+    });
+
+    $(".js-save-img").click(function () {
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an image
+                return kendo.drawing.exportImage(group);
+            })
+            .done(function(data) {
+                // Save the image file
+                saveDiagram("@Url.Action("SaveDiagram", "Diagram")", data, "@Model.Filename" + ".png", @Model.Level, "@NotificationTypeNames.Success");
+            });
+    });*@
+</script>

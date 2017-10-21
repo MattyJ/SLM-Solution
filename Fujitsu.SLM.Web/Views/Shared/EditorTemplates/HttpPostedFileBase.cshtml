@@ -1,0 +1,6 @@
+﻿@model HttpPostedFileBase
+
+@(Html.Kendo().Upload()
+    .Multiple(false)
+    .Messages(m => m.Select("Select File..."))
+      .Name(ViewData.TemplateInfo.GetFullHtmlFieldId("")))

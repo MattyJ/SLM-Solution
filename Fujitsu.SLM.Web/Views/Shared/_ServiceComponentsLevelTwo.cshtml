@@ -1,0 +1,151 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model ServiceComponentGridViewModel
+
+@{
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+    var level2Image = Url.Content("~/Images/Level2ServiceComponent.png");
+}
+
+<script type="text/x-kendo-template" id="componentLevelTemplate">
+    #if(data == 2){#
+    <img class="level2-image" src="@level2Image" alt="Level 2" />&nbsp;#: data #
+    #}#
+</script>
+<script type="text/javascript">
+    var componentLevelTemplate = kendo.template($("#componentLevelTemplate").html());
+</script>
+
+@(Html.Kendo().Grid<ServiceComponentViewModel>()
+        .Name("ServiceComponentsLevelTwoGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.ServiceFunctionId).Visible(false);
+            columns.Bound(c => c.ParentServiceComponentId).Visible(false);
+            columns.Template(c => c.ComponentLevel).Width(45).ClientTemplate("#=componentLevelTemplate(ComponentLevel)#");
+            columns.Bound(c => c.ComponentName);
+            columns.Bound(c => c.DiagramOrder);
+            columns.Bound(c => c.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(150);
+            columns.Bound(c => c.UpdatedBy).Width(300);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Move").Click("moveServiceComponent");
+                cmd.Custom("Delete").Click("onDeleteServiceComponent");
+            }).Title("").Width(250).Visible(isArchitect);
+
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isArchitect)
+            {
+                toolbar.Custom().Url(Url.Action("AddLevel2", "ServiceComponent", new { Level = Model.EditLevel, Id = Model.ParentComponentId })).Text("Add Service Component (Level 2)").HtmlAttributes(new { id = "js-addServiceComponent" });
+            }
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .ServerOperation(true)
+            .Model(model => model.Id(p => p.Id))
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxServiceComponentsLevelTwoGrid", "ServiceComponent", new { parentComponentId = Model.ParentComponentId }))
+            .Update(update => update.Action("UpdateAjaxServiceComponentsGrid", "ServiceComponent"))
+            .Create(create => create.Action("CreateAjaxServiceComponentsGrid", "ServiceComponent"))
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Change("onRowSelectServiceComponent");
+            e.Cancel("onCancel");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+        .Editable(edt => edt.Mode(GridEditMode.PopUp))
+)
+
+@Html.Partial("_ServiceComponentMoveLevel2")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#js-addServiceComponent > span").addClass("k-icon k-i-add");
+        loadKendoGridUsingSavedState('#ServiceComponentsLevelTwoGrid');
+        $("#ServiceComponentsLevelTwoGrid .k-grid-add").on("click", function (e) {
+            isCreating = true;
+        });
+    });
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Move > span").addClass("k-icon k-i-connector");
+        e.sender.tbody.find(".k-grid-Edit > span").addClass("k-icon k-i-pencil");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function moveServiceComponent(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        if (dataItem.ComponentLevel == 1) {
+            moveServiceComponentLevel1(dataItem);
+        } else {
+            moveServiceComponentLevel2(dataItem);
+        }
+        e.preventDefault();
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+        $("#ServiceComponentsLevelTwoGrid tr.k-alt").removeClass("k-alt");
+        $(".level1-image").closest("td").addClass("level1-image-cell");
+        $(".level2-image").closest("td").addClass("level2-image-cell");
+        $(".level2-image").closest("tr").addClass("level2-row");
+        saveKendoGridState('#ServiceComponentsLevelTwoGrid');
+    }
+
+    function onRowSelectServiceComponent() {
+        var serviceComponentGrid = $('#ServiceComponentsLevelTwoGrid').data("kendoGrid");
+        var row = serviceComponentGrid.select();
+        var data = serviceComponentGrid.dataItem(row);
+        var url = '@Url.Action("Edit", "ServiceComponent", new { level = "XXXLevel", id = "XXXId" })';
+        url = url.replace('XXXLevel', '@Model.EditLevel');
+        window.location.href = url.replace('XXXId', data.id);
+    }
+
+    function onCancel() {
+        var grid = $("#ServiceComponentsLevelTwoGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteServiceComponent(e) {
+        var grid = $("#ServiceComponentsLevelTwoGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Service Component?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteServiceComponent", "ServiceComponent")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Service Component successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

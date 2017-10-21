@@ -1,0 +1,43 @@
+﻿@model FunctionTypeRefDataViewModel
+@{
+    var isAdministrator = @User.IsInRole(UserRoles.Administrator);
+}
+<div>
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        <legend>Function Type</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.FunctionName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.FunctionName, "WindowWideText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.FunctionName)
+                </div>
+            </div>
+        </div>
+        @if (isAdministrator)
+        {
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.Visible)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().CheckBox().Name("Visible"))
+            </div>
+        }
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.SortOrder)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.SortOrder, "SmallInteger"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.SortOrder)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_KendoValidation")

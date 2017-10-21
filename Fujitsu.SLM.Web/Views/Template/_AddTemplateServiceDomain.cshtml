@@ -1,0 +1,148 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model AddTemplateServiceDomainViewModel
+
+@if (Model.HasServiceDeskContext)
+{
+    @Html.HiddenFor(x => x.ServiceDeskId)
+}
+else
+{
+    <div>
+        <fieldset>
+            <legend>Service Desk</legend>
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.ServiceDeskId) :</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(x => x.ServiceDeskId)
+                        .Name("ServiceDeskId")
+                        .Popup(p => p.AppendTo("body")) // Kendo Bug 985 workaround, append popup manually to body
+                        .Filter(FilterType.Contains).DataTextField("Text")
+                        .DataValueField("Value")
+                        .BindTo(Model.ServiceDesks).OptionLabel(WebResources.DefaultDropDownListText))
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(x => x.ServiceDeskId)
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+}
+<fieldset>
+    <p>
+        <input id="btnAddSelectedDomains" type="button" value="Add Selected Domains" class="update k-button k-button-icontext slm-wide-button"/>
+        <input id="btnReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel"/>
+    </p>
+</fieldset>
+
+<div>
+    @(Html.Kendo().Grid<TemplateDomainViewModel>()
+        .Name("TemplateDomainGrid")
+        .Columns(columns =>
+        {
+    columns.Template(@<text></text>).ClientTemplate("<input type='checkbox' class='checkbox' />").Width(20);
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.ServiceDeskId).Visible(false);
+            columns.Bound(c => c.TemplateId).Visible(false);
+            columns.Bound(c => c.Selected).Visible(false);
+            columns.Bound(c => c.DomainName);
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+          .Ajax()
+          .ServerOperation(false)
+          .Batch(true)
+          .PageSize(50)
+          .Events(e =>
+          {
+              e.Error("onError").Sync("syncHandler");
+              e.RequestEnd("onRequestEnd");
+          })
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+        })
+          .Read(read => read.Action("ReadAjaxTemplateDomainGrid", "Template", new { templateType = Model.TemplateType }))
+          .Update(upd => upd.Action("UpdateAjaxTemplateDomainGrid", "Template", new { level = Model.EditLevel }))
+          .Sort(sort =>
+          {
+              sort.Add(col => col.DomainName);
+          }))
+    )
+</div>
+
+
+<script type="text/javascript">
+    var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+    $(document).ready(function () {
+        // Get the grid and setup the "click" of the row checkboxes
+        var grid = $('#TemplateDomainGrid').data("kendoGrid");
+        grid.table.on("click", ".checkbox", selectRow);
+
+        // Extract model values into the script.
+        // var url = '@Model.ReturnUrl';
+
+        $(".k-grid-save-changes").hide();
+        $(".k-grid-cancel-changes").hide();
+
+        $("#btnReturn").click(function (e) {
+                startSpinner();
+                window.location.href = url;
+            });
+
+        highlightRequiredFields();
+    });
+
+    $("#btnAddSelectedDomains").click(function () {
+        var grid = $("#TemplateDomainGrid").data("kendoGrid");
+        var serviceDeskId = $('input#ServiceDeskId').val();
+        if (serviceDeskId > 0) {
+            var allRows = grid.tbody.find("tr");
+            var rowSelected = false;
+            // Iterate each row setting the selected values
+            for (var i = 0; i < allRows.length; i++) {
+                var currentRow = allRows[i];
+                if ($(currentRow).hasClass("k-state-selected")) {
+                    var dataItem = grid.dataSource.view()[i];
+                    dataItem.set("Selected", true);
+                    dataItem.set("ServiceDeskId", serviceDeskId);
+                    rowSelected = true;
+                }
+            }
+
+            if (rowSelected) {
+                grid.saveChanges();
+                setTimeout(stopSpinner, 3000);
+            } else {
+                stopSpinner();
+                kendoErrorAlert("@WebResources.ServiceDomainPleaseSelect");
+            }
+        } else {
+            stopSpinner();
+            kendoErrorAlert("@WebResources.ServiceDeskPleaseSelect");
+        }
+    }).mouseup(function () {
+        // Fired just before click event
+        startSpinner();
+    });
+
+    function onRequestEnd(e) {
+        if (e.type == "update") {
+            if (e.response.Errors == null) {
+                displayNotification("Service Domain(s) successfully added.", "@NotificationTypeNames.Success");
+                window.location.href = url; //'@Model.ReturnUrl';
+            } else {
+                $("#TemplateDomainGrid").data("kendoGrid").dataSource.read();
+            }
+        }
+    }
+</script>

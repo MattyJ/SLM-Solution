@@ -1,0 +1,62 @@
+﻿@model CustomerViewModel
+
+@{
+    ViewBag.Title = "Service Decomposition > Customer";
+}
+
+@section navigation
+{
+    @Html.Partial("_ServiceDecompositionMenu", new ServiceDecompositionMenuModel { ServiceDecompositionsSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "editcustomer" })
+}
+
+@section contextcommands
+{
+
+}
+
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel()
+    <fieldset>
+        <p>
+            <input type="submit" name="action" class="k-button k-button-icontext slm-button" value="Save"/>
+            <input id="editCustomerReturn" type="submit" name="action" class="k-button k-button-icontext slm-button" value="Cancel"/>
+        </p>
+    </fieldset>
+}
+
+<p>
+    <h3>Service Desks</h3>
+    @Html.Partial("_ServiceDesks", new ServiceDeskGridViewModel {EditLevel = NavigationLevelNames.None})
+</p>
+
+<p>
+    <h3>Contributors</h3>
+    @Html.Partial("_Contributors", new ContributorGridViewModel {EditLevel = NavigationLevelNames.None, Owner = Model.Owner})
+</p>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#editCustomerReturn").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            window.location.href = url; //"@Model.ReturnUrl";
+        });
+    });
+</script>

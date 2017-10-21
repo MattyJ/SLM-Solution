@@ -1,0 +1,14 @@
+﻿@(Html.Kendo().Window()
+    .Name("process-type-window")
+    .Title("Operational Process Type")
+    .Width(675)
+    .Height(400)
+    .Modal(true)
+    .Visible(false)
+    .Events(events =>
+    {
+        events.Refresh("onOperationalProcessTypeRefresh");
+    })
+    .Actions(actions => actions.Close())
+    .LoadContentFrom("CreateOperationalProcessType", "ReferenceData"))
+

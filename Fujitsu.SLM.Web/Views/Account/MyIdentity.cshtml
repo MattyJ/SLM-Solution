@@ -1,0 +1,31 @@
+﻿@model MyIdentityViewModel
+@{
+    ViewBag.Title = "Identity Roles";
+}
+
+@section navigation
+{
+    @Html.Action("HomeMenu", "Menu")
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "myidentity" })
+}
+
+@Html.DisplayForModel(Model)
+
+@if (!Model.UserRoles.Any())
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnBack").hide();
+            $("#customer-details").hide();
+        });
+    </script>
+}

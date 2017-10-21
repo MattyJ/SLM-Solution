@@ -1,0 +1,30 @@
+﻿@model int?
+
+@{
+    ViewBag.Title = LevelNames.LevelZero + " > Diagrams > Customer and Customer Third Party Services Overview";
+    var level = @Model;
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelZeroDiagramMenu", new DiagramMenuModel { CustomerServicesSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "customerservicesdiagram" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Action("CustomerServices","ServiceDesk", new {level = @level}))

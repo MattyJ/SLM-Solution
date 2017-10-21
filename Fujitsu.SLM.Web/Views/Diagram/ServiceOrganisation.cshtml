@@ -1,0 +1,50 @@
+﻿@using Fujitsu.SLM.Extensions
+@model ServiceOrganisationViewModel
+@{
+    var level = Model.Level;
+    var type = Model.OrganisationType;
+    var levelTitle = level == 1 ? LevelNames.LevelOne : LevelNames.LevelTwo;
+    ViewBag.Title = levelTitle + " > Diagrams > Service Organisation Diagrams";
+}
+
+@section navigation
+{
+    @switch (level)
+    {
+        case 1:
+            @Html.Partial("_LevelOneDiagramMenu", new DiagramMenuModel
+               {
+                   ServiceOrganisationFujitsuSelected = type.SafeEquals(Diagram.FujitsuServiceOrganisation),
+                   ServiceOrganisationCustomerSelected = type.SafeEquals(Diagram.CustomerServiceOrganisation),
+                   ServiceOrganisationCustomerThirdPartySelected = type.SafeEquals(Diagram.CustomerThirdPartyServiceOrganisation)
+               })
+            break;
+        case 2:
+            @Html.Partial("_LevelTwoDiagramMenu", new DiagramMenuModel
+               {
+                   ServiceOrganisationFujitsuSelected = type.SafeEquals(Diagram.FujitsuServiceOrganisation),
+                   ServiceOrganisationCustomerSelected = type.SafeEquals(Diagram.CustomerServiceOrganisation),
+                   ServiceOrganisationCustomerThirdPartySelected = type.SafeEquals(Diagram.CustomerThirdPartyServiceOrganisation)
+               })
+            break;
+    }
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "serviceorganisationdiagram" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Action("ServiceOrganisation", "ServiceDesk", new { level = @level, type = @type }))

@@ -1,0 +1,31 @@
+﻿@using Fujitsu.SLM.Web.Helpers
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=10" charset="utf-8">
+    <title>@ViewBag.Title - Service Decomposition Tool @SettingsHelper.VersionTitle</title>
+    <link rel="shortcut icon" type="image/x-icon" href="~/Images/favicon.ico">
+    <meta name="viewport" content="width=device-width" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/lib")
+    @Scripts.Render("~/bundles/app")
+    <script type="text/javascript">
+        // set Kendo Culture
+        kendo.culture("en-GB");
+    </script>
+</head>
+<body>
+@Html.Partial("_ModalWait", new ModalWaitViewModel())
+<div class="layout-header">
+    <div class="main-container">
+        <div class="fixer-container">@UI.ApplicationName</div>
+    </div>
+</div>
+<div class="help-body">
+    @RenderBody()
+</div>
+    @RenderSection("scripts", false)
+    @Html.Partial("_Notification")
+</body>
+</html>

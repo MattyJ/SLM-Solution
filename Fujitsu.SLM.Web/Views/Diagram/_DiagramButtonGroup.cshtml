@@ -1,0 +1,30 @@
+﻿@using Fujitsu.SLM.Extensions
+@using Fujitsu.SLM.Web.Helpers
+@{
+    var isAdministrator = User.IsInRole(UserRoles.Administrator);
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@if (isAdministrator || (isArchitect && !SettingsHelper.Environment.SafeEquals(EnvironmentTypeNames.Test)))
+{
+    <div class="btn-group save-button">
+        <button id="dSave" type="button" class="k-button k-button-icontext slm-button dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Save <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dSave">
+            <li><a href="#" class="js-save-pdf">Save as PDF</a></li>
+            @*<li><a href="#" class="js-save-img">Save as Image</a></li>*@
+            <li><a href="#" class="js-save-svg">Save as SVG for opening in Visio</a></li>
+        </ul>
+    </div>
+    <div class="btn-group export-button">
+        <button id="dExport" type="button" class="k-button k-button-icontext slm-button dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Export <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dExport">
+            <li><a href="#" class="js-export-pdf">Export as PDF</a></li>
+            @*<li><a href="#" class="js-export-img">Export as Image</a></li>*@
+            <li><a href="#" class="js-export-svg">Export as SVG for opening in Visio</a></li>
+        </ul>
+    </div>
+}

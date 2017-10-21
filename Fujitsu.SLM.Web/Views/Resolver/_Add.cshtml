@@ -1,0 +1,112 @@
+﻿@model AddResolverViewModel
+
+<div>Please note: any empty or incomplete rows will be ignored when saving. Also, moving away from the page without saving will also cause any changes made to be lost. To add more rows to the grid, click the 'Add More Rows' button.</div>
+<br />
+
+@(Html.Kendo().Grid<BulkResolverViewModel>()
+    .Name("AddResolverGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Id).Visible(false);
+        if (Model.HasServiceComponentContext)
+        {
+            columns.Bound(p => p.ServiceComponentId).Visible(false);
+        }
+        else
+        {
+            columns.ForeignKey(p => p.ServiceComponentId, Model.ServiceComponents, "Value", "Text").Width(400);
+        }
+        columns.ForeignKey(p => p.ServiceDeliveryOrganisationTypeId, Model.ServiceDeliveryOrganisationTypes, "Value", "Text").Width(200);
+        columns.ForeignKey(p => p.ServiceDeliveryUnitTypeId, Model.ServiceDeliveryUnitTypes, "Value", "Text").Width(200);
+        columns.ForeignKey(p => p.ResolverGroupTypeId, Model.ResolverGroupTypes, "Value", "Text").Width(200);
+        columns.Command(command => command.Destroy()).Width(100);
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text("Add More Rows").HtmlAttributes(new { id = "addMoreRowsToolbar" });
+        toolbar.Custom().Text("Add Service Delivery Unit Name").HtmlAttributes(new { id = "addServiceDeliveryUnitTypeToolbar" });
+        toolbar.Custom().Text("Add Resolver Group Name").HtmlAttributes(new { id = "addResolverGroupTypeToolbar" });
+        toolbar.Save().HtmlAttributes(new { id = "gridSave" });
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .Events(events =>
+        {
+            events.Error("onErrorNoCancel");
+            events.RequestStart("onRequestStart");
+            events.RequestEnd("onRequestEnd");
+        })
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            if (Model.HasServiceComponentContext)
+            {
+                model.Field(f => f.ServiceComponentId).DefaultValue(Model.ServiceComponentId);
+            }
+        })
+        .Create(create => create.Action("CreateAjaxAddResolverGrid", "Resolver"))
+        .Read(read => read.Action("ReadAjaxAddResolverGrid", "Resolver"))
+        .Update(update => update.Action("UpdateAjaxAddResolverGrid", "Resolver"))
+        .Destroy(destroy => destroy.Action("DestroyAjaxAddResolverGrid", "Resolver"))
+    ))
+<fieldset>
+    <p>
+        <input id="buttonSave" type="button" name="Save" class="k-button k-button-icontext slm-button" value="Save"/>
+        <input id="buttonReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel"/>
+    </p>
+</fieldset>
+
+@Html.Partial("_AddServiceDeliveryUnitTypeWindow")
+
+@Html.Partial("_AddResolverGroupTypeWindow")
+
+<script type="text/javascript">
+    var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+    $(document).ready(function () {
+        $("#addMoreRowsToolbar > span").removeClass("k-i-add").addClass("k-icon k-i-rows");
+        $("#addServiceDeliveryUnitTypeToolbar > span").removeClass("k-i-add").addClass("k-icon k-i-add");
+        $("#addResolverGroupTypeToolbar > span").removeClass("k-i-add").addClass("k-icon k-i-add");
+        $("#addMoreRowsToolbar").click();
+
+        // Hide grid toolbar buttons.
+        $(".k-grid-save-changes").hide();
+        $(".k-grid-cancel-changes").hide();
+
+        addResolverClickHandlers();
+
+        // Save button.
+        $("#buttonSave").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            $(".k-grid-save-changes").click();
+        });
+
+        // Return button.
+        $("#buttonReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url; //'@Model.ReturnUrl';
+        });
+    });
+
+    function onRequestStart(e) {
+        if (e.type == "read") {
+            e.preventDefault();
+        }
+    }
+
+    function onRequestEnd(e) {
+        if (e.type == "create" && e.response.Errors == null) {
+            window.location.href = url; //'@Model.ReturnUrl';
+        } else {
+            stopSpinner();
+        }
+        e.preventDefault();
+    }
+</script>

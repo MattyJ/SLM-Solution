@@ -1,0 +1,89 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model ServiceDeskViewModel
+
+@{
+    // This has been added to overcome model binding prefixing issues when using EditorFor on the Edit Service Desk pages.
+    // Otherwise a hierarchy will start to be added to the posted values back to the controller.
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+<div>
+    <fieldset>
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.CustomerId)
+        <legend>Service Desk</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.DeskName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.DeskName, "WideText"))
+                @Html.ValidationMessageFor(model => model.DeskName)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.DeskInputTypes)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().MultiSelectFor(x => x.DeskInputTypes)
+                      .DataTextField("InputTypeName")
+                      .DataValueField("Id")
+                      .AutoBind(true)
+                      .HtmlAttributes(new {style = "width:350px"})
+                      .DataSource(source => source.Read(read => read.Action("GetInputTypes", "ReferenceData")))
+                      .Placeholder(WebResources.DefaultDropDownListText))
+                @Html.ValidationMessageFor(model => model.DeskInputTypes)
+                <p class="multiselect-hint">
+                    To make Desk Input Type selections please click within the textarea above.
+                </p>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label"></div>
+            <div class="editor-field">
+                @(Html.Kendo().Button()
+                                .Name("addInputType")
+                                .HtmlAttributes(new { type="button" })
+                                .Content("Create Input Type Name")
+                                .Events(events => events.Click("addInputType")))
+
+                @(Html.Kendo().Window()
+                              .Name("input-type-window")
+                              .Title("Input Type")
+                              .Width(630)
+                              .Height(300)
+                              .Modal(true)
+                              .Visible(false)
+                              .Events(events => events.Refresh("onInputTypeRefresh"))
+                              .Actions(actions => actions.Close())
+                              .HtmlAttributes(new { style="margin: 10px" })
+                              .LoadContentFrom("CreateInputType", "ReferenceData"))
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+<script type="text/javascript">
+
+    $(document).ready(function (e) {
+        if (typeof isCreating !== "undefined" && isCreating === true) {
+            var multiselect = $("#DeskInputTypes").data("kendoMultiSelect");
+            var url = '@Url.Action("GetInputTypes", "ReferenceData")';
+            var jqXhr = $.getJSON(url, 'json');
+            jqXhr.done(function (data) {
+                var all = $.map(data, function (dataItem) {
+                    return dataItem.Id;
+                });
+                multiselect.value(all);
+
+                // Kept just in case we ever switch back to a grid
+                //var uid = $("#DeskInputTypes").closest("[data-role=window]").data("uid");
+                //var model = $("#ServiceDeskGrid").data("kendoGrid").dataSource.getByUid(uid);
+                //model.set("DeskInputTypes", data);
+            });
+        }
+
+        highlightRequiredFields();
+    });
+</script>

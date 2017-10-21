@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "Service Delivery Organisation Types";
+}
+
+@section navigation
+{
+    @Html.Partial("_ReferenceDataMenu", new ReferenceDataMenuModel { ServiceDeliveryOrganisationTypesSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "servicedeliveryorganisationtypesrefdata" })
+}
+
+<h2>@ViewBag.Title</h2>
+@(Html.Kendo().Grid<ServiceDeliveryOrganisationTypeRefDataViewModel>()
+    .Name("ServiceDeliveryOrganisationTypeRefDataGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Id).Visible(false);
+        columns.Bound(c => c.ServiceDeliveryOrganisationTypeName).Width(200);
+        columns.Bound(c => c.SortOrder).Width(100);
+    })
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .Groupable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            model.Field(f => f.SortOrder).DefaultValue(5);
+        })
+        .Events(events => events.Error("onError"))
+        .Read(read => read.Action("ReadAjaxServiceDeliveryOrganisationTypesRefDataGrid", "ReferenceData"))
+        .Sort(sort =>
+        {
+            sort.Add(col => col.SortOrder);
+            sort.Add(col => col.ServiceDeliveryOrganisationTypeName);
+        }))
+      )
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#btnBack").hide();
+    });
+</script>

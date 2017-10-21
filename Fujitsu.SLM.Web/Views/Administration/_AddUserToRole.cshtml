@@ -1,0 +1,80 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model RoleViewModel
+
+@using (Html.BeginForm("AddUserToRole", "Administration"))
+{
+    @Html.AntiForgeryToken()
+
+        <fieldset class="form-popup-fieldset">
+            @Html.HiddenFor(x => x.RoleName)
+            <legend>Add User To Role</legend>
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.UserId)</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().ComboBoxFor(model => model.UserId)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .Filter("contains")
+                          .AutoBind(false)
+                          .HtmlAttributes(new { style = "width:300px" })
+                          .DataSource(source =>
+                              source.Read(read => read.Action("GetUsers", "Administration", new {role = Model.RoleName})).ServerFiltering(false)
+                                      ).Placeholder(WebResources.DefaultDropDownListText)
+                    )
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(model => model.UserId)
+                    </div>
+                </div>
+            </div>
+            <div class="layout-row">
+                <div class="editor-label"></div>
+                <div class="editor-field">
+                    @(Html.Kendo().Button()
+                          .HtmlAttributes(new { type = "button" })
+                          .Name("Add")
+                          .Content("Add User"))
+                </div>
+            </div>
+        </fieldset>
+}
+
+@Html.Partial("_KendoValidation")
+
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        highlightRequiredFields();
+
+        $("#Add").click(function (clk) {
+            var form = $(this).closest("form");
+            var validator = form.kendoValidator().data("kendoValidator");
+            if (validator.validate()) {
+                startSpinner();
+                $.ajax({
+                    url: form.attr("action"),
+                    type: "POST",
+                    data: form.serialize(),
+                    success: function () {
+                        var wnd = $("#add-user-to-role-window").data("kendoWindow");
+                        wnd.close();
+                        var grid = $("#UserRoleGrid");
+                        if (grid) {
+                            var kendoGrid = grid.data("kendoGrid");
+                            kendoGrid.dataSource.read();
+                            kendoGrid.refresh();
+                        }
+                        stopSpinner();
+                    },
+                    error: function (result) {
+                        onErrorNoXhr(result);
+                        stopSpinner();
+                    }
+                });
+            } else {
+                clk.preventDefault();
+            }
+
+        });
+    });
+</script>

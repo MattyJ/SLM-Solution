@@ -1,0 +1,31 @@
+﻿@model ServiceDeliveryOrganisationTypeRefDataViewModel
+<div>
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        <legend>Service Delivery Organisation Type</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ServiceDeliveryOrganisationTypeName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ServiceDeliveryOrganisationTypeName, "WindowWideText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.ServiceDeliveryOrganisationTypeName)
+                </div>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.SortOrder)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.SortOrder, "SmallInteger"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.SortOrder)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_KendoValidation")

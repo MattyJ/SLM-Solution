@@ -1,0 +1,13 @@
+﻿@(Html.Kendo().Window()
+                      .Name("domain-type-window")
+                      .Title("Domain Type")
+                      .Width(630)
+                      .Height(275)
+                      .Modal(true)
+                      .Visible(false)
+                      .Events(events =>
+                      {
+                          events.Refresh("onDomainTypeRefresh");
+                      })
+                      .Actions(actions => actions.Close())
+                      .LoadContentFrom("CreateDomainType", "ReferenceData"))

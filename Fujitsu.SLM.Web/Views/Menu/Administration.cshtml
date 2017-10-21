@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Administration";
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel())
+}
+
+
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>

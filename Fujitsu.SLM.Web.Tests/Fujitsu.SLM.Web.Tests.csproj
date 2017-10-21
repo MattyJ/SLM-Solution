@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{09615EA9-25EC-4B2E-8F19-1CF9F8C938B2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fujitsu.SLM.Web.Tests</RootNamespace>
+    <AssemblyName>Fujitsu.SLM.Web.Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure|AnyCPU'">
+    <OutputPath>bin\Azure\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="CloneExtensions">
+      <HintPath>..\packages\CloneExtensions.1.2\lib\portable-net40+sl50+win+wp80\CloneExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.MVC5.6.2.1.0\lib\Net45\FluentValidation.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="KellermanSoftware.Compare-NET-Objects, Version=3.5.0.0, Culture=neutral, PublicKeyToken=d970ace04cc85217, processorArchitecture=MSIL">
+      <HintPath>..\packages\CompareNETObjects.3.05.0.0\lib\net46\KellermanSoftware.Compare-NET-Objects.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Kendo.Mvc, Version=2016.2.607.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Kendo\Kendo.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1502.0911\lib\net40\Moq.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions">
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Choose>
+    <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <ItemGroup>
+    <Compile Include="App_Start\Identity\ApplicationSignInManagerTests.cs" />
+    <Compile Include="AuditControllerTests.cs" />
+    <Compile Include="DiagramControllerTests.cs" />
+    <Compile Include="HelpControllerTests.cs" />
+    <Compile Include="Model\LevelViewModelTests.cs" />
+    <Compile Include="OperationalProcessesControllerTests.cs" />
+    <Compile Include="ServiceDecompositionControllerTests.cs" />
+    <Compile Include="ServiceDeskControllerTests.cs" />
+    <Compile Include="ReferenceDataControllerTests.cs" />
+    <Compile Include="CustomerControllerTests.cs" />
+    <Compile Include="AdministrationControllerTests.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="HomeControllerTests.cs" />
+    <Compile Include="AutoMapperTests.cs" />
+    <Compile Include="TemplateControllerTests.cs" />
+    <Compile Include="ServiceFunctionControllerTests.cs" />
+    <Compile Include="ServiceDomainControllerTests.cs" />
+    <Compile Include="Session\AppUserContextTests.cs" />
+    <Compile Include="Attributes\SessionExpiryAttributeTests.cs" />
+    <Compile Include="MenuControllerTests.cs" />
+    <Compile Include="ErrorControllerTests.cs" />
+    <Compile Include="ServiceComponentControllerTests.cs" />
+    <Compile Include="ResolverControllerTests.cs" />
+    <Compile Include="Validators\UploadCustomerFileViewModelValidatorTests.cs" />
+    <Compile Include="Validators\AddCustomerPackViewModelValidatorTests.cs" />
+    <Compile Include="Validators\Administration\ResetUserPasswordViewModelValidatorTests.cs" />
+    <Compile Include="Validators\CustomerViewModelValidatorTests.cs" />
+    <Compile Include="Validators\MoveResolverViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\ContextHelpRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\ResolverGroupTypeRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\ServiceDeliveryUnitTypeRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\OperationalProcessTypeRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\ServiceDeliveryOrganisationTypeRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ServiceActivityViewModelValidatorTests.cs" />
+    <Compile Include="Validators\EditServiceComponentChildViewModelValidatorTests.cs" />
+    <Compile Include="Validators\CustomerPackViewModelValidatorTests.cs" />
+    <Compile Include="Validators\DiagramViewModelValidatorTests.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel1WithChildComponentViewModelValidatorTests.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel1WithNoChildComponentOrResolverViewModelValidatorTests.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel1WithResolverViewModelValidatorTests.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel2ViewModelValidatorTests.cs" />
+    <Compile Include="Validators\EditServiceComponentNameLevelViewModelValidatorTests.cs" />
+    <Compile Include="Validators\EditServiceComponentNameViewModelValidatorTests.cs" />
+    <Compile Include="Validators\MoveServiceComponentLevel2ViewModelValidatorTests.cs" />
+    <Compile Include="Validators\MoveServiceComponentLevel1ViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\InputTypeRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\FunctionTypeRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\RoleViewModelValidatorTests.cs" />
+    <Compile Include="Validators\MoveServiceDomainViewModelValidatorTests.cs" />
+    <Compile Include="Validators\SelectUserViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ServiceDeskViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ParameterViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ReferenceData\DomainTypeRefDataViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ServiceFunctionViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ServiceDomainViewModelValidatorTests.cs" />
+    <Compile Include="Validators\ImportTemplateViewModelValidatorTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fujitsu.Exceptions.Framework\Fujitsu.Exceptions.Framework.csproj">
+      <Project>{66d72d78-84b2-47f4-a702-24cdf11f2d0e}</Project>
+      <Name>Fujitsu.Exceptions.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Constants\Fujitsu.SLM.Constants.csproj">
+      <Project>{C250E534-FD0A-47CE-B1E3-C46E39DB3544}</Project>
+      <Name>Fujitsu.SLM.Constants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Core\Fujitsu.SLM.Core.csproj">
+      <Project>{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}</Project>
+      <Name>Fujitsu.SLM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.DataImportProcessors\Fujitsu.SLM.DataImportProcessors.csproj">
+      <Project>{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}</Project>
+      <Name>Fujitsu.SLM.DataImportProcessors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Data\Fujitsu.SLM.Data.csproj">
+      <Project>{C1CEA65C-3724-4D17-8862-7B512C61D899}</Project>
+      <Name>Fujitsu.SLM.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Diagrams\Fujitsu.SLM.Diagrams.csproj">
+      <Project>{42AED40B-130F-40EC-988E-CB0E0B6875C3}</Project>
+      <Name>Fujitsu.SLM.Diagrams</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Extensions\Fujitsu.SLM.Extensions.csproj">
+      <Project>{3ff40663-dc0a-4b5b-8001-cfe8b083f269}</Project>
+      <Name>Fujitsu.SLM.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.ModelHelpers\Fujitsu.SLM.ModelHelpers.csproj">
+      <Project>{3348044A-DAE8-4D25-9CA9-8B22BCD68528}</Project>
+      <Name>Fujitsu.SLM.ModelHelpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Model\Fujitsu.SLM.Model.csproj">
+      <Project>{1E4B9F25-20BE-467B-9559-11056FF04000}</Project>
+      <Name>Fujitsu.SLM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Services\Fujitsu.SLM.Services.csproj">
+      <Project>{5FA955B4-94C9-443E-B926-CCFEE42293E4}</Project>
+      <Name>Fujitsu.SLM.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.TemplateProcessors\Fujitsu.SLM.TemplateProcessors.csproj">
+      <Project>{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}</Project>
+      <Name>Fujitsu.SLM.TemplateProcessors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Transformers\Fujitsu.SLM.Transformers.csproj">
+      <Project>{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}</Project>
+      <Name>Fujitsu.SLM.Transformers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.UnitTesting\Fujitsu.SLM.UnitTesting.csproj">
+      <Project>{6A28C86D-620C-4CE4-81B0-4369D818DA72}</Project>
+      <Name>Fujitsu.SLM.UnitTesting</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Web.Context\Fujitsu.SLM.Web.Context.csproj">
+      <Project>{EA96972E-47CB-4EF0-8665-5A3C049BBA00}</Project>
+      <Name>Fujitsu.SLM.Web.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Web.Resources\Fujitsu.SLM.Web.Resources.csproj">
+      <Project>{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}</Project>
+      <Name>Fujitsu.SLM.Web.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Web\Fujitsu.SLM.Web.csproj">
+      <Project>{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}</Project>
+      <Name>Fujitsu.SLM.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujtisu.SLM.Enumerations\Fujitsu.SLM.Enumerations.csproj">
+      <Project>{2D99FA85-14F1-4019-8951-5A3CC29DE804}</Project>
+      <Name>Fujitsu.SLM.Enumerations</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Register SLM Generator Tutorial.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
+      <ItemGroup>
+        <Reference Include="Microsoft.VisualStudio.QualityTools.CodedUITestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Common, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITest.Extension, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Microsoft.VisualStudio.TestTools.UITesting, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <Private>False</Private>
+        </Reference>
+      </ItemGroup>
+    </When>
+  </Choose>
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

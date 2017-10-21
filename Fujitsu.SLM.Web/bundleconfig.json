@@ -1,0 +1,32 @@
+[
+  {
+    "outputFileName": "Content/Site.min.css",
+    "inputFiles": [
+      "Content/Site.css"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/slm.min.js",
+    "inputFiles": [
+      "Scripts/slm.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/jquery-1.12.3.intellisense.min.js",
+    "inputFiles": [
+      "Scripts/jquery-1.12.3.intellisense.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/jquery.validate-vsdoc.min.js",
+    "inputFiles": [
+      "Scripts/jquery.validate-vsdoc.js"
+    ]
+  },
+  {
+    "outputFileName": "Scripts/modernizr-2.6.2.min.js",
+    "inputFiles": [
+      "Scripts/modernizr-2.6.2.js"
+    ]
+  }
+]

@@ -1,0 +1,203 @@
+﻿@{
+    ViewBag.Title = "Users";
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { UsersSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "users" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Kendo().Grid<UserViewModel>()
+        .Name("UsersGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(c => c.Id).Visible(false);
+            columns.Bound(c => c.UserName).Width(100);
+            columns.Bound(c => c.Email).Width(100);
+            columns.Bound(c => c.RegionName).Width(150);
+            columns.Bound(c => c.LockoutEnabled).ClientTemplate("#= LockoutEnabled? 'Yes' : 'No' #").Width(30);
+            columns.Bound(c => c.LockoutEndDateUtc).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(80).Sortable(false);
+            columns.Bound(c => c.AccessFailedCount).Width(30);
+            columns.Bound(c => c.LastLoginUtc).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(80);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Reset Password").Click("onResetPassword");
+                cmd.Custom("Lock User").Click("onLockUser");
+                cmd.Custom("Unlock User").Click("onUnlockUser");
+                cmd.Custom("Delete").Click("onDeleteUser");
+            }).Width(250).Title("");
+
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .Groupable()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model => model.Id(p => p.Id))
+            .Events(e =>
+            {
+                e.Error("onError").Sync("syncHandler");
+            })
+            .Read(read => read.Action("ReadAjaxUsersGrid", "Administration"))
+            .Sort(sort => sort.Add(col => col.UserName))
+        )
+        .Events(e =>
+        {
+            e.Cancel("onCancel");
+        })
+        .Events(e => e.DataBound("onDataBound"))
+)
+
+<script type="text/javascript">
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-ResetPassword > span").addClass("k-icon k-i-password");
+        e.sender.tbody.find(".k-grid-LockUser > span").addClass("k-icon k-i-lock");
+        e.sender.tbody.find(".k-grid-UnlockUser > span").addClass("k-icon k-i-unlock");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        $("#UsersGrid tbody tr").each(function () {
+            var dataItem = $("#UsersGrid").data("kendoGrid").dataItem($(this).closest("tr"));
+            if (dataItem.IsLockedOut == true) {
+                $(this).find(".k-grid-LockUser").remove();
+            } else {
+                $(this).find(".k-grid-UnlockUser").remove();
+            }
+        });
+        addIcons(e);
+    }
+
+    function onResetPassword(e) {
+        kendo.confirm("Are you sure you want to reset the password of this user?").then(function () {
+            startSpinner();
+
+            var grid = $("#UsersGrid").data("kendoGrid");
+            var dataItem = grid.dataItem($(e.currentTarget).closest("tr"));
+            var data = { UserId: dataItem.Id };
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ResetUserPassword", "Administration")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function () {
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("User password has been reset.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                }
+            });
+            stopSpinner();
+        });
+        e.preventDefault();
+    }
+
+    function onLockUser(e) {
+        lockUser(e, true);
+    }
+
+    function onUnlockUser(e) {
+        lockUser(e, false);
+    }
+
+    function lockUser(e, lock) {
+        var message = "Are you sure you want to lock this user?";
+        var confirmation = "User has been locked.";
+        if (!lock) {
+            message = "Are you sure you want to unlock this user?";
+            confirmation = "User has been unlocked.";
+        }
+        kendo.confirm(message).then(function() {
+            startSpinner();
+
+            var grid = $("#UsersGrid").data("kendoGrid");
+            var dataItem = grid.dataItem($(e.currentTarget).closest("tr"));
+            var data = { UserId: dataItem.Id, Lock: lock };
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("LockUser", "Administration")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function() {
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification(confirmation, "@NotificationTypeNames.Success");
+                },
+                error: function(result) {
+                    onErrorNoXhr(result);
+                }
+            });
+            stopSpinner();
+        });
+        e.preventDefault();
+    }
+
+    function onCancel() {
+        var grid = $("#UsersGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onDeleteUser(e) {
+        var grid = $("#UsersGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this User?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteUser", "Administration")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    stopSpinner();
+                    displayNotification("User successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                    stopSpinner();
+                    onCancel();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

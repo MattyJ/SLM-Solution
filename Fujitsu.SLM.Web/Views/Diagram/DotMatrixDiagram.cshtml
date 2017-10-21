@@ -1,0 +1,372 @@
+﻿@model ChartViewModel
+
+
+@{
+    var level = Model.Level;
+    var levelTitle = level == 1 ? LevelNames.LevelOne : LevelNames.LevelTwo;
+    ViewBag.Title = $"{levelTitle} > Diagrams > {Diagram.ServiceDeskDotMatrixTitle}";
+}
+
+@section navigation
+{
+    @switch (level)
+    {
+        case 1:
+            @Html.Partial("_LevelOneDiagramMenu", new DiagramMenuModel { DotMatrixSelected = true })
+            break;
+        case 2:
+            @Html.Partial("_LevelTwoDiagramMenu", new DiagramMenuModel { DotMatrixSelected = true })
+            break;
+    }
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "dotmatrixdiagram" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div id="btn-group" role="group">
+    @Html.Partial("_DiagramButtonGroup")
+</div>
+
+<div id="diagram" class="js-content">
+    @(Html.Kendo().Diagram()
+          .Name("ServiceDeskDotMatrixDiagram")
+          .DataSource(dataSource => dataSource
+              .Custom()
+              .Schema(schema => schema.Model(model => model.HasChildren("hasChildren").Id("flatIndex")))
+              .Transport(transport => transport.Read("readHandler")))
+          .Editable(false)
+          .ShapeDefaults(sd => sd
+              .Visual("visualTemplate")
+              .Content(c => c.Template("#= dataItem.CenteredTitle #").FontSize(12).FontFamily("Segoe UI")))
+          .Events(evt => evt.ItemBoundsChange("onDotMatrixDiagram"))
+          .ConnectionDefaults(cd => cd
+              .Stroke(s => s
+                  .Color("#979797")
+                  .Width(2))
+              .EndCap("none"))
+          )
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+    });
+
+    function onDotMatrixDiagram() {
+        var diagram = $("#ServiceDeskDotMatrixDiagram").getKendoDiagram();
+        var bbox = diagram.boundingBox();
+        diagram.wrapper.width(bbox.width + bbox.x + 50);
+        diagram.wrapper.height(bbox.height + bbox.y + 50);
+        diagram.resize();
+    }
+
+    var dataMap = [];
+    var lastRoot;
+    var response;
+    var lastRootTimeout;
+
+    function readHandler(options) {
+        var data = {
+            Id: @Model.Id,
+        };
+
+        if (!dataMap.length) {
+            startSpinner();
+            $.ajax({
+                url: '@Url.Action("ReadServiceDeskDotMatrixChart", "Diagram")',
+                data: JSON.stringify(data),
+                type: "POST",
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    $("#ServiceDeskDotMatrixDiagram").hide();
+                    loaded = true;
+                    response = result;
+                    flatten(result.slice(0), 0);
+                    options.success(result);
+                },
+                error: function() {
+                    diagramError();
+                    stopSpinner();
+                }
+            });
+        } else {
+            var root = dataMap[options.data.flatIndex];
+            var successHandler = function () {
+                options.success(root.Units);
+                if (root === lastRoot) {
+                    lastRootTimeout = setTimeout(function () {
+                        lastRootTimeout = undefined;
+                        var diagram = $("#ServiceDeskDotMatrixDiagram").getKendoDiagram();
+                        diagram.layout({
+                            type: "tree",
+                            subtype: "right"
+                        });
+                        onRequestEnd({
+                            response: response
+                        });
+                    }, 0);
+                }
+            }
+
+            if (lastRootTimeout) {
+                clearTimeout(lastRootTimeout);
+                lastRoot = root;
+            }
+
+            if (root.itemLevel % 15 !== 0) {
+                successHandler();
+            } else {
+                setTimeout(successHandler, 0);
+            }
+        }
+    }
+
+    var FJS_WATERMARK_WIDTH = 489;
+    var FJS_WATERMARK_HEIGHT = 625;
+    var FJS_WATERMARK_URL = '@Url.Content("~/Images/Infinity-Mark-Watermark-Grey.png")';
+
+    function visualTemplate(options) {
+        var diagram = kendo.dataviz.diagram;
+        var g = new diagram.Group();
+        var dataItem = options.dataItem;
+
+        if (dataItem.Type === "@DecompositionTypeNames.OperationalProcess") {
+            g.append(new diagram.Rectangle({
+                width: 240,
+                height: 40,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.Resolver") {
+            g.append(new diagram.Rectangle({
+                width: 450,
+                height: 40,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+            g.append(new diagram.TextBlock({
+                text: dataItem.Title,
+                fontSize: 12,
+                fontFamily: "Segoe UI",
+                x: 0,
+                y: 5,
+                color: "#00000"
+            }));
+            g.append(new diagram.TextBlock({
+                text: dataItem.TitleTwo,
+                fontSize: 12,
+                fontFamily: "Segoe UI",
+                x: 0,
+                y: 25,
+                color: "#00000"
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcessSelected") {
+            g.append(new diagram.Rectangle({
+                width: 240,
+                height: 40,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+
+            g.append(new diagram.Circle({
+                width : 30,
+                height: 30,
+                fill: "#000000",
+                x: 105,
+                y: 5
+            }));
+
+        } else if (dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcess") {
+            g.append(new diagram.Rectangle({
+                width: 240,
+                height: 40,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+            g.append(new diagram.Circle({
+                width : 30,
+                height: 30,
+                x: 105,
+                y: 5
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.EmptyForLayout") {
+            g.append(new diagram.Rectangle({
+                width: 450,
+                height: 40,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+        } else if (dataItem.Type === "@DecompositionTypeNames.EmptyForLayoutRoot") {
+            g.append(new diagram.Rectangle({
+                width: 0,
+                height: 0,
+                stroke: {
+                    width: 0
+                },
+                fill: "#ffffff"
+            }));
+        }
+
+
+        return g;
+    }
+
+    function onRequestEnd() {
+        setTimeout(function () {
+            var diagram = $("#ServiceDeskDotMatrixDiagram").getKendoDiagram();
+            for (var i = 0; i < diagram.shapes.length; i++) {
+                var shape = diagram.shapes[i];
+                if (diagram.shapes[i].dataItem.Type === "@DecompositionTypeNames.OperationalProcess") {
+                    diagram.remove(shape.connections());
+                } else if (diagram.shapes[i].dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcess" ||
+                    diagram.shapes[i].dataItem.Type === "@DecompositionTypeNames.ResolverGroupOperationalProcessSelected") {
+                    diagram.remove(shape.connections());
+                }
+            }
+
+            diagram.element.show();
+            onDotMatrixDiagram();
+            diagram.bringIntoView(diagram.shapes);
+            stopSpinner();
+        }, 0);
+    }
+
+    $(".js-save-pdf").click(function () {
+        startSpinner();
+        var diagram = $("#ServiceDeskDotMatrixDiagram").getKendoDiagram();
+        var group = diagram.exportVisual();
+        var cbox = group.clippedBBox();
+        var center = cbox.center();
+
+        var rect = new kendo.geometry.Rect([center.x - FJS_WATERMARK_WIDTH / 2, center.y - FJS_WATERMARK_HEIGHT / 2], [FJS_WATERMARK_WIDTH, FJS_WATERMARK_HEIGHT]);
+        var background = new kendo.drawing.Image(FJS_WATERMARK_URL, rect);
+
+        group.insertAt(background, 0);
+
+        group.transform(kendo.geometry.transform().scale(0.1, 0.1));
+
+        kendo.drawing.exportPDF(group, {
+            paperSize: "auto",
+            title: "@Model.Title",
+            author: "@Model.Author",
+            creator: "@Model.Creator",
+            date: new Date(),
+            subject: "@Model.Subject",
+            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+        }).done(function (data) {
+            saveDiagram('@Url.Action("SaveDiagram", "Diagram")', data, "@Model.Filename"+".pdf", @Model.Level, "@NotificationTypeNames.Success");
+        });
+
+    });
+
+    $(".js-save-svg").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an SVG
+                return kendo.drawing.exportSVG(group);
+            })
+            .done(function(data) {
+                saveDiagram("@Url.Action("SaveDiagram", "Diagram")", data, "@Model.Filename" + ".svg", @Model.Level, "@NotificationTypeNames.Success");
+            });
+    });
+
+    $(".js-export-pdf").click(function () {
+        startSpinner();
+        var diagram = $("#ServiceDeskDotMatrixDiagram").getKendoDiagram();
+        var group = diagram.exportVisual();
+        var cbox = group.clippedBBox();
+        var center = cbox.center();
+
+        var rect = new kendo.geometry.Rect([center.x - FJS_WATERMARK_WIDTH / 2, center.y - FJS_WATERMARK_HEIGHT / 2], [FJS_WATERMARK_WIDTH, FJS_WATERMARK_HEIGHT]);
+        var background = new kendo.drawing.Image(FJS_WATERMARK_URL, rect);
+
+        group.insertAt(background, 0);
+
+        kendo.drawing.exportPDF(group, {
+            paperSize: "auto",
+            title: "@Model.Title",
+            author: "@Model.Author",
+            creator: "@Model.Creator",
+            date: new Date(),
+            subject: "@Model.Subject",
+            margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" }
+        }).done(function (data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "@Model.Filename"
+            });
+            stopSpinner();
+        });
+    });
+
+    $(".js-export-svg").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an SVG
+                return kendo.drawing.exportSVG(group);
+            })
+            .done(function(data) {
+                // Save the SVG file
+                saveAs(dataURLtoBlob(data), "@Model.Filename"+".svg");
+            });
+    });
+
+    @*$(".js-save-img").click(function () {
+        kendo.drawing.drawDOM($(".js-content"))
+            .then(function(group) {
+                // Render the result as an image
+                return kendo.drawing.exportImage(group);
+            })
+            .done(function(data) {
+                // Save the image file
+                saveDiagram("@Url.Action("SaveDiagram", "Diagram")", data, "@Model.Filename" + ".png", @Model.Level, "@NotificationTypeNames.Success");
+            });
+    });
+
+    $(".js-export-img").click(function() {
+        // Convert the DOM element to a drawing using kendo.drawing.drawDOM
+        startSpinner();
+        try {
+            kendo.drawing.drawDOM($(".js-content"))
+                .then(function(group) {
+                // Render the result as an image
+                return kendo.drawing.exportImage(group);
+            })
+            .done(function(data) {
+                // Save the image file
+                saveAs(dataURLtoBlob(data), "@Model.Filename" + ".png");
+            });
+        } catch (e) {
+            kendoErrorAlert("An unexpected error has occurred the details of which have been logged. Please try again and if the problem persists, contact an administrator.");
+        } finally {
+            stopSpinner();
+        }
+    });*@
+
+</script>

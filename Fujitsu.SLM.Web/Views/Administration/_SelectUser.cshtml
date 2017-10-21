@@ -1,0 +1,35 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model SelectUserViewModel
+<div id="selectUserContainer">
+    <fieldset class="form-popup-fieldset">
+        <legend>Select User</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.SelectedEmail)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().DropDownListFor(x => x.SelectedEmail)
+                      .AutoBind(true)
+                      .Filter(FilterType.Contains)
+                      .DataTextField("Text")
+                      .DataValueField("Text")
+                      .OptionLabel(WebResources.DefaultDropDownListText)
+                      .DataSource(source => source
+                          .Read(read => read.Action("GetUsersInRole", "Administration", new {role = Model.RoleName}))
+                          .ServerFiltering(false)))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(x => x.SelectedEmail)
+                </div>
+            </div>
+        </div>
+        <div class="layout-row">
+            <fieldset>
+                <p>
+                    <input id="selectUserButton" type="button" name="action" class="k-button k-button-icontext slm-button" value="Select User"/>
+                </p>
+            </fieldset>
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_KendoValidation")

@@ -1,0 +1,32 @@
+﻿@model System.Exception
+
+@{
+    ViewBag.Title = "GeneralError";
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "generalerror" })
+}
+
+<h2>An error was detected within the system and the current operation has failed.</h2>
+<p>
+    Details of the error have been automatically logged to help us diagnose the problem.
+    You may return to the previous page and attempt the operation again, but please consider that the problem may still exist.
+</p>
+<p>If the problem continues, please consider reporting the problem via the help menu option specifying the Error ID [@Model.Message] and if possible the steps taken to reproduce the problem.</p>
+
+@if (!Request.IsAuthenticated)
+{
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#btnBack").hide();
+            $("#customer-details").hide();
+        });
+    </script>
+}

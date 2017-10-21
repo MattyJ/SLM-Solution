@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Fujitsu.SLM.Web.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DefaultCacheDuration" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">600</Value>
+    </Setting>
+    <Setting Name="CookieName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Fujitsu.SLM</Value>
+    </Setting>
+    <Setting Name="Environment" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Development</Value>
+    </Setting>
+    <Setting Name="ImportSpreadsheetFileLocation" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Media\ImportFiles</Value>
+    </Setting>
+    <Setting Name="HelpVideoFileLocation" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Media\Videos</Value>
+    </Setting>
+    <Setting Name="VersionTitle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">v 1.5.1</Value>
+    </Setting>
+    <Setting Name="UserLogonValidateInterval" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="CookieTimeout" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">30</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

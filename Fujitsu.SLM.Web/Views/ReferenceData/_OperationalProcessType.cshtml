@@ -1,0 +1,64 @@
+﻿@model OperationalProcessTypeRefDataViewModel
+
+@using (Html.BeginForm())
+{
+        @*@Html.AntiForgeryToken()*@
+        @Html.EditorForModel(Model)
+        <fieldset>
+            <p>
+                <input id="operationalProcessTypeCreateButton" type="button" name="action" class="k-button k-button-icontext slm-button" value="Create" />
+            </p>
+        </fieldset>
+}
+<script>
+
+    // Register custom validation rules
+    (function ($, kendo) {
+        $.extend(true,
+            kendo.ui.validator,
+            {
+                rules: { // Custom rules
+                    standardvalidation: function (input, params) {
+                        var operationalProcessTypeVisible = $("input#OperationalProcessTypeVisible");
+                        if (operationalProcessTypeVisible !== null && operationalProcessTypeVisible !== undefined) {
+                            if ($("input#OperationalProcessTypeVisible").is(":checked")) {
+                                $("input#Visible").prop("checked", true);
+                            } else {
+                                $("input#Visible").prop("checked", false);
+                            }
+                        }
+                        var operationalProcessTypeStandard = $("input#OperationalProcessTypeStandard");
+                        if (operationalProcessTypeStandard !== null && operationalProcessTypeStandard !== undefined) {
+                            if ($("input#OperationalProcessTypeStandard").is(":checked")) {
+                                $("input#Standard").prop("checked", true);
+                            } else {
+                                $("input#Standard").prop("checked", false);
+                            }
+                        }
+
+                        //var operationalProcessTypeSortOrder = $("#OperationalProcessTypeSortOrder"); //$("#OperationalProcessTypeSortOrder").data("kendoNumericTextBox"); $("#input#OperationalProcessTypeSortOrder");
+                        //var sortOrder = $("#SortOrder").data("kendoNumericTextBox");
+                        //if (operationalProcessTypeSortOrder !== null && operationalProcessTypeSortOrder !== undefined) {
+                        //    sortOrder.value(operationalProcessTypeSortOrder.val());
+                        //    sortOrder.trigger("change");
+                        //}
+
+                        if (input.is("[name='Visible']") && input.val() != "") {
+                            if ($("#OperationalProcessTypeVisible").prop("checked") == false && $("#OperationalProcessTypeStandard").prop("checked") == true) {
+                                input.attr("data-visiblevalidation-msg", "A Standard Operational Process Type must always be visible across all Customers");
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                },
+                messages: { // Custom rules messages
+                    standardvalidation: function (input) {
+                        // Return the message text
+                        return input.attr("data-visiblevalidation-msg");
+                    }
+                }
+            });
+    })(jQuery, kendo);
+</script>

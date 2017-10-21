@@ -1,0 +1,53 @@
+﻿@*
+    Usage: displayNotification("Diagram saved successfully.", "@NotificationTypeNames.Success");
+*@
+
+@{
+    var errorImageUrl = Url.Content("~/Images/Notification/error.png");
+    var warningImageUrl = Url.Content("~/Images/Notification/warning.png");
+    var successImageUrl = Url.Content("~/Images/Notification/success.png");
+}
+
+<script id="notificationErrorTemplate" type="text/x-kendo-template">
+    <div class="notification-error notification-container">
+        <span class="notification-image"><img src="@errorImageUrl" alt="Error" /></span>
+        <span class="notification-message">#= message #</span>
+    </div>
+</script>
+
+<script id="notificationWarningTemplate" type="text/x-kendo-template">
+    <div class="notification-warning notification-container">
+        <span class="notification-image"><img src="@warningImageUrl" alt="Warning" /></span>
+        <span class="notification-message">#= message #</span>
+    </div>
+</script>
+
+<script id="notificationSuccessTemplate" type="text/x-kendo-template">
+    <div class="notification-success notification-container">
+        <span class="notification-image"><img src="@successImageUrl" alt="Success" /></span>
+        <span class="notification-message">#= message #</span>
+    </div>
+</script>
+
+@(Html.Kendo().Notification()
+    .Name("common-notification")
+    .Position(p => p.Pinned(true).Top(50).Right(20))
+    .Stacking(NotificationStackingSettings.Up)
+    .AutoHideAfter(3000)
+    .Width(400)
+    .Templates(t =>
+    {
+        t.Add().Type("error").ClientTemplateID("notificationErrorTemplate");
+        t.Add().Type("warning").ClientTemplateID("notificationWarningTemplate");
+        t.Add().Type("success").ClientTemplateID("notificationSuccessTemplate");
+    })
+)
+
+<script type="text/javascript">
+    function displayNotification(message, type) {
+        var notification = $("#common-notification").data("kendoNotification");
+        notification.show({
+            message: message
+        }, type);
+    }
+</script>

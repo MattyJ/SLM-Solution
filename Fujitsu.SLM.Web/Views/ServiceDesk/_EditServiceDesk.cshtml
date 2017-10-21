@@ -1,0 +1,44 @@
+﻿@model EditServiceDeskViewModel
+
+@{
+    var vm = new ServiceDomainGridViewModel
+    {
+        ServiceDeskId = Model.ServiceDesk.Id,
+        EditLevel = Model.EditLevel,
+        HasServiceDeskContext = true,
+        CanMoveServiceDomain = Model.CanMoveServiceDomain,
+        CanImportServiceConfiguratorTemplate = Model.CanImportServiceConfiguratorTemplate,
+        CanImportServiceLandscapeTemplate = Model.CanImportServiceLandscapeTemplate
+    };
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    @Html.EditorFor(m => m.ServiceDesk)
+
+    <fieldset>
+        <p>
+            <input type="submit" name="Save" class="k-button k-button-icontext slm-button" value="Save" />
+            @*<input type="submit" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />*@
+            <input id="buttonReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+        </p>
+    </fieldset>
+}
+
+@Html.Partial("_ServiceDomains", vm)
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Extract model values into the script.
+        // var url = '@Model.ReturnUrl';
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#buttonReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url;
+        });
+    });
+</script>

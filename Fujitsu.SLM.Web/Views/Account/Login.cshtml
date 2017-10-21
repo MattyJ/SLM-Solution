@@ -1,0 +1,77 @@
+﻿@model LoginViewModel
+@{
+    ViewBag.Title = "Log in";
+}
+
+@section navigation
+{
+    @Html.Action("HomeMenu", "Menu")
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "login" })
+}
+
+@section contextcommands
+{
+
+}
+<h2>@ViewBag.Title</h2>
+<hr />
+<div class="col-sm-12 col-md-6">
+    @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div class="form-group">
+            <label>@Html.LabelFor(x => x.Email)</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-envelope"></i>
+                </span>
+                @(Html.EditorFor(x => x.Email))
+            </div>
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+        <div class="form-group">
+            <label>@Html.LabelFor(x => x.Password)</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="glyphicon glyphicon-lock"></i>
+                </span>
+                @(Html.EditorFor(x => x.Password))
+            </div>
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+        <div class="checkbox margin-top">
+            @(Html.Kendo().CheckBox().Name("RememberMe"))
+            <label>@Html.LabelFor(x => x.RememberMe)</label>
+        </div>
+        <div class="input-group">
+            <input type="submit" name="action" class="k-button k-button-icontext slm-button" value="Log in" />
+        </div>
+        <p>
+            <div class="input-group">
+                @Html.ActionLink("Register as a new user", "Register")
+            </div>
+        </p>
+            @* Enable this once you have account confirmation enabled for password reset functionality
+                <p>
+                    @Html.ActionLink("Forgot your password?", "ForgotPassword")
+                </p>*@
+            }
+            <script type="text/javascript">
+                $(document)
+                    .ready(function () {
+                        $("#btnBack").hide();
+                        $("#customer-details").hide();
+                        //highlightRequiredFields();
+                    });
+            </script>
+        </div>

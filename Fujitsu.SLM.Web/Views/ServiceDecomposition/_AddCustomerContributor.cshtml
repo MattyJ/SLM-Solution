@@ -1,0 +1,106 @@
+﻿@model AddCustomerContributorViewModel
+
+<div>Please note: any empty or incomplete rows will be ignored when saving. Also, moving away from the page without saving will also cause any changes made to be lost. To add more rows to the grid, click the 'Add More Rows' button.</div>
+<br/>
+
+@(Html.Kendo().Grid<BulkCustomerContributorViewModel>()
+    .Name("AddCustomerContributorGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.CustomerId).Visible(false);
+        columns.Bound(p => p.Id).Visible(false);
+        columns.ForeignKey(p => p.UserId, Model.Users, "Value", "Text").Width(300);
+        columns.Command(command => command.Destroy()).Width(100);
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text("Add More Rows").HtmlAttributes(new {id = "addMoreRowsToolbar"});
+        toolbar.Save().HtmlAttributes(new { id = "gridSave" });
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .Events(events => events.SaveChanges("onAddCustomerContributorSaveChanges"))
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .Events(e =>
+            {
+                e.Error("error_handler");
+                e.RequestEnd("onRequestEnd");
+            })
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            model.Field(f => f.UserId).DefaultValue(string.Empty);
+            model.Field(f => f.CustomerId).DefaultValue(Model.CustomerId);
+        })
+        .Create(read => read.Action("CreateAjaxAddCustomerContributorGrid", "ServiceDecomposition"))
+        .Read(read => read.Action("ReadAjaxAddCustomerContributorGrid", "ServiceDecomposition"))
+        .Update(read => read.Action("UpdateAjaxAddCustomerContributorGrid", "ServiceDecomposition"))
+        .Destroy(read => read.Action("DestroyAjaxAddCustomerContributorGrid", "ServiceDecomposition"))
+    ))
+<fieldset>
+    <p>
+        <input id="buttonSave" type="button" name="Save" class="k-button k-button-icontext slm-button" value="Save" />
+        <input id="buttonReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+    </p>
+</fieldset>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#addMoreRowsToolbar > span").removeClass("k-i-add").addClass("k-icon k-i-rows");
+        $("#addMoreRowsToolbar").click();
+
+        // var url = '@Model.ReturnUrl';
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        if (isEmpty(url)) {
+            url = '@Url.Action("EditCustomer", "ServiceDecomposition", new {id = "XXXId"})';
+            url = url.replace('XXXId', '@Model.CustomerId');
+        }
+
+        // Hide grid toolbar buttons.
+        $(".k-grid-save-changes").hide();
+        $(".k-grid-cancel-changes").hide();
+
+        addCustomerContributorsClickHandlers();
+
+        // Save button.
+        $("#buttonSave").click(function (e) {
+            startSpinner();
+            $(".k-grid-save-changes").click();
+            window.location.href = url;
+        });
+
+        // Return button.
+        $("#buttonReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url;
+        });
+    });
+
+    function onAddCustomerContributorSaveChanges(e) {
+        var addCustomerContributorGrid = $("#AddCustomerContributorGrid").data("kendoGrid");
+        var ds = addCustomerContributorGrid.dataSource.data();
+    }
+
+    function onCancel() {
+        var grid = $("#AddCustomerContributorGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onRequestEnd(e) {
+        if (e.type == "create") {
+            if (e.response.Errors == null) {
+                displayNotification("Contributor successfully inserted.", "success");
+            } else {
+                this.cancelChanges();
+            }
+        }
+    }
+
+</script>

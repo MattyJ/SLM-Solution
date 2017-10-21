@@ -1,0 +1,15 @@
+﻿@using Fujitsu.SLM.Constants
+@using Fujitsu.SLM.Web.Extensions
+
+@model ReferenceDataMenuModel
+
+@if (User.IsInRole(UserRoles.Architect))
+{
+    @Html.NavigationLinkListItem("Desk Inputs", Model.InputTypesSelected, "InputTypes", "ReferenceData", null, new { id = "lnkInputTypesRefData" })
+    @Html.NavigationLinkListItem("Service Domains", Model.DomainsSelected, "Domains", "ReferenceData", null, new { id = "lnkDomainsRefData" })
+    @Html.NavigationLinkListItem("Service Functions", Model.FunctionsSelected, "Functions", "ReferenceData", null, new { id = "lnkFunctionsRefData" })
+    @Html.NavigationLinkListItem("Delivery Organisations", Model.ServiceDeliveryOrganisationTypesSelected, "ServiceDeliveryOrganisationTypes", "ReferenceData", null, new { id = "lnkResolverGroupTypesRefData" })
+    @Html.NavigationLinkListItem("Delivery Units", Model.ServiceDeliveryUnitTypesSelected, "ServiceDeliveryUnitTypes", "ReferenceData", null, new { id = "lnkServiceDeliveryUnitTypesRefData" })
+    @Html.NavigationLinkListItem("Resolver Groups", Model.ResolverGroupTypesSelected, "ResolverGroupTypes", "ReferenceData", null, new { id = "lnkServiceDeliveryUnitTypesRefData" })
+    @Html.NavigationLinkListItem("Operational Processes", Model.OperationalProcessesSelected, "OperationalProcessTypes", "ReferenceData", null, new { id = "lnkOperationalProcessesRefData" })
+}

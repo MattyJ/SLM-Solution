@@ -1,0 +1,30 @@
+﻿@model CustomerPackViewModel
+<div>
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        <legend>Customer</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.Filename)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.Filename, "WindowWideText"))
+                @Html.ValidationMessageFor(model => model.Filename)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.PackNotes)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.PackNotes, "MultiLineText"))
+                @Html.ValidationMessageFor(model => model.PackNotes)
+            </div>
+        </div>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        highlightRequiredFields();
+    });
+</script>

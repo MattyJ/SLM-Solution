@@ -1,0 +1,42 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model MoveResolverLevelZeroViewModel
+
+@using (Html.BeginForm("MoveLevelZero", "Resolver", FormMethod.Post, new { id = "moveResolverForm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="moveResolverContainer">
+        <fieldset class="form-popup-fieldset">
+            @Html.HiddenFor(x => x.Id)
+            <legend>Move Resolver</legend>
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.DestinationDeskId)</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(model => model.DestinationDeskId)
+                          .AutoBind(true)
+                          .Filter(FilterType.Contains)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .OptionLabel(WebResources.DefaultDropDownListText)
+                          .BindTo(Model.Desks))
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(model => model.DestinationDeskId)
+                    </div>
+                </div>
+            </div>
+            <div class="layout-row">
+                <div class="editor-label"></div>
+                <div class="editor-field">
+                    @(Html.Kendo().Button()
+                          .HtmlAttributes(new { type = "button" })
+                          .Name("moveResolver")
+                          .Content("Move"))
+                </div>
+            </div>
+        </fieldset>
+    </div>
+}
+
+@Html.Partial("_KendoValidation")

@@ -1,0 +1,12 @@
+﻿@model ResolverGroupTypeRefDataViewModel
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.EditorForModel(Model)
+    <fieldset>
+        <p>
+            <input id="resolverGroupTypeCreateButton" type="button" name="action" class="k-button k-button-icontext slm-button" value="Create"/>
+        </p>
+    </fieldset>
+}

@@ -1,0 +1,15 @@
+﻿@using Fujitsu.SLM.Web.Session
+@model CurrentCustomerViewModel
+@{
+    var appUserContext = AppUserContext.GetAppUserContext();
+}
+
+@if (Model != null && Model.Id > 0)
+{
+    @*<text>Current Customer : <b>@Model.CustomerName</b></text>*@
+    <text>Current Customer : <a href="@Url.Action("EditCustomer", "ServiceDecomposition", new { id = appUserContext.Current.CurrentCustomer.Id })" class="current-customer">@Model.CustomerName</a></text>
+}
+else
+{
+    <text>No Customer Selected</text>
+}

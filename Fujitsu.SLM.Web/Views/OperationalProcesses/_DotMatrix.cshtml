@@ -1,0 +1,157 @@
+﻿@model ViewProcessDotMatrixViewModel
+@{
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@(Html.Kendo().Grid<dynamic>()
+    .Name("DotMatrix")
+    .Columns(columns =>
+    {
+    foreach (var column in Model.Columns)
+    {
+        switch (column.TypeFullName)
+        {
+            case "System.Int32":
+                columns.Bound(DotMatrixNames.ResolverId).Visible(false);
+                break;
+            case "System.String":
+                if (column.Name == DotMatrixNames.ResolverName)
+                {
+                    columns.Bound(DotMatrixNames.ResolverName)
+                        .Title(column.Title)
+                        .EditorTemplateName("NotEditable").Width(200).Locked(true);
+                }
+                else
+                {
+                    columns.Bound(DotMatrixNames.ComponentName)
+                        .Title(column.Title)
+                        .EditorTemplateName("NotEditable").Width(350).Locked(true);
+                }
+
+                break;
+            case "System.Boolean":
+                columns.Template(@<text></text>)
+                        .ClientTemplate("<input id='" + column.Name + "' type='checkbox' #= " + column.Name + " ? checked='checked':'' # class='chkbx' />")
+                        .Width(35)
+                        .Title(column.Title)
+                        .HeaderTemplate("<div class='vertical-text'>" + column.Title + "</div>")
+                        .Locked(false);
+                    continue;
+            }
+        }
+    })
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.Refresh(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Events(e =>
+        {
+            e.RequestStart("onRequestStart");
+            e.RequestEnd("onRequestEnd");
+        })
+        .Model(model =>
+        {
+            model.Id(DotMatrixNames.ResolverId);
+            model.Field<string>(DotMatrixNames.ResolverName).Editable(false);
+            model.Field<string>(DotMatrixNames.ComponentName).Editable(false);
+        })
+        .Batch(true)
+        .ServerOperation(false)
+        .PageSize(12)
+        .Read(read => read.Action("ReadAjaxDotMatrixGrid", "OperationalProcesses"))
+        .Update(update => update.Action("UpdateAjaxDotMatrixGrid", "OperationalProcesses"))
+    )
+    .Editable(ed => ed.Mode(GridEditMode.InCell))
+    .ToolBar(tb =>
+    {
+        if (isArchitect)
+        {
+            tb.Save();
+        }
+    })
+    .Resizable(resizable => resizable.Columns(true))
+    .Reorderable(reorderable => reorderable.Columns(true))
+    .Sortable()
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Scrollable()
+    .Groupable()
+    .ColumnMenu(c =>
+    {
+        c.Sortable(true);
+        c.Filterable(true);
+        c.Columns(false);
+    })
+    .Events(e =>
+    {
+        e.DataBound("onDataBound");
+    })
+)
+
+<script type="text/javascript">
+    $(function () {
+        loadKendoDotMatrixGridUsingSavedState("#DotMatrix");
+        $('#DotMatrix').on('click', '.chkbx', function () {
+            var checked = $(this).is(':checked');
+            var grid = $('#DotMatrix').data().kendoGrid;
+            var dataItem = grid.dataItem($(this).closest('tr'));
+            dataItem.dirty = true;
+            var setDataItemJs = "dataItem." + $(this).attr('id') + " = " + checked + ";";
+            eval(setDataItemJs);
+            var td = $(this).parent();
+            td.addClass('k-dirty-cell');
+            $('<span class="k-dirty"></span>').insertBefore($(this));
+        });
+    });
+
+    function loadKendoDotMatrixGridUsingSavedState(gridName) {
+        var grid = $(gridName).data("kendoGrid");
+        var options = localStorage[gridName.substr(1) + "-kendo-grid-options"];
+        if (options) {
+            var toolBar = $(gridName+" .k-grid-toolbar").html();
+            var parsedOptions = JSON.parse(options);
+            parsedOptions.columns.forEach(function (entry) {
+                if (entry.title != "undefined" && entry.title !== "Resolver Group" && entry.title !== "Service Component")
+                {
+                    entry.headerTemplate = "<div class='vertical-text'>" + entry.title + "</div>";
+                }
+            });
+            grid.setOptions(parsedOptions);
+            $(gridName+" .k-grid-toolbar").html(toolBar);  // templates are lost once setOptions is invoked
+            $(gridName+" .k-grid-toolbar").addClass("k-grid-top");
+           }
+    }
+
+    function saveKendoDotMatrixGridState(gridName) {
+        // Note this does not remove the columns as the templates are required
+        var grid = $(gridName).data("kendoGrid");
+        var gridOptions = JSON.parse(kendo.stringify(grid.getOptions()));
+        var dataSource = gridOptions['dataSource'];
+        delete dataSource['transport']; // removing transport from datasource as otherwise read is restored
+        localStorage[gridName.substr(1) + "-kendo-grid-options"] = kendo.stringify(gridOptions);
+    }
+
+    function onDataBound(e) {
+        removeGridHeightRestriction();
+        saveKendoDotMatrixGridState("#DotMatrix");
+    }
+
+    function onRequestStart(e) {
+        if (e.type == "update") {
+            startSpinner();
+        }
+    }
+
+    function onRequestEnd(e) {
+        if (e.type == "update" && e.response.Errors == null) {
+            $("#DotMatrix").data("kendoGrid").dataSource.read();
+            stopSpinner();
+            if (e.response.Errors == null) {
+                displayNotification("Dot Matrix updated successfully.", "@NotificationTypeNames.Success");
+            }
+        }
+    }
+</script>

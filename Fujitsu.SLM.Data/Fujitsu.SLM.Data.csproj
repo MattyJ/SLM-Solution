@@ -1,0 +1,401 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{C1CEA65C-3724-4D17-8862-7B512C61D899}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fujitsu.SLM.Data</RootNamespace>
+    <AssemblyName>Fujitsu.SLM.Data</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure|AnyCPU'">
+    <OutputPath>bin\Azure\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ApplicationUser.cs" />
+    <Compile Include="DatabaseResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DatabaseResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="IdentityDataContext.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\IRepositoryTransaction.cs" />
+    <Compile Include="Interfaces\ISLMDataContext.cs" />
+    <Compile Include="Interfaces\IUnitOfWork.cs" />
+    <Compile Include="Migrations\Identity\201502051333130_InitialCreate.cs" />
+    <Compile Include="Migrations\Identity\201502051333130_InitialCreate.designer.cs">
+      <DependentUpon>201502051333130_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201502271250334_UserTableAmendments.cs" />
+    <Compile Include="Migrations\Identity\201502271250334_UserTableAmendments.designer.cs">
+      <DependentUpon>201502271250334_UserTableAmendments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201606221017277_AddUserRegionTypeColumn.cs" />
+    <Compile Include="Migrations\Identity\201606221017277_AddUserRegionTypeColumn.Designer.cs">
+      <DependentUpon>201606221017277_AddUserRegionTypeColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201606221026028_PopulateUserRegionType.cs" />
+    <Compile Include="Migrations\Identity\201606221026028_PopulateUserRegionType.Designer.cs">
+      <DependentUpon>201606221026028_PopulateUserRegionType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201606221034191_MakeUserRegionTypeMandatory.cs" />
+    <Compile Include="Migrations\Identity\201606221034191_MakeUserRegionTypeMandatory.Designer.cs">
+      <DependentUpon>201606221034191_MakeUserRegionTypeMandatory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201606221400191_AddUserFirstNameAndLastNameColumns.cs" />
+    <Compile Include="Migrations\Identity\201606221400191_AddUserFirstNameAndLastNameColumns.Designer.cs">
+      <DependentUpon>201606221400191_AddUserFirstNameAndLastNameColumns.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\Configuration.cs" />
+    <Compile Include="Migrations\SLM\201512111117361_InitialCreate.cs" />
+    <Compile Include="Migrations\SLM\201512111117361_InitialCreate.Designer.cs">
+      <DependentUpon>201512111117361_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201512111119375_AddspDeleteCustomer.cs" />
+    <Compile Include="Migrations\SLM\201512111119375_AddspDeleteCustomer.Designer.cs">
+      <DependentUpon>201512111119375_AddspDeleteCustomer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201512160847364_AddResolverGroupTypeVisibleColumn.cs" />
+    <Compile Include="Migrations\SLM\201512160847364_AddResolverGroupTypeVisibleColumn.Designer.cs">
+      <DependentUpon>201512160847364_AddResolverGroupTypeVisibleColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201512181718394_AddServiceDeliveryUnitTypeVisibleColumn.cs" />
+    <Compile Include="Migrations\SLM\201512181718394_AddServiceDeliveryUnitTypeVisibleColumn.Designer.cs">
+      <DependentUpon>201512181718394_AddServiceDeliveryUnitTypeVisibleColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201604290655184_IncreaseActivityNameColumnSize.cs" />
+    <Compile Include="Migrations\SLM\201604290655184_IncreaseActivityNameColumnSize.Designer.cs">
+      <DependentUpon>201604290655184_IncreaseActivityNameColumnSize.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201606220726137_AddRegionTypeRefDataTable.cs" />
+    <Compile Include="Migrations\SLM\201606220726137_AddRegionTypeRefDataTable.Designer.cs">
+      <DependentUpon>201606220726137_AddRegionTypeRefDataTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201606220728245_PopulateRegionTypeRefDataTable.cs" />
+    <Compile Include="Migrations\SLM\201606220728245_PopulateRegionTypeRefDataTable.Designer.cs">
+      <DependentUpon>201606220728245_PopulateRegionTypeRefDataTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201607050717487_AddCustomerSpecificTypesParameter.cs" />
+    <Compile Include="Migrations\SLM\201607050717487_AddCustomerSpecificTypesParameter.Designer.cs">
+      <DependentUpon>201607050717487_AddCustomerSpecificTypesParameter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201608311400123_ServiceActivitiesColumnAddedToServiceComponent.cs" />
+    <Compile Include="Migrations\SLM\201608311400123_ServiceActivitiesColumnAddedToServiceComponent.Designer.cs">
+      <DependentUpon>201608311400123_ServiceActivitiesColumnAddedToServiceComponent.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201609060803050_UpdateServiceComponentActivities.cs" />
+    <Compile Include="Migrations\SLM\201609060803050_UpdateServiceComponentActivities.Designer.cs">
+      <DependentUpon>201609060803050_UpdateServiceComponentActivities.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201609060915413_RemoveResolverServiceActivityTable.cs" />
+    <Compile Include="Migrations\SLM\201609060915413_RemoveResolverServiceActivityTable.Designer.cs">
+      <DependentUpon>201609060915413_RemoveResolverServiceActivityTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201610061613599_ServiceDecompositionTemplates.cs" />
+    <Compile Include="Migrations\SLM\201610061613599_ServiceDecompositionTemplates.Designer.cs">
+      <DependentUpon>201610061613599_ServiceDecompositionTemplates.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201610071041140_TemplateResolverSDUandRGMadeOptional.cs" />
+    <Compile Include="Migrations\SLM\201610071041140_TemplateResolverSDUandRGMadeOptional.Designer.cs">
+      <DependentUpon>201610071041140_TemplateResolverSDUandRGMadeOptional.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201610121537432_AddTemplateRows.cs" />
+    <Compile Include="Migrations\SLM\201610121537432_AddTemplateRows.Designer.cs">
+      <DependentUpon>201610121537432_AddTemplateRows.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201610271007223_AddspDeleteStoredProcedures.cs" />
+    <Compile Include="Migrations\SLM\201610271007223_AddspDeleteStoredProcedures.Designer.cs">
+      <DependentUpon>201610271007223_AddspDeleteStoredProcedures.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201611031620207_AddAssetTable.cs" />
+    <Compile Include="Migrations\SLM\201611031620207_AddAssetTable.Designer.cs">
+      <DependentUpon>201611031620207_AddAssetTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201611071145106_AddspModifyDeleteServiceDeskContents.cs" />
+    <Compile Include="Migrations\SLM\201611071145106_AddspModifyDeleteServiceDeskContents.Designer.cs">
+      <DependentUpon>201611071145106_AddspModifyDeleteServiceDeskContents.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201611101349105_ColumnLengthSizeChanges.cs" />
+    <Compile Include="Migrations\SLM\201611101349105_ColumnLengthSizeChanges.Designer.cs">
+      <DependentUpon>201611101349105_ColumnLengthSizeChanges.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201612141338367_InputTypeRefDataDefaultColumnAdded.cs" />
+    <Compile Include="Migrations\SLM\201612141338367_InputTypeRefDataDefaultColumnAdded.Designer.cs">
+      <DependentUpon>201612141338367_InputTypeRefDataDefaultColumnAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201702071400545_ServiceDomainDiagramOrderColumnAdded.cs" />
+    <Compile Include="Migrations\SLM\201702071400545_ServiceDomainDiagramOrderColumnAdded.Designer.cs">
+      <DependentUpon>201702071400545_ServiceDomainDiagramOrderColumnAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201702090838105_ServiceFunctionDiagramOrderColumnAdded.cs" />
+    <Compile Include="Migrations\SLM\201702090838105_ServiceFunctionDiagramOrderColumnAdded.Designer.cs">
+      <DependentUpon>201702090838105_ServiceFunctionDiagramOrderColumnAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201702140827435_ServiceComponentDiagramOrderColumnAdded.cs" />
+    <Compile Include="Migrations\SLM\201702140827435_ServiceComponentDiagramOrderColumnAdded.Designer.cs">
+      <DependentUpon>201702140827435_ServiceComponentDiagramOrderColumnAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201702151121211_OperationalProcessTypeRefDataStandardColumnAdded.cs" />
+    <Compile Include="Migrations\SLM\201702151121211_OperationalProcessTypeRefDataStandardColumnAdded.Designer.cs">
+      <DependentUpon>201702151121211_OperationalProcessTypeRefDataStandardColumnAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201702211502559_CustomerBaselineColumnAdded.cs" />
+    <Compile Include="Migrations\SLM\201702211502559_CustomerBaselineColumnAdded.Designer.cs">
+      <DependentUpon>201702211502559_CustomerBaselineColumnAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201702241209229_AddAuditTable.cs" />
+    <Compile Include="Migrations\SLM\201702241209229_AddAuditTable.Designer.cs">
+      <DependentUpon>201702241209229_AddAuditTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\201702270848579_CustomerAuditRelationshipAdded.cs" />
+    <Compile Include="Migrations\SLM\201702270848579_CustomerAuditRelationshipAdded.Designer.cs">
+      <DependentUpon>201702270848579_CustomerAuditRelationshipAdded.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\SLM\Configuration.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\Repository.cs" />
+    <Compile Include="Repository\RepositoryTransaction.cs" />
+    <Compile Include="Repository\UnitOfWork.cs" />
+    <Compile Include="SLMDataContext.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fujitsu.SLM.Constants\Fujitsu.SLM.Constants.csproj">
+      <Project>{C250E534-FD0A-47CE-B1E3-C46E39DB3544}</Project>
+      <Name>Fujitsu.SLM.Constants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Model\Fujitsu.SLM.Model.csproj">
+      <Project>{1e4b9f25-20be-467b-9559-11056ff04000}</Project>
+      <Name>Fujitsu.SLM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujtisu.SLM.Enumerations\Fujitsu.SLM.Enumerations.csproj">
+      <Project>{2D99FA85-14F1-4019-8951-5A3CC29DE804}</Project>
+      <Name>Fujitsu.SLM.Enumerations</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DatabaseResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DatabaseResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201502051333130_InitialCreate.resx">
+      <DependentUpon>201502051333130_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201502271250334_UserTableAmendments.resx">
+      <DependentUpon>201502271250334_UserTableAmendments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201606221017277_AddUserRegionTypeColumn.resx">
+      <DependentUpon>201606221017277_AddUserRegionTypeColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201606221026028_PopulateUserRegionType.resx">
+      <DependentUpon>201606221026028_PopulateUserRegionType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201606221034191_MakeUserRegionTypeMandatory.resx">
+      <DependentUpon>201606221034191_MakeUserRegionTypeMandatory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201606221400191_AddUserFirstNameAndLastNameColumns.resx">
+      <DependentUpon>201606221400191_AddUserFirstNameAndLastNameColumns.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201512111117361_InitialCreate.resx">
+      <DependentUpon>201512111117361_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201512111119375_AddspDeleteCustomer.resx">
+      <DependentUpon>201512111119375_AddspDeleteCustomer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201512160847364_AddResolverGroupTypeVisibleColumn.resx">
+      <DependentUpon>201512160847364_AddResolverGroupTypeVisibleColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201512181718394_AddServiceDeliveryUnitTypeVisibleColumn.resx">
+      <DependentUpon>201512181718394_AddServiceDeliveryUnitTypeVisibleColumn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201604290655184_IncreaseActivityNameColumnSize.resx">
+      <DependentUpon>201604290655184_IncreaseActivityNameColumnSize.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201606220726137_AddRegionTypeRefDataTable.resx">
+      <DependentUpon>201606220726137_AddRegionTypeRefDataTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201606220728245_PopulateRegionTypeRefDataTable.resx">
+      <DependentUpon>201606220728245_PopulateRegionTypeRefDataTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201607050717487_AddCustomerSpecificTypesParameter.resx">
+      <DependentUpon>201607050717487_AddCustomerSpecificTypesParameter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201608311400123_ServiceActivitiesColumnAddedToServiceComponent.resx">
+      <DependentUpon>201608311400123_ServiceActivitiesColumnAddedToServiceComponent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201609060803050_UpdateServiceComponentActivities.resx">
+      <DependentUpon>201609060803050_UpdateServiceComponentActivities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201609060915413_RemoveResolverServiceActivityTable.resx">
+      <DependentUpon>201609060915413_RemoveResolverServiceActivityTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201610061613599_ServiceDecompositionTemplates.resx">
+      <DependentUpon>201610061613599_ServiceDecompositionTemplates.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201610071041140_TemplateResolverSDUandRGMadeOptional.resx">
+      <DependentUpon>201610071041140_TemplateResolverSDUandRGMadeOptional.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201610121537432_AddTemplateRows.resx">
+      <DependentUpon>201610121537432_AddTemplateRows.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201610271007223_AddspDeleteStoredProcedures.resx">
+      <DependentUpon>201610271007223_AddspDeleteStoredProcedures.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201611031620207_AddAssetTable.resx">
+      <DependentUpon>201611031620207_AddAssetTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201611071145106_AddspModifyDeleteServiceDeskContents.resx">
+      <DependentUpon>201611071145106_AddspModifyDeleteServiceDeskContents.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201611101349105_ColumnLengthSizeChanges.resx">
+      <DependentUpon>201611101349105_ColumnLengthSizeChanges.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201612141338367_InputTypeRefDataDefaultColumnAdded.resx">
+      <DependentUpon>201612141338367_InputTypeRefDataDefaultColumnAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201702071400545_ServiceDomainDiagramOrderColumnAdded.resx">
+      <DependentUpon>201702071400545_ServiceDomainDiagramOrderColumnAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201702090838105_ServiceFunctionDiagramOrderColumnAdded.resx">
+      <DependentUpon>201702090838105_ServiceFunctionDiagramOrderColumnAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201702140827435_ServiceComponentDiagramOrderColumnAdded.resx">
+      <DependentUpon>201702140827435_ServiceComponentDiagramOrderColumnAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201702151121211_OperationalProcessTypeRefDataStandardColumnAdded.resx">
+      <DependentUpon>201702151121211_OperationalProcessTypeRefDataStandardColumnAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201702211502559_CustomerBaselineColumnAdded.resx">
+      <DependentUpon>201702211502559_CustomerBaselineColumnAdded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201702241209229_AddAuditTable.resx">
+      <DependentUpon>201702241209229_AddAuditTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\SLM\201702270848579_CustomerAuditRelationshipAdded.resx">
+      <DependentUpon>201702270848579_CustomerAuditRelationshipAdded.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\AFC_InitialCreate.sql" />
+    <Content Include="Scripts\AFC_Migration_201604290655184_IncreaseActivityNameColumnSize.sql" />
+    <Content Include="Scripts\AFC_Migration_201606220728245_PopulateRegionTypeRefDataTable.sql" />
+    <Content Include="Scripts\AFC_Migration_201606221400191_AddUserFirstNameAndLastNameColumns.sql" />
+    <Content Include="Scripts\AFC_Migration_201609060915413_RemoveResolverServiceActivityTable.sql" />
+    <Content Include="Scripts\AFC_Migration_201607050717487_AddCustomerSpecificTypesParameter.sql" />
+    <Content Include="Scripts\AFC_Migration_201610121537432_AddTemplateRows.sql" />
+    <Content Include="Scripts\AFC_Migration_201610271007223_AddspDeleteStoredProcedures.sql" />
+    <Content Include="Scripts\AFC_Migration_201611071145106_AddspModifyDeleteServiceDeskContents.sql" />
+    <Content Include="Scripts\AFC_Migration_201611101349105_ColumnLengthSizeChanges.sql" />
+    <Content Include="Scripts\AFC_Migration_201612141338367_InputTypeRefDataDefaultColumnAdded.sql" />
+    <Content Include="Scripts\AFC_Migration_201702090838105_ServiceFunctionDiagramOrderColumnAdded.sql" />
+    <Content Include="Scripts\AFC_Migration_201702140827435_ServiceComponentDiagramOrderColumnAdded.sql" />
+    <Content Include="Scripts\AFC_Migration_201702151121211_OperationalProcessTypeRefDataStandardColumnAdded.sql" />
+    <Content Include="Scripts\AFC_Migration_201702211502559_CustomerBaselineColumnAdded.sql" />
+    <Content Include="Scripts\SLM_Permissions.sql" />
+    <Content Include="Stored Procedures\Create_spDeleteResolver.sql" />
+    <Content Include="Stored Procedures\Create_spDeleteServiceDeskContents.sql" />
+    <Content Include="Stored Procedures\Create_spDeleteServiceDesk.sql" />
+    <Content Include="Stored Procedures\Create_spDeleteServiceComponent.sql" />
+    <Content Include="Stored Procedures\Create_spDeleteServiceFunction.sql" />
+    <Content Include="Stored Procedures\Create_spDeleteServiceDomain.sql" />
+    <Content Include="Stored Procedures\Drop_spDeleteResolver.sql" />
+    <Content Include="Stored Procedures\Drop_spDeleteServiceDesk.sql" />
+    <Content Include="Stored Procedures\Drop_spDeleteServiceDeskContents.sql" />
+    <Content Include="Stored Procedures\Drop_spDeleteServiceComponent.sql" />
+    <Content Include="Stored Procedures\Drop_spDeleteServiceFunction.sql" />
+    <Content Include="Stored Procedures\Drop_spDeleteServiceDomain.sql" />
+    <Content Include="Stored Procedures\Modify_spDeleteCustomer.sql" />
+    <Content Include="Stored Procedures\Create_spDeleteCustomer.sql" />
+    <Content Include="Stored Procedures\Drop_spDeleteCustomer.sql" />
+    <Content Include="Stored Procedures\Modify_spDeleteServiceDeskContents.sql" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

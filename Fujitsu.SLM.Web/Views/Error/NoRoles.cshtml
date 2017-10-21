@@ -1,0 +1,32 @@
+﻿
+@model String
+@{
+    ViewBag.Title = "Home";
+}
+
+@section navigation
+{
+    @Html.Action("HomeMenu", "Menu")
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "noroles" })
+}
+
+<div class="landing-image">
+    @Html.Partial("_NoRolesText", Model)
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnBack").hide();
+        $("#customer-details").hide();
+    });
+</script>

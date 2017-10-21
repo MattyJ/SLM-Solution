@@ -1,0 +1,64 @@
+﻿@model MyIdentityViewModel
+@{
+    ViewBag.Title = "Identity";
+}
+
+<h2>@ViewBag.Title</h2>
+<hr />
+
+<div class="layout-row">
+    <div class="display-label">
+        <label>@Html.LabelFor(x => x.Id)</label>
+    </div>
+    <div class="display-field">
+        @(Html.DisplayFor(x => x.Id))
+    </div>
+</div>
+
+<div class="layout-row">
+    <div class="display-label">
+        <label>@Html.LabelFor(x => x.Email)</label>
+    </div>
+    <div class="display-field">
+        @(Html.DisplayFor(x => x.Email))
+    </div>
+</div>
+
+<p>
+    Below are a list of the Roles you are a member of whilst accessing the Fujitsu SLM system.
+    To request additional access please contact <a href="mailto:@(Model.SupportEmailAddress)" title="Email SLM administration">@Model.SupportEmailAddress</a> quoting your Id and Email above followed by the names of the roles you would like to be granted.
+</p>
+
+@foreach (var role in Model.UserRoles)
+{
+    <div class="layout-row">
+        <div class="display-label">
+            <label>Role Name</label>
+        </div>
+        <div class="display-field">
+            @role
+        </div>
+    </div>
+}
+
+<p>
+    Below are a list of the Claims you are a member of whilst accessing the Fujitsu SLM system.
+</p>
+
+@if (Model.Claims != null)
+{
+    <table>
+        <tr>
+            <th style="padding: 3px;">Claim Name</th>
+            <th style="padding: 3px;">Claim Value</th>
+        </tr>
+        @foreach (var claim in Model.Claims)
+        {
+            <tr>
+                <td style="padding: 3px 10px;">@claim.Type</td>
+                <td style="padding: 3px 10px;">@claim.Value</td>
+            </tr>
+
+        }
+    </table>
+}

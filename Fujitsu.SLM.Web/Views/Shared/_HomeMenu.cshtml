@@ -1,0 +1,18 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+@model HomeMenuModel
+
+@if (@User.IsInRole(UserRoles.Architect))
+{
+    @Html.NavigationLinkListItem("My Customers", Model.MyCustomersSelected, "MyCustomers", "Customer", null, new { id = "lnkMyCustomers" })
+    @Html.NavigationLinkListItem("My Archives", Model.MyArchivesSelected, "MyArchives", "Customer", null, new { id = "lnkMyArchives" })
+}
+
+@if (@User.IsInRole(UserRoles.Viewer))
+{
+    @Html.NavigationLinkListItem("Reference Data", Model.ReferenceDataSelected, "Index", "ReferenceData", null, new { id = "lnkReferenceDataMenu" })
+}
+
+@if (@User.IsInRole(UserRoles.Administrator))
+{
+    @Html.NavigationLinkListItem("Administration", Model.AdministrationSelected, "Index", "Administration", null, new { id = "lnkSearchServiceDomains" })
+}

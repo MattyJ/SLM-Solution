@@ -1,0 +1,121 @@
+﻿@{
+    ViewBag.Title = "Operational Process Types";
+    var isAdministrator = User.IsInRole(UserRoles.Administrator);
+}
+
+@section navigation
+{
+    @Html.Partial("_ReferenceDataMenu", new ReferenceDataMenuModel { OperationalProcessesSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "operationalprocesstypesrefdata" })
+}
+
+<h2>@ViewBag.Title</h2>
+@(Html.Kendo().Grid<OperationalProcessTypeRefDataViewModel>()
+    .Name("OperationalProcessTypeRefDataGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Id).Visible(false);
+        columns.Bound(c => c.OperationalProcessTypeName).Width(200);
+        columns.Bound(o => o.Visible).Width(50).ClientTemplate("#= Visible? 'Yes' : 'No' #");
+        columns.Bound(o => o.Standard).Width(50).ClientTemplate("#= Standard? 'Yes' : 'No' #");
+        columns.Bound(c => c.SortOrder).Width(100);
+        columns.Bound(c => c.UsageCount).Width(100);
+        columns.Command(cmd =>
+        {
+            cmd.Edit();
+            cmd.Destroy();
+        }).Width(100).Title("").Visible(isAdministrator);
+    })
+    .ToolBar(toolbar =>
+    {
+        if (isAdministrator)
+        {
+            toolbar.Create().Text("Add Operational Process Type");
+        }
+    })
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .Groupable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            model.Field(f => f.SortOrder).DefaultValue(5);
+        })
+        .Events(events => events.Error("onErrorOperationalProcessTypes").Sync("syncHandler"))
+        .Read(read => read.Action("ReadAjaxOperationalProcessTypesRefDataGrid", "ReferenceData"))
+        .Create(create => create.Action("CreateAjaxOperationalProcessTypesRefDataGrid", "ReferenceData"))
+        .Update(update => update.Action("UpdateAjaxOperationalProcessTypesRefDataGrid", "ReferenceData"))
+        .Destroy(destroy => destroy.Action("DeleteAjaxOperationalProcessTypesRefDataGrid", "ReferenceData"))
+        .Sort(sort =>
+        {
+            sort.Add(col => col.SortOrder);
+            sort.Add(col => col.OperationalProcessTypeName);
+        }))
+    .Events(e => e.Edit("onEdit"))
+    .Editable(edt => edt.Mode(GridEditMode.PopUp).DisplayDeleteConfirmation("Are you sure you want to delete this Operational Process Type?")
+    .Window(w => w.Title("Operational Process Type").Width(600)))
+)
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    // Register custom validation rules
+    (function ($, kendo) {
+        $.extend(true,
+            kendo.ui.validator,
+            {
+                rules: { // Custom rules
+                    standardvalidation: function (input, params) {
+                        if (input.is("[name='Visible']") && input.val() != "") {
+                            if ($("#Visible").prop("checked") == false && $("#Standard").prop("checked") == true) {
+                                input.attr("data-visiblevalidation-msg", "A Standard Operational Process Type must always be visible across all Customers");
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                },
+                messages: { // Custom rules messages
+                    standardvalidation: function (input) {
+                        // Return the message text
+                        return input.attr("data-visiblevalidation-msg");
+                }
+            }
+        });
+    })(jQuery, kendo);
+
+    $(document).ready(function() {
+        $("#OperationalProcessTypeRefDataGrid .k-grid-add").on("click", function () {
+            isCreating = true;
+        });
+
+        popupGridEditorButtonNamingOnInsert("#OperationalProcessTypeRefDataGrid");
+
+        $("#btnBack").hide();
+    });
+
+    function onErrorOperationalProcessTypes(e) {
+        onErrorCancelWithGridId(e, "#OperationalProcessTypeRefDataGrid");
+    }
+</script>

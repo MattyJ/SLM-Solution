@@ -1,0 +1,57 @@
+﻿@model EditServiceDomainViewModel
+
+@{
+    var vm = new ServiceFunctionGridViewModel
+    {
+        ServiceDomainId = Model.ServiceDomain.Id,
+        EditLevel = Model.EditLevel,
+        HasServiceDomainContext = true,
+        CanMoveServiceFunction = Model.CanMoveServiceFunction
+    };
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+<div class="js-editServiceDomain">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        <fieldset>
+            @Html.HiddenFor(m => m.EditLevel)
+            @Html.HiddenFor(m => m.CanMoveServiceFunction)
+            @Html.EditorFor(m => m.ServiceDomain)
+            <fieldset>
+                <p>
+                    <input type="submit" name="Save" class="k-button k-button-icontext slm-button" value="Save" />
+                    <input id="buttonReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+                    @*<input type="submit" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />*@
+                </p>
+            </fieldset>
+        </fieldset>
+    }
+    <script>
+        $(function () {
+            highlightRequiredFields();
+            $("form").kendoValidator();
+        });
+    </script>
+</div>
+
+@{
+    if (Model.EditLevel != NavigationLevelNames.LevelZero)
+    {
+        @Html.Partial("_ServiceFunctions", vm)
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // Extract model values into the script.
+        // var url = '@Model.ReturnUrl';
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#buttonReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url;
+        });
+    });
+</script>

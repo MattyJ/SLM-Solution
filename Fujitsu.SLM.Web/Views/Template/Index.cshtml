@@ -1,0 +1,166 @@
+﻿@using Fujitsu.SLM.Web.Session
+@{
+    ViewBag.Title = "Templates";
+    var isArchitect = User.IsInRole(UserRoles.Architect);
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { TemplatesSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "templates" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+@(Html.Kendo().Grid<TemplateViewModel>()
+        .Name("TemplatesGrid")
+        .Columns(columns =>
+        {
+            columns.Bound(t => t.Id).Visible(false);
+            columns.Bound(t => t.Filename).Width(100);
+            columns.Bound(t => t.TemplateType).Width(50);
+            columns.Bound(t => t.InsertedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(50);
+            columns.Bound(t => t.InsertedBy).Width(75);
+            columns.Bound(t => t.UpdatedDate).Format("{0:dd/MM/yyyy HH:mm:ss}").Width(50);
+            columns.Bound(t => t.UpdatedBy).Width(75);
+            columns.Command(cmd =>
+            {
+                cmd.Custom("Download").Click("downloadTemplate");
+                cmd.Custom("Delete").Click("onDeleteTemplate");
+            }).Width(150).Title("").Visible(isArchitect);
+
+        })
+        .ToolBar(toolbar =>
+        {
+            if (isArchitect)
+            {
+                toolbar.Custom().Name("Import Service Configurator Template").Action("ImportTemplateSpreadsheet", "Template", new { templateType = TemplateTypeNames.SORT }).HtmlAttributes(new { id = "js-chooseFromServiceConfiguratorCatalogue" }).HtmlAttributes(new { id = "js-importServiceConfiguratorTemplate" });
+                toolbar.Custom().Name("Import SLM Template").Action("ImportTemplateSpreadsheet", "Template", new { templateType = TemplateTypeNames.SLM }).HtmlAttributes(new { id = "js-importSLMTemplate" });
+            }
+        })
+        .Pageable(pageable =>
+        {
+            pageable.Enabled(true);
+            pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+        })
+        .Filterable(filterable=>filterable.Extra(false).Operators(operators=>operators.ForString(str=>str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+        .Sortable()
+        .ColumnMenu()
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .PageSize(15)
+            .ServerOperation(true)
+            .Model(model =>
+            {
+                model.Id(p => p.Id);
+                model.Field(field => field.UpdatedBy).DefaultValue(@User.Identity.Name);
+            })
+            .Events(events =>
+            {
+                events.Error("onError").Sync("syncHandler");
+                events.RequestEnd("onRequestEnd");
+            })
+            .Read(read => read.Action("ReadAjaxTemplateGrid", "Template"))
+            .Sort(sort => sort.Add(col => col.Filename))
+        )
+        .Events(e =>
+        {
+            e.DataBound("onDataBound");
+            e.Cancel("onCancel");
+            e.Change("onRowSelectTemplate");
+        })
+        .Selectable(selection => selection.Mode(GridSelectionMode.Single))
+        .Editable(edt => edt.Mode(GridEditMode.PopUp).DisplayDeleteConfirmation("Are you sure you want to delete this Template?")
+        .Window(w => w.Title("Customer").Width(600)))
+)
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#js-importServiceConfiguratorTemplate > span").addClass("k-icon k-i-globe-outline");
+        $("#js-importSLMTemplate > span").addClass("k-icon k-i-globe");
+    });
+
+    function downloadTemplate(e) {
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+        var url = '@Url.Action("DownloadTemplate", "Template", new { id = "XXXId" })';
+        window.location.href = url.replace('XXXId', dataItem.Id);
+    }
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Download > span").addClass("k-icon k-i-download");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+    }
+
+    function onCancel() {
+        var grid = $("#TemplatesGrid").data("kendoGrid");
+        grid.dataSource.read();
+        grid.refresh();
+    }
+
+    function onRequestEnd(e) {
+        if (e.type == "destroy") {
+            if (e.response.Errors == null) {
+                displayNotification("Template successfully deleted.", "@NotificationTypeNames.Success");
+            } else {
+                this.cancelChanges();
+            }
+        }
+    }
+
+    function onRowSelectTemplate() {
+        var templateGrid = $('#TemplatesGrid').data("kendoGrid");
+        var row = templateGrid.select();
+        var data = templateGrid.dataItem(row);
+        var url = '@Url.Action("Template", "Template", new { id = "XXXId" })';
+        window.location.href = url.replace('XXXId', data.id);
+    }
+
+    function onDeleteTemplate(e) {
+        var grid = $("#TemplatesGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Template?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Delete", "Template")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Template successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    onErrorNoXhr(result);
+                },
+                complete: function() {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+</script>

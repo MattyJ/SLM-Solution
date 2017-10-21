@@ -1,0 +1,34 @@
+﻿@using Fujitsu.SLM.Enumerations
+@model int?
+
+@{
+    ViewBag.Title = "Level " + Model + " > Diagrams > Dot Matrix";
+    var level = @Model;
+}
+
+@section navigation
+{
+    @switch (level)
+    {
+        case 1:
+            @Html.Partial("_LevelOneDiagramMenu", new DiagramMenuModel { DotMatrixSelected = true })
+            break;
+        case 2:
+            @Html.Partial("_LevelTwoDiagramMenu", new DiagramMenuModel { DotMatrixSelected = true })
+            break;
+    }
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "dotmatrix" })
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Action("ServiceDeskDotMatrix","ServiceDesk", new {level = @level}))

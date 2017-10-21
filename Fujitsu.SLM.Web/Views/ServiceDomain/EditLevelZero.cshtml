@@ -1,0 +1,33 @@
+﻿@model EditServiceDomainViewModel
+
+@{
+    ViewBag.Title = LevelNames.LevelZero + " > " + @Model.ServiceDomain.ServiceDeskName;
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelZeroMenu", new LevelZeroMenuModel { ServiceDomainsSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "editdomainlevelzero" })
+}
+
+@section contextcommands
+{
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.Partial("_EditServiceDomain", Model)

@@ -1,0 +1,22 @@
+﻿@model System.Exception
+
+@{
+    ViewBag.Title = "Session Expired";
+}
+
+<div style="width:220px; float:left">
+    <img src="~/Images/ModernClock.png" width="200" height="200" alt="Session Timeout" />
+</div>
+<div style="margin-left: 230px">
+    <h2>Timeout!</h2>
+    <h3>Your SLM session has not been used for a long time, and has been shut down</h3>
+    <h4>Please press the button below to start a new session</h4>
+    <a class="k-button k-button-icontext slm-button btn btn-lg" href='@Url.Action("Index", "Home")'>Restart</a>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnBack").hide();
+        $("#customer-details").hide();
+    });
+</script>

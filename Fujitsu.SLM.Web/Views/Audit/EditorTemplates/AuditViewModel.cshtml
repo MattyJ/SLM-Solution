@@ -1,0 +1,49 @@
+﻿@model AuditViewModel
+<div>
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.CustomerId)
+        <legend>Customer</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.Version)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().NumericTextBoxFor(m => m.Version)
+                    .Decimals(1)
+                    .Spinners(true)
+                    .Step(0.1)
+                    .Format("v#.0")
+                    .Min(1)
+                    .Max(99.9)
+                    .HtmlAttributes(new { style = "width:80px;" })
+                )
+                @Html.ValidationMessageFor(model => model.Version)
+            </div>
+        </div>
+
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ReasonForIssue)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ReasonForIssue, "WindowWideText"))
+                @Html.ValidationMessageFor(model => model.ReasonForIssue)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.Notes)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.Notes, "WindowMultiLine"))
+                @Html.ValidationMessageFor(model => model.Notes)
+            </div>
+        </div>
+    </fieldset>
+</div>
+<script type="text/javascript">
+    $(document).ready(function (e) {
+        highlightRequiredFields();
+    });
+</script>

@@ -1,0 +1,43 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model MoveServiceComponentLevel2ViewModel
+
+@using (Html.BeginForm("MoveLevel2", "ServiceComponent", FormMethod.Post, new { id = "moveServiceComponentLevel2Form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="moveServiceComponentLevel2Container">
+        <fieldset class="form-popup-fieldset">
+            @Html.HiddenFor(x => x.ServiceComponentId)
+            <legend>Move Service Component (Level 2)</legend>
+            <div>Please note: This list only contains Service Components that do not have either a child Service Component or Resolver.</div>
+            <div class="layout-row">
+                <div class="editor-label">
+                    <label>@Html.LabelFor(x => x.DestinationServiceComponentId)</label>
+                </div>
+                <div class="editor-field">
+                    @(Html.Kendo().DropDownListFor(model => model.DestinationServiceComponentId)
+                          .AutoBind(true)
+                          .Filter(FilterType.Contains)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .OptionLabel(WebResources.DefaultDropDownListText)
+                          .BindTo(Model.ServiceComponents))
+                    <div class="kendo-validation">
+                        @Html.ValidationMessageFor(model => model.DestinationServiceComponentId)
+                    </div>
+                </div>
+            </div>
+            <div class="layout-row">
+                <div class="editor-label"></div>
+                <div class="editor-field">
+                    @(Html.Kendo().Button()
+                          .HtmlAttributes(new { type = "button" })
+                          .Name("moveServiceComponentLevel2")
+                          .Content("Move"))
+                </div>
+            </div>
+        </fieldset>
+    </div>
+}
+
+@Html.Partial("_KendoValidation")

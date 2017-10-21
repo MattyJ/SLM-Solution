@@ -1,0 +1,89 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@using Fujitsu.SLM.Web.Session
+@model AuditViewModel
+@{
+    var appUserContext = AppUserContext.GetAppUserContext();
+    ViewBag.Title = $"Service Decomposition > Audit > {appUserContext.Current.CurrentCustomer.CustomerName} > {Model.VersionNumber}";
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+@section navigation
+{
+    @Html.Partial("_ServiceDecompositionMenu", new ServiceDecompositionMenuModel { AuditSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "decompositioneditaudit" })
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id)
+    @Html.HiddenFor(x => x.CustomerId)
+    <div class="layout-row">
+        <div class="display-label">
+            <label>@Html.LabelFor(x => x.VersionNumber)</label>
+        </div>
+        <div class="display-field">
+            @Html.HiddenFor(x => x.Version)
+            @Html.DisplayFor(m => m.VersionNumber)
+        </div>
+    </div>
+
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.ReasonForIssue)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.EditorFor(x => x.ReasonForIssue, "WideText"))
+            @Html.ValidationMessageFor(model => model.ReasonForIssue)
+        </div>
+    </div>
+    <div class="layout-row">
+        <div class="editor-label">
+            <label>@Html.LabelFor(x => x.Notes)</label>
+        </div>
+        <div class="editor-field">
+            @(Html.EditorFor(x => x.Notes, "MultiLineText"))
+            @Html.ValidationMessageFor(model => model.Notes)
+        </div>
+    </div>
+    <fieldset>
+        <p>
+            <input type="submit" name="action" class="k-button k-button-icontext slm-button" value="Save" />
+            <input id="editAuditReturn" type="submit" name="action" class="k-button k-button-icontext slm-button" value="Cancel" />
+        </p>
+    </fieldset>
+}
+
+<p>
+    <h3>History</h3>
+    @*@Html.Partial("_VersionHistory", new ContributorGridViewModel { EditLevel = NavigationLevelNames.None, Owner = Model.Owner })*@
+</p>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        highlightRequiredFields();
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#editAuditReturn").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            window.location.href = url;
+        });
+    });
+</script>

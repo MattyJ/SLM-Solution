@@ -1,0 +1,54 @@
+﻿@model int
+
+@(Html.Kendo().Grid<TemplateRowViewModel>
+    ()
+    .Name("TemplateRowsGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(t => t.ServiceDomain);
+        columns.Bound(t => t.ServiceFunction);
+        columns.Bound(t => t.ServiceComponentLevel1);
+        columns.Bound(t => t.ServiceComponentLevel2);
+        columns.Group(g => g.Title("Resolver")
+            .Columns(resolver =>
+            {
+                resolver.Bound(r => r.ServiceDeliveryOrganisation);
+                resolver.Bound(r => r.ServiceDeliveryUnit);
+                resolver.Bound(r => r.ResolverGroup);
+            }));
+    })
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .Groupable()
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+    .Ajax()
+    .PageSize(15)
+    .ServerOperation(true)
+    .Events(events =>
+    {
+        events.Error("onError").Sync("syncHandler");
+    })
+    .Read(read => read.Action("ReadAjaxTemplateRowGrid", "Template", new { templateId = Model}))
+    .Sort(sort =>
+    {
+    sort.Add(col => col.ServiceDomain);
+    sort.Add(col => col.ServiceFunction);
+    sort.Add(col => col.ServiceComponentLevel1);
+    sort.Add(col => col.ServiceComponentLevel2);
+    sort.Add(col => col.ServiceDeliveryOrganisation);
+    sort.Add(col => col.ServiceDeliveryUnit);
+    sort.Add(col => col.ResolverGroup);
+    }))
+    )
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>

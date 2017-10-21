@@ -1,0 +1,62 @@
+﻿@model EditServiceComponentLevel1WithChildComponentViewModel
+
+@{
+    var vm = new ServiceComponentGridViewModel
+    {
+        ServiceFunctionId = 0,
+        ParentComponentId = Model.Id,
+        EditLevel = Model.EditLevel,
+        HasServiceFunctionContext = true
+    };
+
+    ViewData.TemplateInfo.HtmlFieldPrefix = "";
+}
+
+@using (Html.BeginForm("EditLevel1WithChildComponent", "ServiceComponent"))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="editServiceComponentLevel1WithChildComponentContainer" class="edit-service-component">
+
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ReturnUrl)
+        @Html.HiddenFor(m => m.EditLevel)
+
+        @Html.EditorFor(m => m.ComponentName)
+        @Html.EditorFor(m => m.ServiceActivities)
+        @Html.EditorFor(m => m.DiagramOrder)
+
+        <fieldset>
+            <p>
+                <input type="submit" name="Save" class="k-button k-button-icontext slm-button" value="Save"/>
+                <input id="editServiceComponentReturn" type="submit" name="Return" class="k-button k-button-icontext slm-button" value="Cancel"/>
+            </p>
+        </fieldset>
+
+    </div>
+}
+<script>
+        $(function () {
+            highlightRequiredFields();
+            $("form").kendoValidator();
+        });
+</script>
+
+@{
+    if (Model.EditLevel != NavigationLevelNames.LevelZero)
+    {
+        @Html.Partial("_ServiceComponentsLevelTwo", vm)
+    }
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#editServiceComponentReturn").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            window.location.href = url; //"@Model.ReturnUrl";
+        });
+    });
+</script>

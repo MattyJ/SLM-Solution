@@ -1,0 +1,11 @@
+﻿@model SelectUserWindowViewModel
+@(Html.Kendo().Window()
+    .Name("user-selector-window")
+    .Title(Model.WindowTitle)
+    .Width(630)
+    .Height(200)
+    .Modal(true)
+    .Visible(false)
+    .Events(events => events.Refresh("onSelectUserRefresh"))
+    .Actions(actions => actions.Close())
+    .LoadContentFrom("SelectUser", "Administration", new {Model.RoleName}))

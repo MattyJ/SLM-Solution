@@ -1,0 +1,35 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+
+@model DiagramMenuModel
+
+
+@if (@User.IsInRole(UserRoles.Viewer))
+{
+    @Html.NavigationLinkListItem(LevelNames.LevelOne, Model.LevelOneSelected, "Index", "ServiceDesk", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkLevelOneServiceDesk" })
+    @Html.NavigationLinkListItem("Assets", Model.DiagramsSelected, "Index", "Diagram", new { level = NavigationLevelNames.LevelOne }, new { id = "lnkLevelOneDiagrams" })
+    @Html.NavigationLinkListItem("Baseline", Model.ServiceDeskStructureSelected, "ServiceDeskStructure", "Diagram", new { level = 1 }, new { id = "lnkBaselineDiagram" })
+    @Html.NavigationLinkListItem("Process Dot Matrix", Model.DotMatrixSelected, "DotMatrix", "Diagram", new { level = 1 }, new { id = "lnkDotMatrix" })
+    @(Html.Kendo().TreeView()
+        .Name("MenuTree")
+        .Events(evt => evt.Select("onSelectMenuItem"))
+        .Items(actions =>
+        {
+            actions.Add()
+                .Text("Service Organisation")
+                .Expanded(Model.ServiceOrganisationFujitsuSelected || Model.ServiceOrganisationCustomerSelected || Model.ServiceOrganisationCustomerThirdPartySelected)
+                .Items(children =>
+                {
+                    children.Add().Text("Fujitsu").Action("ServiceOrganisation", "Diagram", new { level = 1, type = Diagram.FujitsuServiceOrganisation }).Selected(Model.ServiceOrganisationFujitsuSelected).HtmlAttributes(new { id = "lnkServiceOrganisationFujitsuDiagram" });
+                    children.Add().Text("Customer").Action("ServiceOrganisation", "Diagram", new { level = 1, type = Diagram.CustomerServiceOrganisation }).Selected(Model.ServiceOrganisationCustomerSelected).HtmlAttributes(new { id = "lnkServiceOrganisationCustomerDiagram" });
+                    children.Add().Text("Customer Third Party").Action("ServiceOrganisation", "Diagram", new { level = 1, type = Diagram.CustomerThirdPartyServiceOrganisation }).Selected(Model.ServiceOrganisationCustomerThirdPartySelected).HtmlAttributes(new { id = "lnkServiceOrganisationCustomerThirdPartyDiagram" });
+                });
+        }))
+ }
+
+<script>
+
+    $(document).ready(function () {
+        highlightSelectedNode();
+    });
+
+</script>

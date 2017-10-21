@@ -1,0 +1,78 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model ServiceDomainViewModel
+<div id="serviceDomainViewModelContainer">
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.ServiceDeskId)
+        @Html.HiddenFor(x => x.ServiceDeskName)
+        <legend>Service Domain</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.DomainTypeId)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().DropDownListFor(model => model.DomainTypeId)
+                      .AutoBind(true)
+                      .Filter(FilterType.Contains)
+                      .DataTextField("DomainName")
+                      .DataValueField("Id")
+                      .DataSource(source => source.Read(read => read.Action("GetAllAndNotVisibleDomainTypesForCustomer", "ReferenceData")))
+                      .OptionLabel(WebResources.DefaultDropDownListText))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.DomainTypeId)
+                </div>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label"></div>
+            <div class="editor-field">
+                @(Html.Kendo().Button().Name("addDomainType").Content("Create Domain Type").Events(evt => evt.Click("addDomainType")))
+                @Html.Partial("_AddDomainTypeWindow")
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.AlternativeName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.AlternativeName, "WideText"))
+                @Html.ValidationMessageFor(model => model.AlternativeName)
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.DiagramOrder)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.DiagramOrder, "SmallInteger"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.DiagramOrder)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</div>
+
+@*<script type="text/javascript">
+    //$(document).ready(function (e) {
+    //    highlightRequiredFields();
+    //});
+
+    //function ChangedDomainType(e) {
+    //    var text = e.sender.text();
+    //    var typeId = e.sender.value();
+    //    if (typeId > 0)
+    //    {
+    //        var hiddenField = $('#ServiceDomain_DomainTypeId');
+    //        $(hiddenField).val(parseInt(typeId));
+
+    //        //var domainName = $('#ServiceDomain_DomainName');
+    //        //$(domainName).val(text);
+    //        //$(domainName).change();
+
+    //        var dropDownList = $("#ServiceDomain_DomainTypeId").data("kendoDropDownList");
+    //        dropDownList.value(parseInt(typeId));
+    //    }
+    //}
+</script>*@

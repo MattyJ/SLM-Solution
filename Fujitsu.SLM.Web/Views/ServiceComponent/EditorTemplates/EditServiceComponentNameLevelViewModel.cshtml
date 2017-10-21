@@ -1,0 +1,46 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model EditServiceComponentNameLevelViewModel
+
+<div id="editServiceComponentNameContainer">
+    <fieldset class="form-popup-fieldset">
+        <legend>Component</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ComponentName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.ComponentName, "WideText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.ComponentName)
+                </div>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ComponentLevel)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.Kendo().DropDownListFor(x => x.ComponentLevel)
+                      .AutoBind(true)
+                      .DataTextField("Text")
+                      .DataValueField("Value")
+                      .DataSource(source => source.Read(read => read.Action("GetServiceComponentLevels", "ServiceComponent")))
+                      .OptionLabel(WebResources.DefaultDropDownListText))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(x => x.ComponentLevel)
+                </div>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.DiagramOrder)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.DiagramOrder, "SmallInteger"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.DiagramOrder)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>

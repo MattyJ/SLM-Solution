@@ -1,0 +1,12 @@
+﻿@using Fujitsu.SLM.Web.Resources
+@model int?
+           
+@(
+ Html.Kendo().DropDownListFor(m => m)
+     .HtmlAttributes(new { data_value_primitive = true })
+     .OptionLabel(WebResources.DefaultDropDownListText)
+     .Filter(FilterType.Contains)
+     .DataTextField("Text")
+     .DataValueField("Value")
+     .BindTo((SelectList)ViewData[ViewData.TemplateInfo.GetFullHtmlFieldName("") + "_Data"])
+)

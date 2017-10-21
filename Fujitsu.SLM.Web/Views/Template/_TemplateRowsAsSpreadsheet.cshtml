@@ -1,0 +1,47 @@
+﻿@model int
+<div id="spreadsheet"></div>
+<script>
+    $("#spreadsheet").kendoSpreadsheet(
+    {"excel":{"proxyURL":"/Template/Save"},
+        "pdf":{"proxyURL":"/Template/Save"},
+        "sheets": [{
+            "name": "Decomposition", "columns": [{ "width": 200, }, { "width": 200 }, { "width": 200 }, { "width": 200 }, { "width": 415 }, { "width": 200 }, { "width": 200 }, { "width": 200 }], "rows": [{
+                "cells": [{
+                        "background": "#C6E0B4", "color": "black", "bold": true,
+                        "textAlign": "center"
+                    },
+                    { "background": "#C6E0B4", "color": "black", "bold": true, "textAlign": "center" },
+                    { "background": "#C6E0B4", "color": "black", "bold": true, "textAlign": "center" },
+                    { "background": "#C6E0B4", "color": "black", "bold": true, "textAlign": "center" },
+                    { "background": "#C6E0B4", "color": "black", "bold": true, "textAlign": "center" },
+                    { "background": "#C6E0B4", "color": "black", "bold": true, "textAlign": "center" },
+                    { "background": "#C6E0B4", "color": "black", "bold": true, "textAlign": "center" },
+                    { "background": "#C6E0B4", "color": "black", "bold": true, "textAlign": "center" }],
+                "height": 60
+            }], "dataSource": {
+                "type": (function () { if (kendo.data.transports['aspnetmvc-ajax']) { return 'aspnetmvc-ajax'; } else { throw new Error('The kendo.aspnetmvc.min.js script is not included.'); } })(),
+                "transport": { "read": { "url": '@Url.Action("ReadAjaxTemplateRowGrid", "Template", new { templateId = Model})' }, "prefix": "" },
+                "schema": { "data": "Data", "total": "Total", "errors": "Errors", "model": { "fields": { "ServiceDomain": { "type": "string" }, "ServiceFunction": { "type": "string" }, "ServiceComponentLevel1": { "type": "string" }, "ServiceComponentLevel2": { "type": "string" }, "ServiceActivities": { "type": "string" }, "ServiceDeliveryOrganisation": { "type": "string" }, "ServiceDeliveryUnit": { "type": "string" }, "ResolverGroup": { "type": "string" } } } }, "batch": true
+            }
+        }]
+        , "toolbar" : {
+            "home" : ["exportAs", [ "cut", "copy", "paste" ], [ "bold", "italic", "underline" ], "backgroundColor", "textColor", "borders", "fontSize", "fontFamily", "alignment", "textWrap", [ "formatDecreaseDecimal", "formatIncreaseDecimal" ], "format","merge", "freeze","filter"], //define single tool
+            "insert": false,
+            "data": false
+        }
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        var spreadsheet = $("#spreadsheet").data("kendoSpreadsheet");
+        var sheet = spreadsheet.activeSheet();
+    });
+
+
+    function getDataSource() {
+        return $("#spreadsheet").data("kendoSpreadsheet").activeSheet().dataSource;
+    }
+</script>
+
+

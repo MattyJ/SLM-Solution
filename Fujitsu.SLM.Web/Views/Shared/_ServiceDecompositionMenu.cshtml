@@ -1,0 +1,32 @@
+﻿@using System.Diagnostics.Eventing.Reader
+@using Fujitsu.SLM.Web.Extensions
+@using Fujitsu.SLM.Web.Session
+
+@model ServiceDecompositionMenuModel
+
+@{
+    var appUserContext = AppUserContext.GetAppUserContext();
+}
+
+@if (User.IsInRole(UserRoles.Architect))
+{
+    @Html.NavigationLinkListItem("My Customers", Model.MyCustomersSelected, "MyCustomers", "Customer", null, new { id = "lnkMyCustomers" })
+    @Html.NavigationLinkListItem("Service Decomposition", Model.ServiceDecompositionsSelected, "EditCustomer", "ServiceDecomposition", new { id = appUserContext.Current.CurrentCustomer.Id}, new { id = "lnkServiceDecomposition" })
+}
+@if (User.IsInRole(UserRoles.Viewer))
+{
+    if (!appUserContext.Current.CurrentCustomer.Baseline)
+    {
+        @Html.NavigationLinkListItem(LevelNames.LevelZero, Model.Level0Selected, "Index", "ServiceDesk", new {level = NavigationLevelNames.LevelZero}, new {id = "lnkLevelZeroServiceDesk"})
+        @Html.NavigationLinkListItem(LevelNames.LevelOne, Model.Level1Selected, "Index", "ServiceDesk", new {level = NavigationLevelNames.LevelOne}, new {id = "lnkLevelOneServiceDesk"})
+    }
+    else
+    {
+        @Html.NavigationLinkListItem(LevelNames.LevelTwo, Model.Level2Selected, "Index", "ServiceDesk", new { level = NavigationLevelNames.LevelTwo }, new { id = "lnkLevelTwoServiceDesk" })
+    }
+    @Html.NavigationLinkListItem("Customer Packs", Model.CustomerPacksSelected, "CustomerPack", "ServiceDecomposition", null, new { id = "lnkCustomerPacks" })
+    if (appUserContext.Current.CurrentCustomer.Baseline)
+    {
+        @Html.NavigationLinkListItem("Customer Audit", Model.AuditSelected, "Index", "Audit", null, new { id = "lnkAudit" })
+    }
+}

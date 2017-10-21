@@ -1,0 +1,31 @@
+﻿@model RegionTypeRefDataViewModel
+<div id="Region">
+    <fieldset class="form-popup-fieldset">
+        @Html.HiddenFor(x => x.Id)
+        <legend>Region</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.RegionTypeName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.RegionTypeName, "WindowWideText"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.RegionTypeName)
+                </div>
+            </div>
+        </div>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.SortOrder)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.EditorFor(x => x.SortOrder, "SmallInteger"))
+                <div class="kendo-validation">
+                    @Html.ValidationMessageFor(model => model.SortOrder)
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+@Html.Partial("_KendoValidation")

@@ -1,0 +1,14 @@
+﻿@using Fujitsu.SLM.Constants
+@using Fujitsu.SLM.Web.Extensions
+
+@model ServiceDecompositionSearchMenuModel
+
+@if (@User.IsInRole(UserRoles.Viewer))
+{
+    @Html.NavigationLinkListItem("Customers", Model.CustomersSearchSelected, "Search", "Customer", null, new { id = "lnkServiceSearchCustomers" })
+    @Html.NavigationLinkListItem("Decompositions", Model.ServiceDecompositionsSearchSelected, "Search", "ServiceDecomposition", null, new { id = "lnkServiceDecompositionsSearch" })
+    @Html.NavigationLinkListItem("Desks", Model.ServiceDesksSearchSelected, "Search", "ServiceDesk", null, new { id = "lnkServiceDesksSearch" })
+   @Html.NavigationLinkListItem("Domains", Model.ServiceDomainsSearchSelected, "Search", "ServiceDomain", null, new { id = "lnkServiceSearchServiceDomains" })
+   @Html.NavigationLinkListItem("Functions", Model.ServiceFunctionsSearchSelected, "Search", "ServiceFunction", null, new { id = "lnkServiceFunctionsSearch" })
+   @Html.NavigationLinkListItem("Components", Model.ServiceComponentsSearchSelected, "Search", "ServiceComponent", null, new { id = "lnkServiceComponentsSearch" })
+}

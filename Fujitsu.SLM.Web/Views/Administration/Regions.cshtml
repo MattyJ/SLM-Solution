@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "Regions";
+    var isAdministrator = User.IsInRole(UserRoles.Administrator);
+}
+
+@section navigation
+{
+    @Html.Partial("_AdministrationMenu", new AdministrationMenuModel { RegionsSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "regiontypesrefdata" })
+}
+
+<h2>@ViewBag.Title</h2>
+@(Html.Kendo().Grid<RegionTypeRefDataViewModel>()
+    .Name("RegionTypeRefDataGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(c => c.Id).Visible(false);
+        columns.Bound(c => c.RegionTypeName).Width(200);
+        columns.Bound(c => c.SortOrder).Width(100);
+        columns.Bound(c => c.UsageCount).Width(100);
+        columns.Command(cmd =>
+        {
+            cmd.Edit();
+            cmd.Custom("Delete").Click("onDeleteRegion");
+        }).Width(100).Title("").Visible(isAdministrator);
+    })
+    .ToolBar(toolbar =>
+    {
+        if (isAdministrator)
+        {
+            toolbar.Create().Text("Add Region");
+        }
+    })
+    .Pageable(pageable =>
+    {
+        pageable.Enabled(true);
+        pageable.PageSizes(new[] { 5, 10, 15, 20, 25, 50 });
+    })
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .Groupable()
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .PageSize(15)
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            model.Field(f => f.SortOrder).DefaultValue(5);
+        })
+        .Events(e =>
+            {
+                e.Error("onErrorRegionTypes").Sync("syncHandler");
+                e.RequestEnd("onRequestEnd");
+            })
+        .Read(read => read.Action("ReadAjaxRegionsRefDataGrid", "Administration"))
+        .Create(create => create.Action("CreateAjaxRegionsRefDataGrid", "Administration"))
+        .Update(update => update.Action("UpdateAjaxRegionsRefDataGrid", "Administration"))
+        .Sort(sort =>
+        {
+            sort.Add(col => col.SortOrder);
+            sort.Add(col => col.RegionTypeName);
+        }))
+    .Events(e => e.DataBound("onDataBound"))
+    .Events(e => e.Edit("onEdit"))
+    .Editable(edt => edt.Mode(GridEditMode.PopUp)
+    .Window(w => w.Title("Region").Width(600)))
+)
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $("#RegionTypeRefDataGrid .k-grid-add").on("click", function () {
+            isCreating = true;
+        });
+
+        popupGridEditorButtonNamingOnInsert("#RegionTypeRefDataGrid");
+    });
+
+    function addIcons(e) {
+        e.sender.tbody.find(".k-grid-Edit > span").addClass("k-icon k-i-pencil");
+        e.sender.tbody.find(".k-grid-Delete > span").addClass("k-icon k-i-close");
+    }
+
+    function onDataBound(e) {
+        addIcons(e);
+    }
+
+    function onErrorRegionTypes(e) {
+        onErrorCancelWithGridId(e, "#RegionTypeRefDataGrid");
+    }
+
+    function onDeleteRegion(e) {
+        var grid = $("#RegionTypeRefDataGrid").data("kendoGrid");
+        var dataItem = this.dataItem($(e.currentTarget).closest("tr"));
+
+        kendo.confirm("Are you sure you want to <strong>Delete</strong> this Region?").then(function () {
+            startSpinner();
+            var data = { Id: dataItem.Id };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteRegion", "Administration")',
+                data: JSON.stringify(data),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (result) {
+                    addMessageToValidationSummaryFromJson(result);
+                    grid.dataSource.read();
+                    grid.refresh();
+                    displayNotification("Region successfully deleted.", "@NotificationTypeNames.Success");
+                },
+                error: function (result) {
+                    handleResponseTextError(result);
+                },
+                complete: function () {
+                    stopSpinner();
+                }
+            });
+        }, function () {
+            e.preventDefault();
+        });
+    }
+
+    function onRequestEnd(e) {
+        if (e.type == "create") {
+            if (e.response.Errors == null) {
+                displayNotification("Region successfully created.", "@NotificationTypeNames.Success");
+            } else {
+                $("#RegionTypeRefDataGrid").data("kendoGrid").dataSource.read();
+                this.cancelChanges();
+            }
+        }
+    }
+</script>

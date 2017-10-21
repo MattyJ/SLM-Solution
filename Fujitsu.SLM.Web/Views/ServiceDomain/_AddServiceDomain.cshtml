@@ -1,0 +1,96 @@
+﻿@using Fujitsu.SLM.Web.Extensions
+
+@model AddServiceDomainViewModel
+
+
+<div>Please note: any empty or incomplete rows will be ignored when saving. Also, moving away from the page without saving will also cause any changes made to be lost. To add more rows to the grid, click the 'Add More Rows' button.</div>
+<br/>
+
+@(Html.Kendo().Grid<BulkServiceDomainViewModel>()
+    .Name("AddServiceDomainGrid")
+    .Columns(columns =>
+    {
+        columns.Bound(p => p.Id).Visible(false);
+        if (Model.HasServiceDeskContext)
+        {
+            columns.Bound(p => p.ServiceDeskId).Visible(false);
+        }
+        else
+        {
+            columns.ForeignKey(p => p.ServiceDeskId, Model.ServiceDesks, "Value", "Text").Width(300);
+        }
+        columns.ForeignKey(p => p.DomainTypeId, Model.DomainTypes, "Value", "Text").Width(300);
+        columns.Bound(p => p.AlternativeName).Width(300);
+        columns.Bound(p => p.DiagramOrder).Width(50);
+        columns.Command(command => command.Destroy()).Width(100);
+    })
+    .ToolBar(toolbar =>
+    {
+        toolbar.Create().Text("Add More Rows").HtmlAttributes(new {id = "addMoreRowsToolbar"});
+        toolbar.Custom().Text("Add Service Domain Name").HtmlAttributes(new {id = "addDomainTypeToolbar"});
+        toolbar.Save().HtmlAttributes(new { id = "gridSave" });
+    })
+    .Editable(editable => editable.Mode(GridEditMode.InCell))
+    .Filterable(filterable => filterable.Extra(false).Operators(operators => operators.ForString(str => str.Clear().Contains("Contains").DoesNotContain("Does not contain").StartsWith("Starts with").EndsWith("Ends with").IsEqualTo("Is equal to").IsNotEqualTo("Is not equal to"))))
+    .Sortable()
+    .Events(events => events.SaveChanges("onAddServiceDomainSaveChanges"))
+    .ColumnMenu()
+    .DataSource(dataSource => dataSource
+        .Ajax()
+        .Batch(true)
+        .ServerOperation(false)
+        .Events(events => events.Error("error_handler"))
+        .Model(model =>
+        {
+            model.Id(p => p.Id);
+            if (Model.HasServiceDeskContext)
+            {
+                model.Field(f => f.ServiceDeskId).DefaultValue(Model.ServiceDeskId);
+            }
+        })
+        .Create(read => read.Action("CreateAjaxServiceAddDomainGrid", "ServiceDomain"))
+        .Read(read => read.Action("ReadAjaxServiceAddDomainGrid", "ServiceDomain"))
+        .Update(read => read.Action("UpdateAjaxServiceAddDomainGrid", "ServiceDomain"))
+        .Destroy(read => read.Action("DestroyAjaxServiceAddDomainGrid", "ServiceDomain"))
+    ))
+<fieldset>
+    <p>
+        <input id="buttonSave" type="button" name="Save" class="k-button k-button-icontext slm-button" value="Save" />
+        <input id="buttonReturn" type="button" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+    </p>
+</fieldset>
+
+@Html.Partial("_AddDomainTypeWindow")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#addMoreRowsToolbar > span").removeClass("k-i-add").addClass("k-icon k-i-rows");
+        $("#addDomainTypeToolbar > span").addClass("k-icon k-i-add");
+        $("#addMoreRowsToolbar").click();
+
+        // Extract model values into the script.
+        // var url = '@Model.ReturnUrl';
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $(".k-grid-save-changes").hide();
+        $(".k-grid-cancel-changes").hide();
+
+        addServiceDomainClickHandlers();
+
+        $("#buttonSave").click(function (e) {
+            startSpinner();
+            $(".k-grid-save-changes").click();
+            window.location.href = url;
+        });
+
+        $("#buttonReturn").click(function (e) {
+            startSpinner();
+            window.location.href = url;
+        });
+    });
+
+    function onAddServiceDomainSaveChanges(e) {
+        var addServiceDomainGrid = $("#AddServiceDomainGrid").data("kendoGrid");
+        var ds = addServiceDomainGrid.dataSource.data();
+    }
+</script>

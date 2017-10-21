@@ -1,0 +1,15 @@
+﻿@model EditServiceComponentNameViewModel
+
+<div id="editServiceComponentNameContainer">
+    <fieldset class="form-popup-fieldset">
+        <legend>Component</legend>
+        <div class="layout-row">
+            <div class="editor-label">
+                <label>@Html.LabelFor(x => x.ComponentName)</label>
+            </div>
+            <div class="editor-field">
+                @(Html.DisplayFor(x => x.ComponentName, "WideText"))
+            </div>
+        </div>
+    </fieldset>
+</div>

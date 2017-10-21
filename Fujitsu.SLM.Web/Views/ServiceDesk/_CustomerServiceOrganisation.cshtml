@@ -1,0 +1,21 @@
+﻿@model int?
+
+@Html.Partial("_ServiceDesksForDiagrams")
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+    function onRowSelect() {
+        var resolverGrid = $('#ServiceDesksForDiagramGrid').data("kendoGrid");
+        var row = resolverGrid.select();
+        var data = resolverGrid.dataItem(row);
+        var url = '@Url.Action("CustomerServiceOrganisationDiagram", "Diagram", new { level = "REPLACELEVEL", id = "REPLACEID" })';
+        url = url.replace('REPLACELEVEL', @Model);
+        url = url.replace('REPLACEID', data.Id);
+        window.location.href = url;
+    }
+
+</script>

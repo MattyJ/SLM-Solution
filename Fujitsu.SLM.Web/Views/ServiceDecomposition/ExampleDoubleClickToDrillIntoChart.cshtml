@@ -1,0 +1,221 @@
+﻿@model int
+@{
+    ViewBag.Title = "Service Decomposition";
+    var isArchitect = @User.IsInRole(UserRoles.Architect);
+}
+
+@section navigation
+{
+    @Html.Partial("_ServiceDecompositionMenu", new ServiceDecompositionMenuModel { MyDecompositionsSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<input type="button" class='js-export-pdf' value="Export as PDF" />
+
+@(Html.Kendo().Diagram()
+          .Name("MyServiceDecompositionDiagram")
+          .DataSource(dataSource => dataSource
+              .Model(m =>
+              {
+                  m.Children("Units");
+              })
+              .Events(evt =>
+              {
+                  evt.RequestEnd("onRequestEnd");
+              })
+              .Read(read => read
+                        .Action("ReadDecompositionChart", "ServiceDecomposition", new { id = Model }))
+          )
+          .Editable(false)
+          .Layout(l => l
+                  .Type(DiagramLayoutType.Tree)
+                  .Subtype(DiagramLayoutSubtype.Mindmapvertical)
+                  .HorizontalSeparation(150)
+                  .VerticalSeparation(150)
+              )
+         .ShapeDefaults(sd => sd
+                      .Visual("visualTemplate")
+                      .Content(c => c.Template("#= dataItem.Title #").FontSize(12))
+                      )
+          .Events(evt =>
+          {
+              evt.ItemBoundsChange("onDiagram");
+          })
+          .ConnectionDefaults(cd => cd
+                  .Stroke(s => s
+                      .Color("#979797")
+                      .Width(2))
+                  )
+)
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    });
+
+    $(".js-export-pdf").click(function () {
+        var diagram = $("#MyServiceDecompositionDiagram").getKendoDiagram();
+        diagram.exportPDF({ paperSize: "auto", margin: { left: "1cm", top: "1cm", right: "1cm", bottom: "1cm" } }).done(function (data) {
+            kendo.saveAs({
+                dataURI: data,
+                fileName: "diagram.pdf",
+                proxyURL: "@Url.Action("ExportDecompositionChart", "ServiceDecomposition")"
+            });
+        });
+    });
+
+    function visualTemplate(options) {
+        var dataviz = kendo.dataviz;
+        var g = new dataviz.diagram.Group();
+        var dataItem = options.dataItem;
+
+        if (dataItem.Type === "CommunicationType") {
+            g.append(new dataviz.diagram.Circle({
+                radius: 95,
+                stroke: {
+                    width: 2,
+                    color: dataItem.Color || "#586477"
+                },
+
+                fill: "#e8eff7"
+            }));
+        }
+        else if (dataItem.Type === "Desk") {
+            g.append(new dataviz.diagram.Rectangle({
+                width: 2250,
+                height: 67,
+                stroke: {
+                    width: 2
+                },
+
+                fill: "#ffffff"
+            }));
+
+        } else if (dataItem.Type === "Decomposition") {
+            g.append(new dataviz.diagram.Rectangle({
+                width: 225,
+                height: 67,
+                stroke: {
+                    width: 0
+                },
+                fill: "#e8eff7"
+            }));
+
+            g.append(new dataviz.diagram.Rectangle({
+                width: 8,
+                height: 67,
+                fill: dataItem.ColourScheme,
+                stroke: {
+                    width: 0
+                }
+            }));
+        } else if (dataItem.Type === "Component") {
+            g.append(new dataviz.diagram.Rectangle({
+                width: 310,
+                height: 67,
+                stroke: {
+                    width: 0
+                },
+                fill: "#e8eff7"
+            }));
+
+            g.append(new dataviz.diagram.Rectangle({
+                width: 8,
+                height: 67,
+                fill: dataItem.ColourScheme,
+                stroke: {
+                    width: 0
+                }
+            }));
+        }
+        else {
+            g.append(new dataviz.diagram.Rectangle({
+                width: 260,
+                height: 67,
+                stroke: {
+                    width: 0
+                },
+                fill: "#e8eff7"
+            }));
+
+            g.append(new dataviz.diagram.Rectangle({
+                width: 8,
+                height: 67,
+                fill: dataItem.ColourScheme,
+                stroke: {
+                    width: 0
+                }
+            }));
+        }
+
+        return g;
+    }
+
+    function onDiagram() {
+        var diagram = $("#MyServiceDecompositionDiagram").getKendoDiagram();
+        var bbox = diagram.boundingBox();
+        diagram.wrapper.width(bbox.width + bbox.x + 50);
+        diagram.wrapper.height(bbox.height + bbox.y + 50);
+        diagram.resize();
+    }
+
+    function removeConnections(diagram) {
+        for (var i = 0; i < diagram.shapes.length; i++) {
+            if (diagram.shapes[i].dataItem.Type === "CommunicationType") {
+                var shape = diagram.shapes[i];
+                diagram.remove(shape.connections());
+            }
+        }
+    }
+
+    function onRequestEnd(e) {
+        setTimeout(function () {
+            var diagram = $("#MyServiceDecompositionDiagram").getKendoDiagram();
+            for (var i = 0; i < diagram.shapes.length; i++) {
+                if (diagram.shapes[i].dataItem.Type === "CommunicationType") {
+                    var shape = diagram.shapes[i];
+                    diagram.remove(shape.connections());
+                }
+                removeConnections(diagram);
+            }
+        }, 0);
+    }
+
+    $(function () {
+        $("#MyServiceDecompositionDiagram").on("dblclick", function () {
+            var diagram = $("#MyServiceDecompositionDiagram").data("kendoDiagram");
+            var selected = diagram.select();
+
+            if (selected[0].dataItem.Type == "Domain" || selected[0].dataItem.Type == "Function") {
+
+                if (selected.length === 1 && selected[0].dataItem.hasChildren) {
+                    if (selected[0].dataItem.Type == "Domain") {
+                        var url = '@Url.Action("UpChart", "ServiceDomain", new { id = "REPLACEME" })';
+                        window.location.href = url.replace('REPLACEME', selected[0].dataItem.Id);
+                    } else {
+                        var url = '@Url.Action("UpChart", "ServiceFunction", new {id = "REPLACEME"})';
+                        window.location.href = url.replace('REPLACEME', selected[0].dataItem.Id);
+                    }
+
+                }
+            } else {
+                alert("For demonstration purposes you can only drill into a Service Domain or Function");
+            }
+
+        });
+    });
+</script>

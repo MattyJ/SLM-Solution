@@ -1,0 +1,66 @@
+﻿@model EditResolverLevelZeroViewModel
+
+@Html.ValidationSummary()
+
+@using (Html.BeginForm("EditLevelZero", "Resolver"))
+{
+    @Html.AntiForgeryToken()
+
+    <div id="editResolverContainer" class="edit-resolver">
+        @Html.HiddenFor(m => m.Id)
+        @Html.HiddenFor(m => m.ReturnUrl)
+        @Html.HiddenFor(m => m.EditLevel)
+
+        @(Html.Kendo()
+              .PanelBar()
+              .Name("EditServiceComponentAddResolverPanel")
+              .ExpandMode(PanelBarExpandMode.Multiple)
+              .SelectedIndex(0)
+              .Items(subItems =>
+              {
+                  subItems.Add()
+                      .Text("Service Delivery Organisation").Items(subItem =>
+                      {
+                          subItem
+                              .Add()
+                              .Expanded(true)
+                              .Content(@<text>@Html.EditorFor(m => m.ResolverServiceDeliveryOrganisation)</text>);
+                      });
+                  subItems.Add()
+                      .Text("Service Delivery Unit").Items(subItem =>
+                      {
+                          subItem
+                              .Add()
+                              .Expanded(true)
+                              .Content(@<text>@Html.EditorFor(m => m.ResolverServiceDeliveryUnit)</text>);
+                      });
+                  subItems.Add()
+                      .Text("Resolver Group").Items(subItem =>
+                      {
+                          subItem
+                              .Add()
+                              .Expanded(true)
+                              .Content(@<text>@Html.EditorFor(m => m.ResolverGroup)</text>);
+                      });
+              }))
+
+        <fieldset>
+            <p>
+                <input type="submit" name="Save" class="k-button k-button-icontext slm-button" value="Save" />
+                <input id="editResolverReturn" type="submit" name="Return" class="k-button k-button-icontext slm-button" value="Cancel" />
+            </p>
+        </fieldset>
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = '@ViewContext.HttpContext.Request.UrlReferrer.PathAndQuery';
+
+        $("#editResolverReturn").click(function (e) {
+            startSpinner();
+            e.preventDefault();
+            window.location.href = url; //"@Model.ReturnUrl";
+        });
+    });
+</script>

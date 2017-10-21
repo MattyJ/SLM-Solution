@@ -1,0 +1,1218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CCB42BF8-D97B-435A-B5F7-F6309500B6E3}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fujitsu.SLM.Web</RootNamespace>
+    <AssemblyName>Fujitsu.SLM.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <MvcBuildViews>true</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication>enabled</IISExpressAnonymousAuthentication>
+    <IISExpressWindowsAuthentication>disabled</IISExpressWindowsAuthentication>
+    <IISExpressUseClassicPipelineMode>false</IISExpressUseClassicPipelineMode>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'SystemTest|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Azure|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(WebProjectOutputDir)\bin\Roslyn" md "$(WebProjectOutputDir)\bin\Roslyn"
+start /MIN xcopy /s /y /R "$(OutDir)roslyn\*.*" "$(WebProjectOutputDir)\bin\Roslyn"</PostBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4">
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.2.1.0\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FluentValidation.Mvc, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.MVC5.6.2.1.0\lib\Net45\FluentValidation.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Kendo.Mvc, Version=2016.2.607.545, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Dependencies\Kendo\Kendo.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.2.1.0\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.2.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling">
+      <HintPath>..\packages\EnterpriseLibrary.ExceptionHandling.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging">
+      <HintPath>..\packages\EnterpriseLibrary.ExceptionHandling.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.ExceptionHandling.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception">
+      <HintPath>..\packages\Unity.Interception.3.5.1404.0\lib\Net45\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception.Configuration">
+      <HintPath>..\packages\Unity.Interception.3.5.1404.0\lib\Net45\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Mvc, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
+      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivatorEx">
+      <HintPath>..\packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\Identity\ApplicationRoleManager.cs" />
+    <Compile Include="App_Start\Identity\ApplicationUserManager.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\Identity\EmailService.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\Identity\ApplicationSignInManager.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Identity\SmsService.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\UnityMvcActivator.cs" />
+    <Compile Include="App_Start\ValidationConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Attributes\AjaxModelErrorStatusModifierAttribute.cs" />
+    <Compile Include="Attributes\SessionExpiryAttribute.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdministrationController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BaseServiceComponentController.cs" />
+    <Compile Include="Controllers\AuditController.cs" />
+    <Compile Include="Controllers\CustomerController.cs" />
+    <Compile Include="Controllers\DiagramController.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HelpController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\MenuController.cs" />
+    <Compile Include="Controllers\OperationalProcessesController.cs" />
+    <Compile Include="Controllers\ReferenceDataController.cs" />
+    <Compile Include="Controllers\ResolverController.cs" />
+    <Compile Include="Controllers\TemplateController.cs" />
+    <Compile Include="Controllers\VideoController.cs" />
+    <Compile Include="Helpers\Video\VideoStream.cs" />
+    <Compile Include="Models\AddResolverLevelZeroViewModel.cs" />
+    <Compile Include="Models\AddServiceComponentLevel2ViewModel.cs" />
+    <Compile Include="Models\AddServiceComponentLevel1ViewModel.cs" />
+    <Compile Include="Models\AddResolverViewModel.cs" />
+    <Compile Include="Models\AddCustomerContributorViewModel.cs" />
+    <Compile Include="Models\AddServiceFunctionViewModel.cs" />
+    <Compile Include="Models\AddTemplateServiceDomainViewModel.cs" />
+    <Compile Include="Models\Administration\AssetViewModel.cs" />
+    <Compile Include="Models\Administration\ResetUserPasswordViewModel.cs" />
+    <Compile Include="Controllers\ServiceComponentController.cs" />
+    <Compile Include="Controllers\ServiceDecompositionController.cs" />
+    <Compile Include="Controllers\ServiceDeskController.cs" />
+    <Compile Include="Controllers\ServiceDomainController.cs" />
+    <Compile Include="Controllers\ServiceFunctionController.cs" />
+    <Compile Include="Extensions\CustomValidatorExtensions.cs" />
+    <Compile Include="Extensions\HtmlExtension.cs" />
+    <Compile Include="Extensions\ImageExtensions.cs" />
+    <Compile Include="Extensions\UserExtensions.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\SettingsHelper.cs" />
+    <Compile Include="Interfaces\IAppUserContext.cs" />
+    <Compile Include="Models\Account\LoginViewModel.cs" />
+    <Compile Include="Models\Account\RegisterViewModel.cs" />
+    <Compile Include="Models\Account\ResetPasswordViewModel.cs" />
+    <Compile Include="Models\AddCustomerPackViewModel.cs" />
+    <Compile Include="Models\AddCustomerPackWindowViewModel.cs" />
+    <Compile Include="Models\AddServiceDomainViewModel.cs" />
+    <Compile Include="Models\Administration\RoleViewModel.cs" />
+    <Compile Include="Models\Administration\SelectUserViewModel.cs" />
+    <Compile Include="Models\Administration\SelectUserWindowViewModel.cs" />
+    <Compile Include="Models\Administration\UserViewModel.cs" />
+    <Compile Include="Models\Administration\ParameterViewModel.cs" />
+    <Compile Include="Models\AuditViewModel.cs" />
+    <Compile Include="Models\BaseResolverGroupViewModel.cs" />
+    <Compile Include="Models\BaseServiceDeliveryOrganisationViewModel.cs" />
+    <Compile Include="Models\BaseServiceDeliveryOrganisationTypeViewModel.cs" />
+    <Compile Include="Models\BaseServiceDeliveryUnitViewModel.cs" />
+    <Compile Include="Models\BaseServiceFunctionViewModel.cs" />
+    <Compile Include="Models\BaseViewModel.cs" />
+    <Compile Include="Models\BulkResolverLevelZeroViewModel.cs" />
+    <Compile Include="Models\BaseBulkResolverViewModel.cs" />
+    <Compile Include="Models\BulkServiceComponentViewModel.cs" />
+    <Compile Include="Models\BulkResolverViewModel.cs" />
+    <Compile Include="Models\BulkCustomerContributorViewModel.cs" />
+    <Compile Include="Models\BulkServiceFunctionViewModel.cs" />
+    <Compile Include="Models\EditResolverLevelZeroViewModel.cs" />
+    <Compile Include="Models\EditResolverServiceDeliveryUnitLevelZeroViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentDiagramOrderViewModel.cs" />
+    <Compile Include="Models\ImportServiceDecompositionSpreadsheetViewModel.cs" />
+    <Compile Include="Models\ImportTemplateViewModel.cs" />
+    <Compile Include="Models\MoveResolverLevelZeroViewModel.cs" />
+    <Compile Include="Models\ReferenceData\RegionTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ResolverGridLevelZeroViewModel.cs" />
+    <Compile Include="Models\ResolverLevelZeroViewModel.cs" />
+    <Compile Include="Models\DynamicGridColumn.cs" />
+    <Compile Include="Models\AddServiceDeskViewModel.cs" />
+    <Compile Include="Models\ReferenceData\ResolverGroupTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ContributorGridViewModel.cs" />
+    <Compile Include="Models\ContributorViewModel.cs" />
+    <Compile Include="Models\TemplateDomainViewModel.cs" />
+    <Compile Include="Models\ServiceOrganisationViewModel.cs" />
+    <Compile Include="Models\TemplateRowViewModel.cs" />
+    <Compile Include="Models\TemplateViewModel.cs" />
+    <Compile Include="Models\UpdatedViewModel.cs" />
+    <Compile Include="Models\MoveResolverViewModel.cs" />
+    <Compile Include="Models\OperationalProcessTypesViewModel.cs" />
+    <Compile Include="Models\ReferenceData\ContextHelpRefDataViewModel.cs" />
+    <Compile Include="Models\ReferenceData\ServiceDeliveryUnitTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ReferenceData\OperationalProcessTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ReferenceData\ServiceDeliveryOrganisationTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ServiceActivityViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentChildViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentLevel1WithChildComponentViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EditServiceComponentLevel1WithNoChildComponentOrResolverViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentLevel1WithResolverViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EditResolverViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentLevel2ViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EditServiceComponentNameLevelViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentNameViewModel.cs" />
+    <Compile Include="Models\EditResolverResolverGroupViewModel.cs" />
+    <Compile Include="Models\EditResolverServiceDeliveryOrganisationViewModel.cs" />
+    <Compile Include="Models\EditResolverServiceDeliveryUnitViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentViewModel.cs" />
+    <Compile Include="Models\EditServiceComponentWithResolverViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\EditServiceFunctionViewModel.cs" />
+    <Compile Include="Models\EditServiceDomainViewModel.cs" />
+    <Compile Include="Models\InsertedUpdatedViewModel.cs" />
+    <Compile Include="Models\ChangeOwnerViewModel.cs" />
+    <Compile Include="Models\ChartViewModel.cs" />
+    <Compile Include="Models\CurrentCustomerViewModel.cs" />
+    <Compile Include="Models\CustomerViewModel.cs" />
+    <Compile Include="Models\DiagramGridViewModel.cs" />
+    <Compile Include="Models\CustomerPackGridViewModel.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Models\CustomerPackViewModel.cs" />
+    <Compile Include="Models\DiagramViewModel.cs" />
+    <Compile Include="Models\ChartDataViewModel.cs" />
+    <Compile Include="Models\EditServiceDeskViewModel.cs" />
+    <Compile Include="Models\HomePageViewModel.cs" />
+    <Compile Include="Models\JsonPayload.cs" />
+    <Compile Include="Models\LevelViewModel.cs" />
+    <Compile Include="Models\LockUserViewModel.cs" />
+    <Compile Include="Models\Manage\AddPhoneNumberViewModel.cs" />
+    <Compile Include="Models\Manage\ChangePasswordViewModel.cs" />
+    <Compile Include="Models\Manage\ConfigureTwoFactorViewModel.cs" />
+    <Compile Include="Models\Manage\FactorViewModel.cs" />
+    <Compile Include="Models\Manage\IndexViewModel.cs" />
+    <Compile Include="Models\Manage\ManageLoginsViewModel.cs" />
+    <Compile Include="Models\Manage\SetPasswordViewModel.cs" />
+    <Compile Include="Models\Manage\VerifyPhoneNumberViewModel.cs" />
+    <Compile Include="Models\Menu\HomeMenuModel.cs" />
+    <Compile Include="Models\Menu\AdministrationMenuModel.cs" />
+    <Compile Include="Models\Menu\ArchitectMenuModel.cs" />
+    <Compile Include="Models\Menu\DiagramMenuModel.cs" />
+    <Compile Include="Models\Menu\LevelTwoMenuModel.cs" />
+    <Compile Include="Models\Menu\LevelOneMenuModel.cs" />
+    <Compile Include="Models\Menu\ReferenceDataMenuModel.cs" />
+    <Compile Include="Models\Menu\LevelZeroMenuModel.cs" />
+    <Compile Include="Models\Menu\ServiceDecompositionMenuModel.cs" />
+    <Compile Include="Models\Menu\ServiceDecompositionSearchMenuModel.cs" />
+    <Compile Include="Models\Menu\ViewerMenuModel.cs" />
+    <Compile Include="Models\ModelWaitViewModel.cs" />
+    <Compile Include="Models\MoveServiceComponentLevel1ViewModel.cs" />
+    <Compile Include="Models\MoveServiceComponentLevel2ViewModel.cs" />
+    <Compile Include="Models\MoveServiceFunctionViewModel.cs" />
+    <Compile Include="Models\MoveServiceDomainViewModel.cs" />
+    <Compile Include="Models\MyCustomersServiceDecompositionGridViewModel.cs" />
+    <Compile Include="Models\MyIdentityViewModel.cs" />
+    <Compile Include="Models\ReferenceData\ComponentRefDataViewModel.cs" />
+    <Compile Include="Models\ReferenceData\InputTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ReferenceData\DomainTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ReferenceData\FunctionTypeRefDataViewModel.cs" />
+    <Compile Include="Models\ServiceDeliveryOrganisationViewModel.cs" />
+    <Compile Include="Models\ResolverViewModel.cs" />
+    <Compile Include="Models\SaveServiceComponent.cs" />
+    <Compile Include="Models\SaveServiceComponentPreChecksResult.cs" />
+    <Compile Include="Models\SaveServiceDeskViewModel.cs" />
+    <Compile Include="Models\SearchServiceDomainsViewModel.cs" />
+    <Compile Include="Models\SearchServiceDomainViewModel.cs" />
+    <Compile Include="Models\BaseServiceComponentViewModel.cs" />
+    <Compile Include="Models\ResolverGridViewModel.cs" />
+    <Compile Include="Models\ServiceComponentViewModel.cs" />
+    <Compile Include="Models\ServiceDeskGridViewModel.cs" />
+    <Compile Include="Models\ServiceDeskViewModel.cs" />
+    <Compile Include="Models\ServiceComponentGridViewModel.cs" />
+    <Compile Include="Models\ServiceFunctionGridViewModel.cs" />
+    <Compile Include="Models\ServiceDomainGridViewModel.cs" />
+    <Compile Include="Models\BaseServiceDomainViewModel.cs" />
+    <Compile Include="Models\BulkServiceDomainViewModel.cs" />
+    <Compile Include="Models\ServiceDomainViewModel.cs" />
+    <Compile Include="Models\ServiceFunctionViewModel.cs" />
+    <Compile Include="Models\Session\AppContext.cs" />
+    <Compile Include="Models\UploadCustomerFileViewModel.cs" />
+    <Compile Include="Models\UploadCustomerFileWindowViewModel.cs" />
+    <Compile Include="Models\ViewProcessDotMatrixViewModel.cs" />
+    <Compile Include="Models\ViewResolverViewModel.cs" />
+    <Compile Include="Models\ViewServiceComponentViewModel.cs" />
+    <Compile Include="Models\ViewServiceFunctionViewModel.cs" />
+    <Compile Include="Models\ViewServiceDomainViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Session\AppUserContext.cs" />
+    <Compile Include="Startup.cs" />
+    <Compile Include="Validators\AddTemplateServiceDomainViewModelValidator.cs" />
+    <Compile Include="Validators\AuditViewModelValidator.cs" />
+    <Compile Include="Validators\BaseResolverGroupViewModelValidator.cs" />
+    <Compile Include="Validators\BaseServiceDeliveryOrganisationViewModelValidator.cs" />
+    <Compile Include="Validators\BaseServiceDeliveryOrganisationTypeViewModelValidator.cs" />
+    <Compile Include="Validators\BaseServiceDeliveryUnitViewModelValidator.cs" />
+    <Compile Include="Validators\CustomerViewModelValidator.cs" />
+    <Compile Include="Validators\EditResolverViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentDiagramOrderViewModelValidator.cs" />
+    <Compile Include="Validators\ImportServiceDecompositionSpreadsheetViewModelValidator.cs" />
+    <Compile Include="Validators\ImportTemplateViewModelValidator.cs" />
+    <Compile Include="Validators\MoveResolverLevelZeroViewModelValidator.cs" />
+    <Compile Include="Validators\MoveResolverViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\ContextHelpRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\RegionTypeRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\ResolverGroupTypeRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\ServiceDeliveryUnitTypeRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\OperationalProcessTypeRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\ServiceDeliveryOrganisationTypeRefDataViewModelValidator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Validators\ServiceActivityViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentChildViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel1WithChildComponentViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel1WithNoChildComponentOrResolverViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel1WithResolverViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentLevel2ViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentNameLevelViewModelValidator.cs" />
+    <Compile Include="Validators\EditServiceComponentNameViewModelValidator.cs" />
+    <Compile Include="Validators\MoveServiceComponentLevel1ViewModelValidator.cs" />
+    <Compile Include="Validators\MoveServiceComponentLevel2ViewModelValidator.cs" />
+    <Compile Include="Validators\MoveServiceFunctionViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\FunctionTypeRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\InputTypeRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\Administration\ResetUserPasswordViewModelValidator.cs" />
+    <Compile Include="Validators\SelectUserViewModelValidator.cs" />
+    <Compile Include="Validators\AddCustomerPackViewModelValidator.cs" />
+    <Compile Include="Validators\Administration\RoleViewModelValidator.cs" />
+    <Compile Include="Validators\Administration\ParameterViewModelValidator.cs" />
+    <Compile Include="Validators\CustomerPackViewModelValidator.cs" />
+    <Compile Include="Validators\DiagramViewModelValidator.cs" />
+    <Compile Include="Validators\ReferenceData\DomainTypeRefDataViewModelValidator.cs" />
+    <Compile Include="Validators\MoveServiceDomainViewModelValidator.cs" />
+    <Compile Include="Validators\ServiceDeskViewModelValidator.cs" />
+    <Compile Include="Validators\ServiceFunctionViewModelValidator.cs" />
+    <Compile Include="Validators\ServiceDomainViewModelValidator.cs" />
+    <Compile Include="Validators\UploadCustomerFileViewModelValidator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\roslyn\csc.exe" />
+    <Content Include="bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.dll" />
+    <Content Include="bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll" />
+    <Content Include="bin\roslyn\System.Collections.Immutable.dll" />
+    <Content Include="bin\roslyn\System.Reflection.Metadata.dll" />
+    <Content Include="bin\roslyn\vbc.exe" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\kendo\fonts\DejaVu\LICENSE.txt" />
+    <Content Include="Content\kendo\fonts\glyphs\KendoUIGlyphs.svg" />
+    <Content Include="Content\kendo\fonts\glyphs\WebComponentsIcons.svg" />
+    <Content Include="Content\kendo\images\back.png" />
+    <Content Include="Content\kendo\images\kendoui.svg" />
+    <Content Include="Content\kendo\images\wp8_icons.png" />
+    <Content Include="Content\kendo\images\wp8_inverseicons.png" />
+    <Content Include="Content\kendo\kendo.common.core.min.css" />
+    <Content Include="Content\kendo\kendo.common.min.css" />
+    <Content Include="Content\kendo\kendo.dataviz.default.min.css" />
+    <Content Include="Content\kendo\kendo.dataviz.metro.min.css" />
+    <Content Include="Content\kendo\kendo.dataviz.min.css" />
+    <Content Include="Content\kendo\kendo.default.min.css" />
+    <Content Include="Content\kendo\kendo.metro.min.css" />
+    <Content Include="Content\kendo\Metro\editor.png" />
+    <Content Include="Content\kendo\Metro\imagebrowser.png" />
+    <Content Include="Content\kendo\Metro\indeterminate.gif" />
+    <Content Include="Content\kendo\Metro\loading-image.gif" />
+    <Content Include="Content\kendo\Metro\loading.gif" />
+    <Content Include="Content\kendo\Metro\loading_2x.gif" />
+    <Content Include="Content\kendo\Metro\markers.png" />
+    <Content Include="Content\kendo\Metro\markers_2x.png" />
+    <Content Include="Content\kendo\Metro\slider-h.gif" />
+    <Content Include="Content\kendo\Metro\slider-v.gif" />
+    <Content Include="Content\kendo\Metro\sprite.png" />
+    <Content Include="Content\kendo\Metro\sprite_2x.png" />
+    <Content Include="Content\kendo\Metro\sprite_kpi.png" />
+    <Content Include="Content\kendo\Metro\sprite_kpi_2x.png" />
+    <Content Include="Content\kendo\textures\brushed-metal.png" />
+    <Content Include="Content\kendo\textures\dots1.png" />
+    <Content Include="Content\kendo\textures\dots10.png" />
+    <Content Include="Content\kendo\textures\dots11.png" />
+    <Content Include="Content\kendo\textures\dots12.png" />
+    <Content Include="Content\kendo\textures\dots13.png" />
+    <Content Include="Content\kendo\textures\dots2.png" />
+    <Content Include="Content\kendo\textures\dots3.png" />
+    <Content Include="Content\kendo\textures\dots4.png" />
+    <Content Include="Content\kendo\textures\dots5.png" />
+    <Content Include="Content\kendo\textures\dots6.png" />
+    <Content Include="Content\kendo\textures\dots7.png" />
+    <Content Include="Content\kendo\textures\dots8.png" />
+    <Content Include="Content\kendo\textures\dots9.png" />
+    <Content Include="Content\kendo\textures\glass-lighter.png" />
+    <Content Include="Content\kendo\textures\glass.png" />
+    <Content Include="Content\kendo\textures\highlight.png" />
+    <Content Include="Content\kendo\textures\hsv-gradient.png" />
+    <Content Include="Content\kendo\textures\hue.png" />
+    <Content Include="Content\kendo\textures\leather1.png" />
+    <Content Include="Content\kendo\textures\leather2.png" />
+    <Content Include="Content\kendo\textures\noise.png" />
+    <Content Include="Content\kendo\textures\stripe1.png" />
+    <Content Include="Content\kendo\textures\stripe2.png" />
+    <Content Include="Content\kendo\textures\stripe3.png" />
+    <Content Include="Content\kendo\textures\stripe4.png" />
+    <Content Include="Content\kendo\textures\stripe5.png" />
+    <Content Include="Content\kendo\textures\stripe6.png" />
+    <Content Include="Content\kendo\textures\transparency.png" />
+    <Content Include="Content\kendo\textures\transtexture.png" />
+    <Content Include="Content\kendo\web\notification\envelope.png" />
+    <Content Include="Content\kendo\web\notification\error-icon.png" />
+    <Content Include="Content\kendo\web\notification\success-icon.png" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\Site.min.css">
+      <DependentUpon>Site.css</DependentUpon>
+    </Content>
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Aspose.Total.lic">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="bundleconfig.json" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSans-Bold.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSans-BoldOblique.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSans-ExtraLight.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSans-Oblique.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSans.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSansMono-Bold.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSansMono-BoldOblique.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSansMono-Oblique.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSansMono.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSerif-Bold.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSerif-BoldItalic.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSerif-Italic.ttf" />
+    <Content Include="Content\kendo\fonts\DejaVu\DejaVuSerif.ttf" />
+    <Content Include="Content\kendo\fonts\glyphs\KendoUIGlyphs.eot" />
+    <Content Include="Content\kendo\fonts\glyphs\KendoUIGlyphs.ttf" />
+    <Content Include="Content\kendo\fonts\glyphs\KendoUIGlyphs.woff" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\kendo\kendo.common.core.min.css.map" />
+    <Content Include="Content\kendo\kendo.common.min.css.map" />
+    <Content Include="Content\kendo\kendo.dataviz.default.min.css.map" />
+    <Content Include="Content\kendo\kendo.dataviz.metro.min.css.map" />
+    <Content Include="Content\kendo\kendo.dataviz.min.css.map" />
+    <Content Include="Content\kendo\kendo.default.min.css.map" />
+    <Content Include="Content\kendo\kendo.metro.min.css.map" />
+    <Content Include="Content\kendo\fonts\glyphs\WebComponentsIcons.eot" />
+    <Content Include="Content\kendo\fonts\glyphs\WebComponentsIcons.ttf" />
+    <Content Include="Content\kendo\fonts\glyphs\WebComponentsIcons.woff" />
+    <None Include="Content\Site.less" />
+    <Content Include="Images\ajax-loader.gif" />
+    <Content Include="Images\Archive.png" />
+    <Content Include="Images\Auditing.png" />
+    <Content Include="Images\Auto-Archive.png" />
+    <Content Include="Images\Back.png" />
+    <Content Include="Images\Data-Down.png" />
+    <Content Include="Images\Data-Edit.png" />
+    <Content Include="Images\Data-Export.png" />
+    <Content Include="Images\Data-Find.png" />
+    <Content Include="Images\Data-Information.png" />
+    <Content Include="Images\Data-Refresh.png" />
+    <Content Include="Images\Data-Settings.png" />
+    <Content Include="Images\favicon.ico" />
+    <Content Include="Images\File-Format-ZIP.png" />
+    <Content Include="Images\GenerateReports.png" />
+    <Content Include="Images\Globe.png" />
+    <Content Include="Images\Graph-Diagram.png" />
+    <Content Include="Images\Help.png" />
+    <Content Include="Images\Home.png" />
+    <Content Include="Images\Infinity-Mark-Watermark-Grey-1-RGB.png" />
+    <Content Include="Images\Infinity-Mark-Watermark-Grey.png" />
+    <Content Include="Images\Level1ServiceComponent.png" />
+    <Content Include="Images\Level2ServiceComponent.png" />
+    <Content Include="Images\ModernClock.png" />
+    <Content Include="Images\Notification\error.png" />
+    <Content Include="Images\Notification\success.png" />
+    <Content Include="Images\Notification\warning.png" />
+    <Content Include="Images\People.png" />
+    <Content Include="Images\Roadmap.png" />
+    <Content Include="Images\ServiceActivities.png" />
+    <Content Include="Images\ServiceResolverGroupIcon.png" />
+    <Content Include="Images\ServiceActivitiesIcon.png" />
+    <Content Include="Images\ServiceComponentIcon.png" />
+    <Content Include="Images\ServiceDomainIcon.png" />
+    <Content Include="Images\ServiceFunctionIcon.png" />
+    <Content Include="Images\ServiceResolverIcon.png" />
+    <Content Include="Images\Team-02.png" />
+    <Content Include="Images\Under_Construction_Sign.jpg" />
+    <Content Include="Images\User-Earth.png" />
+    <Content Include="Images\User-Lock.png" />
+    <Content Include="Images\User-Profile.png" />
+    <Content Include="Images\User-Server.png" />
+    <Content Include="Images\WebPageSearch.png" />
+    <Content Include="Content\kendo\images\kendoui.ttf" />
+    <Content Include="Content\kendo\images\kendoui.woff" />
+    <Content Include="CodeTemplates\MvcViewWithoutModel\Empty.cs.t4" />
+    <Content Include="CodeTemplates\MvcViewWithoutModel\Imports.include.t4" />
+    <Content Include="CodeTemplates\MvcView\Create.cs.t4" />
+    <Content Include="CodeTemplates\MvcView\Delete.cs.t4" />
+    <Content Include="CodeTemplates\MvcView\Details.cs.t4" />
+    <Content Include="CodeTemplates\MvcView\Edit.cs.t4" />
+    <Content Include="CodeTemplates\MvcView\Empty.cs.t4" />
+    <Content Include="CodeTemplates\MvcView\Imports.include.t4" />
+    <Content Include="CodeTemplates\MvcView\List.cs.t4" />
+    <Content Include="CodeTemplates\MvcView\ModelMetadataFunctions.cs.include.t4" />
+    <Content Include="bin\roslyn\Microsoft.CSharp.Core.targets" />
+    <Content Include="bin\roslyn\Microsoft.VisualBasic.Core.targets" />
+    <Content Include="bin\roslyn\VBCSCompiler.exe.config" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <None Include="Properties\PublishProfiles\Development.pubxml" />
+    <None Include="Properties\PublishProfiles\G03UKAS00396.pubxml" />
+    <None Include="Properties\PublishProfiles\G03UKAS00398.pubxml" />
+    <None Include="Properties\PublishProfiles\servicelandscapemethodology - Web Deploy.pubxml" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Scripts\jquery-1.12.3.intellisense.js" />
+    <Content Include="Scripts\bootbox.js" />
+    <Content Include="Scripts\bootbox.min.js">
+      <DependentUpon>bootbox.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js">
+      <DependentUpon>bootstrap.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\FileSaver.js" />
+    <Content Include="Scripts\FileSaver.min.js">
+      <DependentUpon>FileSaver.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.12.3.intellisense.min.js">
+      <DependentUpon>jquery-1.12.3.intellisense.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.12.3.js" />
+    <Content Include="Images\world-map.png" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.12.3.min.js">
+      <DependentUpon>jquery-1.12.3.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js">
+      <DependentUpon>jquery.unobtrusive-ajax.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.validate-vsdoc.min.js">
+      <DependentUpon>jquery.validate-vsdoc.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js">
+      <DependentUpon>jquery.validate.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js">
+      <DependentUpon>jquery.validate.unobtrusive.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\kendo\jszip.min.js" />
+    <Content Include="Scripts\kendo\src\jszip.js" />
+    <Content Include="Scripts\kendo\src\jszip.min.js">
+      <DependentUpon>jszip.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\kendo\kendo.all.min.js" />
+    <Content Include="Scripts\kendo\kendo.aspnetmvc.min.js" />
+    <Content Include="Scripts\kendo\kendo.culture.en-GB.min.js" />
+    <Content Include="Scripts\kendo\kendo.web.min.js" />
+    <Content Include="Scripts\kendo\pako_deflate.min.js" />
+    <Content Include="Scripts\kendo\src\kendo.all.js" />
+    <Content Include="Scripts\kendo\src\kendo.aspnetmvc.js" />
+    <Content Include="Scripts\kendo\src\kendo.culture.en-GB.js" />
+    <Content Include="Scripts\kendo\src\kendo.dataviz.diagram.js" />
+    <Content Include="Scripts\kendo\src\kendo.dataviz.js" />
+    <Content Include="Scripts\kendo\src\kendo.web.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js">
+      <DependentUpon>respond.matchmedia.addListener.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\respond.min.js">
+      <DependentUpon>respond.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\slm.js" />
+    <Content Include="Scripts\slm.min.js">
+      <DependentUpon>slm.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\spin.js" />
+    <Content Include="Scripts\spin.min.js">
+      <DependentUpon>spin.js</DependentUpon>
+    </Content>
+    <Content Include="Scripts\_references.js" />
+    <Content Include="source\web\kendo.common.css" />
+    <Content Include="source\web\kendo.metro.css" />
+    <Content Include="Views\ReferenceData\EditorTemplates\OperationalProcessTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\ReferenceData\OperationalProcessTypes.cshtml" />
+    <Content Include="Views\ReferenceData\ServiceDeliveryOrganisationTypes.cshtml" />
+    <Content Include="Views\ReferenceData\_DomainType.cshtml" />
+    <Content Include="Views\ReferenceData\_OperationalProcessType.cshtml" />
+    <Content Include="Views\ReferenceData\_ServiceDeliveryOrganisationType.cshtml" />
+    <Content Include="Views\ServiceComponent\AddLevelOneL1.cshtml" />
+    <Content Include="Views\ServiceComponent\AddLevelOneL2.cshtml" />
+    <Content Include="Views\ServiceComponent\AddLevelTwoL1.cshtml" />
+    <Content Include="Views\ServiceComponent\AddL2.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentChildViewModel.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentLevel1WithChildComponentViewModel.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentLevel1WithResolverViewModel.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentLevel2ViewModel.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentNameLevelViewModel.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentNameViewModel.cshtml" />
+    <Content Include="Views\ServiceComponent\_AddL2.cshtml" />
+    <Content Include="Views\ServiceDesk\Edit.cshtml" />
+    <Content Include="Views\ServiceDesk\EditLevelZero.cshtml" />
+    <Content Include="Views\ServiceDesk\LevelZero.cshtml" />
+    <Content Include="Views\ServiceDesk\_EditServiceDesk.cshtml" />
+    <Content Include="Views\ServiceDomain\AddLevelZero.cshtml" />
+    <Content Include="Views\ServiceDomain\LevelZero.cshtml" />
+    <Content Include="Views\ServiceDomain\_EditServiceDomain.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceDeliveryOrganisationViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceDeliveryOrganisationTypeViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceDeliveryUnitViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceDomainViewModel.cshtml" />
+    <Content Include="Views\Shared\_ServiceComponentMoveLevel1.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\_ServiceComponentMoveLevel2.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\_ServiceDesks.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Azure.Config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.SystemTest.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Currency.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Date.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\DateTime.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Email.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\EmailAddress.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Integer.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\MultiLineText.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Number.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Password.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SmallInteger.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\SmallNumber.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Time.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Url.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\WideText.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\WindowMultiLine.cshtml" />
+    <Content Include="Views\Shared\_ModalWait.cshtml" />
+    <Content Include="Views\Shared\_QuickLinks.cshtml" />
+    <Content Include="Views\Shared\_ReferenceDataMenu.cshtml" />
+    <Content Include="Views\Shared\_ServiceDecompositionMenu.cshtml" />
+    <Content Include="Views\Shared\_ServiceDecompositionSearchMenu.cshtml" />
+    <Content Include="Views\Shared\_SharedScripts.cshtml" />
+    <Content Include="Views\Shared\_UserMenu.cshtml" />
+    <Content Include="Views\Shared\_AdministrationMenu.cshtml" />
+    <Content Include="Views\Shared\_HomeMenu.cshtml" />
+    <Content Include="Views\Account\DisplayTemplates\MyIdentityViewModel.cshtml" />
+    <Content Include="Views\Account\MyIdentity.cshtml" />
+    <Content Include="Views\Error\GeneralError.cshtml" />
+    <Content Include="Views\Error\SessionExpired.cshtml" />
+    <Content Include="Views\Error\Unauthorized.cshtml" />
+    <Content Include="Views\Menu\Administration.cshtml" />
+    <Content Include="Views\Administration\Index.cshtml" />
+    <Content Include="Views\ServiceDecomposition\EditCustomer.cshtml" />
+    <Content Include="Views\Customer\EditorTemplates\CustomerViewModel.cshtml" />
+    <Content Include="Views\ReferenceData\InputTypes.cshtml" />
+    <Content Include="Views\ReferenceData\Domains.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\InputTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\ComponentRefDataViewModel.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\FunctionTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\ReferenceData\Functions.cshtml" />
+    <Content Include="Views\Home\_CurrentCustomer.cshtml" />
+    <Content Include="Views\ServiceDecomposition\ExampleDoubleClickToDrillIntoChart.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\Login.cshtml">
+      <SubType>
+      </SubType>
+    </Content>
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\ReferenceData\_InputType.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\InputTypeRefData.cshtml" />
+    <Content Include="Views\Home\_ShowWelcomeText.cshtml" />
+    <Content Include="Views\Customer\MyCustomers.cshtml" />
+    <Content Include="Views\Customer\MyArchives.cshtml" />
+    <Content Include="Views\ServiceDecomposition\EditorTemplates\CustomerViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceDeskViewModel.cshtml" />
+    <Content Include="Views\Shared\_LevelZeroMenu.cshtml" />
+    <Content Include="Views\Shared\_LevelTwoMenu.cshtml" />
+    <Content Include="Views\Shared\_LevelOneMenu.cshtml" />
+    <Content Include="Views\Customer\Customers.cshtml" />
+    <Content Include="Views\Customer\Archives.cshtml" />
+    <Content Include="Views\Diagram\LevelZero.cshtml" />
+    <Content Include="Views\Diagram\LevelOne.cshtml" />
+    <Content Include="Views\Diagram\LevelTwo.cshtml" />
+    <Content Include="Views\Shared\_LevelOneDiagramMenu.cshtml" />
+    <Content Include="Views\Shared\_LevelTwoDiagramMenu.cshtml" />
+    <Content Include="Views\Shared\_LevelZeroDiagramMenu.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\DomainTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\Administration\Parameters.cshtml" />
+    <Content Include="Views\Diagram\ServiceDeskWithDomainsDiagram.cshtml" />
+    <Content Include="Views\Diagram\ServiceDeskWithInputsDiagram.cshtml" />
+    <Content Include="Views\Shared\_ServiceDomains.cshtml" />
+    <Content Include="Views\ServiceDesk\EditLevelOne.cshtml" />
+    <Content Include="Views\ServiceDesk\LevelOne.cshtml" />
+    <Content Include="Views\ServiceDesk\EditLevelTwo.cshtml" />
+    <Content Include="Views\ServiceDesk\LevelTwo.cshtml" />
+    <Content Include="Views\Shared\_ServiceDomainMove.cshtml" />
+    <Content Include="Views\ServiceDomain\_Move.cshtml" />
+    <Content Include="Views\ServiceDesk\_ServiceDesksForDiagrams.cshtml" />
+    <Content Include="Views\ServiceDomain\_AddServiceDomain.cshtml" />
+    <Content Include="Views\ServiceDomain\Add.cshtml" />
+    <Content Include="Views\Shared\_AddDomainTypeWindow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\GridForeignKey.cshtml" />
+    <Content Include="Views\ServiceDomain\EditorTemplates\GridForeignKey.cshtml" />
+    <Content Include="Views\Diagram\_DiagramGrid.cshtml" />
+    <Content Include="Views\Diagram\EditorTemplates\DiagramViewModel.cshtml" />
+    <Content Include="Views\ServiceDecomposition\EditorTemplates\CustomerPackViewModel.cshtml" />
+    <Content Include="Views\ServiceDecomposition\_CustomerPackGrid.cshtml" />
+    <Content Include="Views\Shared\_AddCustomerPackWindow.cshtml" />
+    <Content Include="Views\ServiceDecomposition\_AddCustomerPack.cshtml" />
+    <Content Include="Views\ServiceDecomposition\CustomerPack.cshtml" />
+    <Content Include="Views\Shared\_KendoValidation.cshtml" />
+    <Content Include="Views\Administration\Roles.cshtml" />
+    <Content Include="Views\Administration\Users.cshtml" />
+    <Content Include="Views\Administration\_AddUserToRole.cshtml" />
+    <Content Include="Views\Shared\_SelectUserWindow.cshtml" />
+    <Content Include="Views\Administration\_SelectUser.cshtml" />
+    <Content Include="Views\ServiceDomain\LevelOne.cshtml" />
+    <Content Include="Views\ServiceDomain\EditLevelOne.cshtml" />
+    <Content Include="Views\ServiceDomain\AddLevelOne.cshtml" />
+    <Content Include="Views\ServiceDomain\AddLevelTwo.cshtml" />
+    <Content Include="Views\ServiceDomain\EditLevelTwo.cshtml" />
+    <Content Include="Views\ServiceDomain\LevelTwo.cshtml" />
+    <Content Include="Views\Shared\_Notification.cshtml" />
+    <Content Include="Views\ServiceDomain\Edit.cshtml" />
+    <Content Include="Views\Shared\_ServiceComponents.cshtml" />
+    <Content Include="Views\ServiceComponent\LevelOne.cshtml" />
+    <Content Include="Views\Shared\_ServiceFunctions.cshtml" />
+    <Content Include="Views\Shared\_ServiceFunctionMove.cshtml" />
+    <Content Include="Views\ServiceFunction\_AddServiceFunction.cshtml" />
+    <Content Include="Views\ServiceFunction\_EditServiceFunction.cshtml" />
+    <Content Include="Views\ServiceFunction\_Move.cshtml" />
+    <Content Include="Views\ServiceFunction\Add.cshtml" />
+    <Content Include="Views\ServiceFunction\AddLevelOne.cshtml" />
+    <Content Include="Views\ServiceFunction\AddLevelTwo.cshtml" />
+    <Content Include="Views\ServiceFunction\Edit.cshtml" />
+    <Content Include="Views\ServiceFunction\EditLevelOne.cshtml" />
+    <Content Include="Views\ServiceFunction\EditLevelTwo.cshtml" />
+    <Content Include="Views\ServiceFunction\LevelOne.cshtml" />
+    <Content Include="Views\ServiceFunction\LevelTwo.cshtml" />
+    <Content Include="Views\ServiceFunction\EditorTemplates\GridForeignKey.cshtml" />
+    <Content Include="Views\Shared\_AddFunctionTypeWindow.cshtml" />
+    <Content Include="Views\ReferenceData\_FunctionType.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceFunctionViewModel.cshtml" />
+    <Content Include="Views\ServiceComponent\_MoveL1.cshtml" />
+    <Content Include="Views\ServiceComponent\_MoveL2.cshtml" />
+    <Content Include="Views\ServiceComponent\LevelTwo.cshtml" />
+    <Content Include="Views\ServiceComponent\_AddL1.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\GridForeignKey.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentLevel1WithNoChildComponentOrResolverViewModel.cshtml" />
+    <Content Include="Views\ServiceComponent\EditLevelOne.cshtml" />
+    <Content Include="Views\ServiceComponent\EditLevelTwo.cshtml" />
+    <Content Include="Views\Resolver\_Resolvers.cshtml" />
+    <Content Include="Views\Resolver\LevelOne.cshtml" />
+    <Content Include="Views\Resolver\LevelTwo.cshtml" />
+    <Content Include="Views\Resolver\_Add.cshtml" />
+    <Content Include="Views\Resolver\EditorTemplates\EditResolverViewModel.cshtml" />
+    <Content Include="Views\Resolver\EditorTemplates\GridForeignKey.cshtml" />
+    <Content Include="Views\Resolver\AddLevelOne.cshtml" />
+    <Content Include="Views\Resolver\AddLevelTwo.cshtml" />
+    <Content Include="Views\Resolver\EditLevelOne.cshtml" />
+    <Content Include="Views\Resolver\EditLevelTwo.cshtml" />
+    <Content Include="Views\Resolver\DisplayTemplates\EditServiceComponentNameViewModel.cshtml" />
+    <Content Include="Views\Shared\DisplayTemplates\WideText.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceActivityViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\OperationalProcessTypesViewModel.cshtml" />
+    <Content Include="Views\Resolver\_Move.cshtml" />
+    <Content Include="Views\Resolver\_ResolverMove.cshtml" />
+    <Content Include="Views\ReferenceData\ServiceDeliveryUnitTypes.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\ResolverGroupTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\ReferenceData\_ServiceDeliveryUnitType.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\ServiceDeliveryUnitTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\OperationalProcesses\DotMatrixLevelOne.cshtml" />
+    <Content Include="Views\OperationalProcesses\_DotMatrix.cshtml" />
+    <Content Include="Views\OperationalProcesses\DotMatrixLevelTwo.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\NotEditable.cshtml" />
+    <Content Include="Views\OperationalProcesses\EditorTemplates\Integer.cshtml" />
+    <Content Include="Views\Diagram\ServiceDeskStructure.cshtml" />
+    <Content Include="Views\Diagram\ServiceDeskStructureDiagram.cshtml" />
+    <Content Include="Views\ServiceDesk\_ServiceDeskStructure.cshtml" />
+    <Content Include="Views\Diagram\DotMatrixDiagram.cshtml" />
+    <Content Include="Views\ServiceDesk\_ServiceDeskDotMatrix.cshtml" />
+    <Content Include="Views\Diagram\DotMatrix.cshtml" />
+    <Content Include="Views\ServiceComponent\Edit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\HelpHtml.cshtml" />
+    <Content Include="Views\Help\Index.cshtml" />
+    <Content Include="Views\Shared\_HelpLayout.cshtml" />
+    <Content Include="Views\Help\EditorTemplates\ContextHelpRefDataViewModel.cshtml" />
+    <Content Include="Views\Help\Edit.cshtml" />
+    <Content Include="Views\Resolver\Edit.cshtml" />
+    <Content Include="Views\ServiceComponent\AddL1.cshtml" />
+    <Content Include="Views\ServiceDomain\EditLevelZero.cshtml" />
+    <Content Include="Views\Shared\_ServiceComponentsLevelTwo.cshtml" />
+    <Content Include="Views\ServiceComponent\AddLevelTwoL2.cshtml" />
+    <Content Include="Views\ServiceDesk\AddLevelOne.cshtml" />
+    <Content Include="Views\ServiceDesk\AddLevelZero.cshtml" />
+    <Content Include="Views\ServiceDesk\AddLevelTwo.cshtml" />
+    <Content Include="Views\ServiceDesk\EditorTemplates\AddServiceDeskViewModel.cshtml" />
+    <Content Include="Views\ReferenceData\ResolverGroupTypes.cshtml" />
+    <Content Include="Views\ReferenceData\_ResolverGroupType.cshtml" />
+    <Content Include="Views\ReferenceData\EditorTemplates\ServiceDeliveryOrganisationTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ResolverGroupViewModel.cshtml" />
+    <Content Include="Views\Diagram\FujitsuDomains.cshtml" />
+    <Content Include="Views\Diagram\FujitsuDomainsDiagram.cshtml" />
+    <Content Include="Views\ServiceDesk\_FujitsuDomains.cshtml" />
+    <Content Include="Views\ServiceDesk\_CustomerServices.cshtml" />
+    <Content Include="Views\Diagram\CustomerServices.cshtml" />
+    <Content Include="Views\Diagram\CustomerServicesDiagram.cshtml" />
+    <Content Include="Views\ServiceDecomposition\_Contributors.cshtml" />
+    <Content Include="Views\ServiceDecomposition\AddCustomerContributor.cshtml" />
+    <Content Include="Views\ServiceDecomposition\_AddCustomerContributor.cshtml" />
+    <Content Include="Views\Resolver\LevelZero.cshtml" />
+    <Content Include="Views\Resolver\EditLevelZero.cshtml" />
+    <Content Include="Views\Resolver\AddLevelZero.cshtml" />
+    <Content Include="Views\Resolver\_ResolversLevelZero.cshtml" />
+    <Content Include="Views\Resolver\_AddLevelZero.cshtml" />
+    <Content Include="Views\Resolver\EditorTemplates\EditResolverLevelZeroViewModel.cshtml" />
+    <Content Include="Views\ServiceDecomposition\EditorTemplates\GridForeignKey.cshtml" />
+    <Content Include="Views\Resolver\_MoveLevelZero.cshtml" />
+    <Content Include="Views\Resolver\_ResolverMoveLevelZero.cshtml" />
+    <Content Include="Views\Diagram\ServiceOrganisation.cshtml" />
+    <Content Include="Views\ServiceDesk\_FujitsuServiceOrganisation.cshtml" />
+    <Content Include="Views\Error\NoRoles.cshtml" />
+    <Content Include="Views\Error\_NoRolesText.cshtml" />
+    <Content Include="Views\Diagram\FujitsuServiceOrganisationDiagram.cshtml" />
+    <Content Include="Views\Diagram\CustomerServiceOrganisationDiagram.cshtml" />
+    <Content Include="Views\Diagram\CustomerThirdPartyServiceOrganisationDiagram.cshtml" />
+    <Content Include="Views\Shared\_AddOperationalProcessTypeWindow.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\ServiceDeliveryUnitLevelZeroViewModel.cshtml" />
+    <Content Include="Views\ServiceDesk\_CustomerServiceOrganisation.cshtml" />
+    <Content Include="Views\ServiceDesk\_CustomerThirdPartyServiceOrganisation.cshtml" />
+    <Content Include="Views\Shared\_AddResolverGroupTypeWindow.cshtml" />
+    <Content Include="Views\Shared\_AddServiceDeliveryUnitTypeWindow.cshtml" />
+    <Content Include="Views\ServiceDesk\_AddServiceDesk.cshtml" />
+    <Content Include="Views\Template\Index.cshtml" />
+    <Content Include="Views\Template\ImportTemplateSpreadsheet.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\HttpPostedFileBase.cshtml" />
+    <Content Include="Views\Template\AddLevelOne.cshtml" />
+    <Content Include="Views\Template\_AddTemplateServiceDomain.cshtml" />
+    <Content Include="Views\Template\AddLevelTwo.cshtml" />
+    <Content Include="Views\Template\AddLevelZero.cshtml" />
+    <Content Include="Views\Template\Add.cshtml" />
+    <Content Include="Views\Template\Template.cshtml" />
+    <Content Include="Views\Template\_TemplateRows.cshtml" />
+    <Content Include="Views\Template\_TemplateRowsAsSpreadsheet.cshtml" />
+    <Content Include="Views\Template\ImportServiceDecompositionSpreadsheet.cshtml" />
+    <Content Include="Views\Template\_ImportServiceDecompositionSpreadsheet.cshtml" />
+    <Content Include="Views\Template\ImportServiceDecompositionSpreadsheetLevelZero.cshtml" />
+    <Content Include="Views\Template\ImportServiceDecompositionSpreadsheetLevelOne.cshtml" />
+    <Content Include="Views\Template\ImportServiceDecompositionSpreadsheetLevelTwo.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\Upload.cshtml" />
+    <Content Include="Views\Administration\Videos.cshtml" />
+    <Content Include="Views\Administration\EditorTemplates\RegionTypeRefDataViewModel.cshtml" />
+    <Content Include="Views\Administration\Regions.cshtml" />
+    <Content Include="Views\Diagram\_DiagramButtonGroup.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\WindowWideText.cshtml" />
+    <Content Include="Views\Shared\_UploadCustomerFileWindow.cshtml" />
+    <Content Include="Views\ServiceDecomposition\_UploadCustomerFile.cshtml" />
+    <Content Include="Views\ServiceComponent\EditorTemplates\EditServiceComponentDiagramOrderViewModel.cshtml" />
+    <Content Include="Views\Audit\Index.cshtml" />
+    <Content Include="Views\Audit\_AuditGrid.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Roadmap.cshtml" />
+    <Content Include="Views\Home\WhatsNew.cshtml" />
+    <Content Include="Views\Home\ReleaseHistory.cshtml" />
+    <Content Include="Views\Audit\EditorTemplates\AuditViewModel.cshtml" />
+    <Content Include="Views\Audit\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fujitsu.Exceptions.Framework\Fujitsu.Exceptions.Framework.csproj">
+      <Project>{66d72d78-84b2-47f4-a702-24cdf11f2d0e}</Project>
+      <Name>Fujitsu.Exceptions.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Constants\Fujitsu.SLM.Constants.csproj">
+      <Project>{C250E534-FD0A-47CE-B1E3-C46E39DB3544}</Project>
+      <Name>Fujitsu.SLM.Constants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Core\Fujitsu.SLM.Core.csproj">
+      <Project>{3015FF9F-6E71-43C5-AF1A-7A079BDC5BDB}</Project>
+      <Name>Fujitsu.SLM.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.DataImporters\Fujitsu.SLM.DataImporters.csproj">
+      <Project>{900B7938-973D-4071-9C2D-0320110D9C04}</Project>
+      <Name>Fujitsu.SLM.DataImporters</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.DataImportProcessors\Fujitsu.SLM.DataImportProcessors.csproj">
+      <Project>{AEE3937C-8C8F-43C3-8846-BC3831C62CD0}</Project>
+      <Name>Fujitsu.SLM.DataImportProcessors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Data\Fujitsu.SLM.Data.csproj">
+      <Project>{c1cea65c-3724-4d17-8862-7b512c61d899}</Project>
+      <Name>Fujitsu.SLM.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Diagrams\Fujitsu.SLM.Diagrams.csproj">
+      <Project>{42AED40B-130F-40EC-988E-CB0E0B6875C3}</Project>
+      <Name>Fujitsu.SLM.Diagrams</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Extensions\Fujitsu.SLM.Extensions.csproj">
+      <Project>{3ff40663-dc0a-4b5b-8001-cfe8b083f269}</Project>
+      <Name>Fujitsu.SLM.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.ModelHelpers\Fujitsu.SLM.ModelHelpers.csproj">
+      <Project>{3348044A-DAE8-4D25-9CA9-8B22BCD68528}</Project>
+      <Name>Fujitsu.SLM.ModelHelpers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Model\Fujitsu.SLM.Model.csproj">
+      <Project>{1e4b9f25-20be-467b-9559-11056ff04000}</Project>
+      <Name>Fujitsu.SLM.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Services\Fujitsu.SLM.Services.csproj">
+      <Project>{5fa955b4-94c9-443e-b926-ccfee42293e4}</Project>
+      <Name>Fujitsu.SLM.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.TemplateProcessors\Fujitsu.SLM.TemplateProcessors.csproj">
+      <Project>{DC65A3AB-4FFC-4306-91FC-F717FAB296C7}</Project>
+      <Name>Fujitsu.SLM.TemplateProcessors</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Transformers\Fujitsu.SLM.Transformers.csproj">
+      <Project>{F6326A6F-AAA6-45BA-B987-BE6CB94D5935}</Project>
+      <Name>Fujitsu.SLM.Transformers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Web.Context\Fujitsu.SLM.Web.Context.csproj">
+      <Project>{EA96972E-47CB-4EF0-8665-5A3C049BBA00}</Project>
+      <Name>Fujitsu.SLM.Web.Context</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujitsu.SLM.Web.Resources\Fujitsu.SLM.Web.Resources.csproj">
+      <Project>{BAEC2A9C-B6A9-45C0-ADEC-7FBCA29A2A0E}</Project>
+      <Name>Fujitsu.SLM.Web.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fujtisu.SLM.Enumerations\Fujitsu.SLM.Enumerations.csproj">
+      <Project>{2D99FA85-14F1-4019-8951-5A3CC29DE804}</Project>
+      <Name>Fujitsu.SLM.Enumerations</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Azure|AnyCPU'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>58767</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:58768/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

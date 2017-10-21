@@ -1,0 +1,28 @@
+﻿@model EditResolverLevelZeroViewModel
+
+@{
+    ViewBag.Title = LevelNames.LevelZero + " > " + Model.ServiceDeskName + " Resolver Group";
+}
+
+@section navigation
+{
+    @Html.Partial("_LevelZeroMenu", new LevelZeroMenuModel { ResolversSelected = true })
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "editresolverlevelzero" })
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<h2>@ViewBag.Title</h2>
+
+@Html.EditorForModel()

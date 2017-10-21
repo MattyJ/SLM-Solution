@@ -1,0 +1,69 @@
+﻿@using Fujitsu.SLM.Web.Helpers
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=10" charset="utf-8">
+        <title>@ViewBag.Title - Service Decomposition Tool @SettingsHelper.VersionTitle</title>
+        <link rel="shortcut icon" type="image/x-icon" href="~/Images/favicon.ico">
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")
+        @Scripts.Render("~/bundles/lib")
+        @Scripts.Render("~/bundles/app")
+        <script type="text/javascript">
+            // set Kendo Culture
+            kendo.culture("en-GB");
+        </script>
+    </head>
+    <body>
+        @Html.Partial("_ModalWait", new ModalWaitViewModel())
+        <div class="layout-header">
+        <a href="javascript:history.go(-1);" id="btnBack">
+                <img src="~/Images/Back.png" alt="Back button" />
+            </a>
+            <div id="customer-details">
+                @{Html.RenderAction("CurrentCustomer", "Home");}
+            </div>
+            <div class="main-container">
+                <div class="fixer-container">@UI.ApplicationName</div>
+            </div>
+
+            <div class="user-details">@Html.Partial("_LoginPartial")</div>
+        </div>
+        @*<div class="navbar navbar-inverse" role="navigation">
+            <div class="navbar-left">
+                <a href="javascript:history.go(-1);">
+                    <img src="~/Images/Back.png" alt="Back button" />
+                </a>
+                <div>
+                    @{Html.RenderAction("CurrentCustomer", "Home");}
+                </div>
+            </div>
+            <div class="text-center main-container">
+                @UI.ApplicationName
+            </div>
+            <div class="navbar-right user-details">
+                <div>@Html.Partial("_LoginPartial")</div>
+            </div>
+        </div>*@
+        <div class="layout-navigation">
+            <ul class="navigation-items">
+                @RenderSection("navigation", false)
+            </ul>
+        </div>
+        <div class="layout-body">
+            @RenderBody()
+        </div>
+    <div class="layout-footer">
+        <div class="global-commands">
+            @RenderSection("globalcommands", false)
+        </div>
+        <div class="context-commands">@RenderSection("contextcommands", false)</div>
+        <div class="help-commands">
+            @RenderSection("helpcommands", false)
+        </div>
+    </div>
+        @RenderSection("scripts", false)
+        @Html.Partial("_Notification")
+    </body>
+</html>

@@ -1,0 +1,40 @@
+﻿@model int?
+
+@{
+    var level = @Model;
+    var levelTitle = level == 1 ? LevelNames.LevelOne : LevelNames.LevelTwo;
+    ViewBag.Title = $"{levelTitle} > Diagrams > Service Desk Structure";
+
+}
+
+@section navigation
+{
+    @switch (level)
+    {
+        case 1:
+            @Html.Partial("_LevelOneDiagramMenu", new DiagramMenuModel { ServiceDeskStructureSelected = true })
+            break;
+        case 2:
+            @Html.Partial("_LevelTwoDiagramMenu", new DiagramMenuModel { ServiceDeskStructureSelected = true })
+            break;
+    }
+}
+
+@section globalcommands
+{
+    @Html.Action("QuickLinks", "Menu")
+}
+
+@section helpcommands
+{
+    @Html.ImageActionLink(Url.Content("~/Images/Help.png"), "Help", "Index", "Help", tooltip: "Help", htmlAttributes: new { id = "btnContextHelp", target = "servicedecompositionhelp" }, routeValues: new { helpKey = "servicedeskstructure" })
+}
+
+@section contextcommands
+{
+
+}
+
+<h2>@ViewBag.Title</h2>
+
+@(Html.Action("ServiceDeskStructure","ServiceDesk", new {level = @level}))
